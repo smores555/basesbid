@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Frozen-Bid Vacancy Cascade</title>
+  <title>Frozen-Bid Vacancy Cascade — Auto</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root{ --fg:#0b1320; --muted:#6a7487; --bg:#f6f8fb; --card:#fff; --line:#e6ebf2; --accent:#2b5be9; }
@@ -36,7 +36,7 @@
       <span class="badge" id="status">Booting…</span>
     </div>
     <div class="row">
-      <button class="ghost" id="btnFetch">Load /data/*.json</button>
+      <button class="ghost" id="btnFetch">Load /data</button>
       <label class="ghost" style="display:inline-flex;align-items:center;gap:6px;">
         capacities.json <input type="file" id="fCap" accept=".json">
       </label>
@@ -59,7 +59,7 @@
         <select id="qdbSeat"><option>CA</option><option>FO</option></select>
         <input id="qdbAmt" type="number" value="10" style="width:90px">
         <button class="ghost" id="qdbApply">Apply Δ</button>
-        <label style="display:inline-flex;align-items:center;gap:6px;margin-left:8px;"><input type="checkbox" id="autoRun"> Auto-run</label>
+        <label style="display:inline-flex;align-items:center;gap:6px;margin-left:8px;"><input type="checkbox" id="autoRun" checked> Auto-run</label>
       </div>
       <div class="capTable" id="capTable"></div>
       <div class="row" style="justify-content:space-between;margin-top:8px;">
@@ -127,15 +127,16 @@
     // ---------- State ----------
     let capacities=[], roster=[], prefs=[], results=[];
 
-    // ---------- Auto-load on open ----------
+    // ---------- Auto-load & autorun ----------
     document.addEventListener('DOMContentLoaded', async () => {
       try {
         await fetchDefault();
         $('btnFetch').style.display = 'none';
+        $('status').textContent = `Loaded /data • ${roster.length} pilots`;
+        runCascade(); // auto-run immediately
       } catch (e) {
         $('status').textContent = 'Auto-load failed';
         console.warn(e);
-        // Keep pickers visible; show quick tip in results area
         $('resultsTable').innerHTML = '<div class="empty">Could not auto-load /data/*.json. Use the file pickers above, or check that <code>data/capacities.json</code>, <code>data/roster.json</code>, and <code>data/preferences.json</code> exist in your repo.</div>';
       }
     });
@@ -155,9 +156,7 @@
         tryFetch(prefix+'preferences.json'),
       ]);
       normalizeState();
-      $('status').textContent = `Loaded /data  •  ${roster.length} pilots`;
     }
-
     async function readLocalJSON(file){ return JSON.parse(await file.text()); }
 
     // ---------- Normalize ----------
@@ -212,7 +211,7 @@
     // ---------- Cascade ----------
     function runCascade(){
       if (!capacities.length || !roster.length){
-        alert('Load capacities and roster first (from /data or via file pickers).');
+        $('resultsTable').innerHTML = '<div class="empty">No data loaded.</div>';
         return;
       }
       const capMap=new Map(); capacities.forEach(r=> capMap.set(key(r.base,r.seat), {cap:Math.max(0,r.startCapacity+r.delta), used:0}) );
@@ -267,11 +266,12 @@
       const csv=toCSV(rows, headers); const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='frozen_bid_results.csv'; document.body.appendChild(a); a.click(); URL.revokeObjectURL(url); a.remove();
     });
 
-    // ---------- Manual Load / File Pickers ----------
-    $('btnFetch').addEventListener('click', async ()=>{ try{ await fetchDefault(); $('btnFetch').style.display='none'; } catch(e){ alert('Could not fetch /data/*.json. Ensure files exist.\n\n'+e); } });
-    $('fCap').addEventListener('change', async (e)=>{ capacities = await readLocalJSON(e.target.files[0]); normalizeState(); $('status').textContent='capacities loaded'; });
-    $('fRos').addEventListener('change', async (e)=>{ roster     = await readLocalJSON(e.target.files[0]); normalizeState(); $('status').textContent='roster loaded'; });
-    $('fPref').addEventListener('change', async (e)=>{ prefs      = await readLocalJSON(e.target.files[0]); normalizeState(); $('status').textContent='preferences loaded'; });
+    // ---------- Manual buttons (still available) ----------
+    $('btnFetch').addEventListener('click', async ()=>{ try{ await fetchDefault(); $('btnFetch').style.display='none'; $('status').textContent = `Loaded /data • ${roster.length} pilots`; runCascade(); } catch(e){ alert('Could not fetch /data/*.json. Ensure files exist.\n\n'+e); } });
+    $('btnRun').addEventListener('click', runCascade);
+    $('fCap').addEventListener('change', async (e)=>{ capacities = await readLocalJSON(e.target.files[0]); normalizeState(); $('status').textContent='capacities loaded'; if ($('autoRun').checked) runCascade(); });
+    $('fRos').addEventListener('change', async (e)=>{ roster     = await readLocalJSON(e.target.files[0]); normalizeState(); $('status').textContent='roster loaded'; if ($('autoRun').checked) runCascade(); });
+    $('fPref').addEventListener('change', async (e)=>{ prefs      = await readLocalJSON(e.target.files[0]); normalizeState(); $('status').textContent='preferences loaded'; if ($('autoRun').checked) runCascade(); });
 
     // ---------- Filters ----------
     ['q','fltMove','fltBase','fltSeat'].forEach(id=>{
