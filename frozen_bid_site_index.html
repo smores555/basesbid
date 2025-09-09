@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Frozen-Bid Vacancy Cascade</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root { --fg:#0b1320; --muted:#5b667a; --bg:#f7f9fc; --card:#fff; --line:#e6ebf2; }
+    html,body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; color:var(--fg); background:var(--bg); }
+    header { padding:20px; border-bottom:1px solid var(--line); background:var(--card); position:sticky; top:0; z-index:5; }
+    h1 { font-size:20px; margin:0 0 6px; }
+    .muted { color:var(--muted); font-size:12px; }
+    main { max-width:1200px; margin:18px auto 60px; padding:0 16px; }
+    section.card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:16px; box-shadow: 0 1px 2px rgba(10,20,40,.05); }
+    .row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+    .row > * { flex: 0 0 auto; }
+    input[type="file"] { border:1px dashed var(--line); padding:8px; border-radius:10px; background:#fff; }
+    button { border:1px solid var(--line); background:#111; color:#fff; border-radius:10px; padding:8px 12px; cursor:pointer; }
+    button.ghost { background:#fff; color:#111; }
+    table { width:100%; border-collapse:collapse; font-size:13px; }
+    th, td { padding:8px 10px; border-bottom:1px solid var(--line); text-align:left; }
+    th { background:#fafbfe; position:sticky; top:56px; z-index:2; }
+    .grid { display:grid; gap:8px; }
+    .grid.cols-4 { grid-template-columns: repeat(4, minmax(0,1fr)); }
+    .pill { display:inline-block; padding:2px 8px; border-radius:999px; border:1px solid var(--line); font-size:12px; }
+    .small { font-size:12px; }
+    .code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:12px; background:#f5f7fb; border:1px solid var(--line); padding:8px; border-radius:8px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Frozen-Bid Vacancy Cascade</h1>
+    <div class="muted">Data-driven mock bid with frozen preferences. “0” = stay in current base/seat.</div>
+  </header>
+  <main>
+    <section class="card">
+      <div class="row">
+        <strong>Data:</strong>
+        <button class="ghost" id="btnFetch">Load from <span class="code">/data/*.json</span></button>
+        <span class="muted">or upload:</span>
+        <label>capacities.json <input type="file" id="fCap" accept=".json"></label>
+        <label>roster.json <input type="file" id="fRos" accept=".json"></label>
+        <label>preferences.json <input type="file" id="fPref" accept=".json"></label>
+        <button id="btnRun">Run Cascade</button>
+        <button class="ghost" id="btnCSV" disabled>Download CSV</button>
+      </div>
+    </section>
+
+    <section class="card" id="capBox" style="display:none;">
+      <h3 style="margin:0 0 8px;">Capacities</h3>
+      <div id="capTable"></div>
+    </section>
+
+    <section class="card" id="outBox" style="display:none;">
+      <div class="row" style="justify-content:space-between;">
+        <h3 style="margin:0;">Results</h3>
+        <div id="summary" class="muted small"></div>
+      </div>
+      <div id="outTable" style="max-height:60vh; overflow:auto; margin-top:8px;"></div>
+    </section>
+  </main>
+
+  <script>
+    const key = (b,s)=> String(b).toUpperCase()+'|'+String(s).toUpperCase();
+    const parsePref = (p) => {
+      if (p===null || p===undefined) return null;
+      const t = String(p).trim().toUpperCase();
+      if (!t) return null;
+      if (t === '0') return {base:null, seat:null, stay:true};
+      const parts = t.replace(/\\s*[-/]\\s*/g,' ').split(/\\s+/);
+      if (parts.length >= 2) return {base:parts[0], seat:parts[1], stay:false};
+      return null;
+    };
+    const el = (tag, attrs={}, ...kids) => {
+      const n = document.createElement(tag);
+      Object.entries(attrs).forEach(([k,v])=>{
+        if (k==='class') n.className=v; else if (k==='html') n.innerHTML=v;
+        else if (k.startsWith('on') && typeof v==='function') n.addEventListener(k.slice(2), v);
+        else n.setAttribute(k, v);
+      });
+      kids.flat().forEach(k => n.appendChild(typeof k==='string'? document.createTextNode(k): k));
+      return n;
+    };
+    const toCSV = (rows, headers) => {
+      const esc = v => `"${String(v ?? '').replace(/"/g,'""')}"`;
+      return [headers.join(','), ...rows.map(r => headers.map(h => esc(r[h])).join(','))].join('\\n');
+    };
+
+    let capacities=[], roster=[], prefs=[], results=[];
+
+    async function fetchDefault() {
+      const base = location.pathname.endsWith('/') ? location.pathname : location.pathname.replace(/\\/[^/]*$/, '/');
+      const prefix = base + 'data/';
+      capacities = await (await fetch(prefix+'capacities.json')).json();
+      roster     = await (await fetch(prefix+'roster.json')).json();
+      prefs      = await (await fetch(prefix+'preferences.json')).json();
+      normalizeAndShow();
+    }
+
+    async function readLocalJSON(file) { return JSON.parse(await file.text()); }
+
+    function normalizeAndShow() {
+      capacities = capacities.map(r=>({ base:String(r.base).toUpperCase().trim(), seat:String(r.seat).toUpperCase().trim(), startCapacity:Number(r.startCapacity)||0, delta:Number(r.delta)||0 }));
+      roster = roster.map(r=>({ seniority:Number(r.seniority)||0, name:String(r.name||''), currentBase:String(r.currentBase||'').toUpperCase().trim(), currentSeat:String(r.currentSeat||'').toUpperCase().trim() })).filter(r=>r.seniority>0).sort((a,b)=>a.seniority-b.seniority);
+      document.getElementById('capBox').style.display='block';
+      renderCapacities();
+      document.getElementById('outBox').style.display='none';
+      results=[]; document.getElementById('btnCSV').disabled=true;
+    }
+
+    function renderCapacities() {
+      const holder = document.getElementById('capTable'); holder.innerHTML='';
+      const tbl = el('table'); const thead = el('thead',{}, el('tr',{}, el('th',{},'Base'), el('th',{},'Seat'), el('th',{},'Start'), el('th',{},'Delta'), el('th',{},'Total')));
+      const tbody = el('tbody');
+      capacities.forEach((r,i)=>{
+        const total = r.startCapacity + r.delta;
+        const tr = el('tr',{}, el('td',{},r.base), el('td',{},r.seat), el('td',{},String(r.startCapacity)),
+          el('td',{}, el('input',{type:'number', value:r.delta, style:'width:90px;', oninput: e=>{ r.delta = Number(e.target.value)||0; tr.lastChild.firstChild.textContent = String(r.startCapacity + r.delta); } })),
+          el('td',{}, el('span',{class:'pill'}, String(total))));
+        tbody.appendChild(tr);
+      });
+      tbl.appendChild(thead); tbl.appendChild(tbody); holder.appendChild(tbl);
+    }
+
+    function runCascade() {
+      const capMap = new Map();
+      capacities.forEach(r=> capMap.set(key(r.base,r.seat), {cap:Math.max(0, r.startCapacity + r.delta), used:0}) );
+      const prefBySen = new Map(); prefs.forEach(p => prefBySen.set(Number(p.seniority)||0, Array.isArray(p.prefs)? p.prefs.slice(): []) );
+      const out=[];
+      for (const r of roster) {
+        let list = (prefBySen.get(r.seniority) || []).map(parsePref).filter(x=>x);
+        if (!list.length || list.some(x=>x.stay)) list = [{base:r.currentBase, seat:r.currentSeat, stay:true}].concat(list.filter(x=>!x.stay));
+        let awardedBase='', awardedSeat='', awardedPrefNum=0, note='';
+        for (let i=0;i<list.length;i++){
+          const pref=list[i]; const b=pref.base ?? r.currentBase; const s=pref.seat ?? r.currentSeat;
+          const k=key(b,s), rec=capMap.get(k);
+          if (rec && rec.used < rec.cap) { rec.used++; awardedBase=b; awardedSeat=s; awardedPrefNum=i+1; note=pref.stay?'Stayed in place (Pref 1 = 0)':'Awarded pref #'+awardedPrefNum; break; }
+        }
+        if (!awardedBase) {
+          const k2=key(r.currentBase,r.currentSeat), rec2=capMap.get(k2);
+          if (rec2 && rec2.used < rec2.cap) { rec2.used++; awardedBase=r.currentBase; awardedSeat=r.currentSeat; awardedPrefNum=0; note='Stayed in place'; }
+          else { note='UNPLACED – no capacity for prefs or current seat'; }
+        }
+        out.push({seniority:r.seniority, name:r.name, awardedBase, awardedSeat, awardedPrefNum, fromBase:r.currentBase, fromSeat:r.currentSeat, note});
+      }
+      results=out; renderResults();
+    }
+
+    function renderResults(){
+      const box=document.getElementById('outBox'), holder=document.getElementById('outTable'); holder.innerHTML='';
+      const hdrs=['seniority','name','awardedBase','awardedSeat','awardedPrefNum','fromBase','fromSeat','note'];
+      const tbl=el('table'), thead=el('thead',{}, el('tr',{}, ...hdrs.map(h=>el('th',{},h)))), tbody=el('tbody');
+      results.forEach(r=> tbody.appendChild(el('tr',{}, ...hdrs.map(h=>el('td',{}, String(r[h]??''))))));
+      tbl.appendChild(thead); tbl.appendChild(tbody); holder.appendChild(tbl); box.style.display='block';
+      document.getElementById('btnCSV').disabled = results.length===0;
+      document.getElementById('summary').textContent = results.length ? `${results.length} awards computed` : '';
+    }
+
+    function downloadCSV(){
+      if (!results.length) return;
+      const headers=['Seniority','Pilot_Name','Awarded_Base','Awarded_Seat','Awarded_Pref_Num','From_Base','From_Seat','Note'];
+      const rows = results.map(r=>({'Seniority':r.seniority,'Pilot_Name':r.name,'Awarded_Base':r.awardedBase,'Awarded_Seat':r.awardedSeat,'Awarded_Pref_Num':r.awardedPrefNum,'From_Base':r.fromBase,'From_Seat':r.fromSeat,'Note':r.note}));
+      const csv = toCSV(rows, headers); const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}); const url=URL.createObjectURL(blob);
+      const a=document.createElement('a'); a.href=url; a.download='frozen_bid_results.csv'; document.body.appendChild(a); a.click(); URL.revokeObjectURL(url); a.remove();
+    }
+
+    document.getElementById('btnFetch').addEventListener('click', async ()=>{ try{ await fetchDefault(); } catch(e){ alert('Could not fetch /data/*.json. Upload files or ensure they exist.\\n\\n'+e); } });
+    document.getElementById('btnRun').addEventListener('click', runCascade);
+    document.getElementById('btnCSV').addEventListener('click', downloadCSV);
+    document.getElementById('fCap').addEventListener('change', async (e)=>{ capacities = await readLocalJSON(e.target.files[0]); normalizeAndShow(); });
+    document.getElementById('fRos').addEventListener('change', async (e)=>{ roster     = await readLocalJSON(e.target.files[0]); normalizeAndShow(); });
+    document.getElementById('fPref').addEventListener('change', async (e)=>{ prefs      = await readLocalJSON(e.target.files[0]); normalizeAndShow(); });
+  </script>
+</body>
+</html>
