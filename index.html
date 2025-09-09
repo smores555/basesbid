@@ -5,62 +5,152 @@
   <title>Frozen-Bid Vacancy Cascade</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    :root { --fg:#0b1320; --muted:#5b667a; --bg:#f7f9fc; --card:#fff; --line:#e6ebf2; }
-    html,body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; color:var(--fg); background:var(--bg); }
-    header { padding:20px; border-bottom:1px solid var(--line); background:var(--card); position:sticky; top:0; z-index:5; }
-    h1 { font-size:20px; margin:0 0 6px; }
-    .muted { color:var(--muted); font-size:12px; }
-    main { max-width:1200px; margin:18px auto 60px; padding:0 16px; }
-    section.card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:16px; box-shadow: 0 1px 2px rgba(10,20,40,.05); }
-    .row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
-    .row > * { flex: 0 0 auto; }
-    input[type="file"] { border:1px dashed var(--line); padding:8px; border-radius:10px; background:#fff; }
-    button { border:1px solid var(--line); background:#111; color:#fff; border-radius:10px; padding:8px 12px; cursor:pointer; }
-    button.ghost { background:#fff; color:#111; }
-    table { width:100%; border-collapse:collapse; font-size:13px; }
-    th, td { padding:8px 10px; border-bottom:1px solid var(--line); text-align:left; }
-    th { background:#fafbfe; position:sticky; top:56px; z-index:2; }
-    .grid { display:grid; gap:8px; }
-    .grid.cols-4 { grid-template-columns: repeat(4, minmax(0,1fr)); }
-    .pill { display:inline-block; padding:2px 8px; border-radius:999px; border:1px solid var(--line); font-size:12px; }
-    .small { font-size:12px; }
-    .code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:12px; background:#f5f7fb; border:1px solid var(--line); padding:8px; border-radius:8px; }
+    :root{
+      --fg:#0b1320; --muted:#6a7487; --bg:#f6f8fb; --card:#fff; --line:#e6ebf2;
+      --accent:#2b5be9; --good:#1f7a4d; --warn:#b78115; --bad:#b0314b;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;color:var(--fg);background:var(--bg);
+      font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+    header{
+      position:sticky;top:0;z-index:20;background:var(--card);
+      border-bottom:1px solid var(--line);padding:12px 16px;
+      display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:space-between
+    }
+    header h1{font-size:18px;margin:0}
+    header .muted{color:var(--muted);font-size:12px}
+    .badge{padding:2px 8px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:12px}
+    main{display:grid;grid-template-columns:360px 1fr;gap:16px;max-width:1400px;margin:16px auto;padding:0 16px}
+    section.card,aside{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow: 0 1px 2px rgba(10,20,40,.05)}
+    aside{padding:14px}
+    h2{margin:0 0 8px;font-size:14px}
+    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .muted{color:var(--muted)}
+    button{border:1px solid var(--line);background:#111;color:#fff;border-radius:10px;padding:8px 12px;cursor:pointer}
+    button.ghost{background:#fff;color:#111}
+    input[type="file"],input[type="number"],input[type="text"],select{border:1px solid var(--line);border-radius:10px;padding:8px;background:#fff}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+    th{background:#fafbfe;position:sticky;top:0;z-index:1;cursor:pointer}
+    .pill{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid var(--line);font-size:12px;background:#fff}
+    .flex{display:flex;gap:8px;align-items:center}
+    .capTable{max-height:60vh;overflow:auto}
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between;padding:12px;border-top:1px solid var(--line)}
+    .resultsWrap{background:var(--card);border:1px solid var(--line);border-radius:14px}
+    .resultsHeader{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;padding:12px;border-bottom:1px solid var(--line)}
+    .filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .count{color:var(--muted);font-size:12px}
+    .tag-ok{background:#e8f8ee;border-color:#bfe7cf}
+    .tag-move{background:#eef2ff;border-color:#cbd5ff}
+    .tag-up{background:#fff6e6;border-color:#ffe0ad}
+    .hl-move{background:#fffdf2}
+    .stickyFooter{position:sticky;bottom:0;background:#fafbff;border-top:1px solid var(--line);padding:10px;border-radius:0 0 14px 14px;display:flex;gap:8px;justify-content:flex-end}
+    .btn-sm{padding:4px 8px;border-radius:8px;font-size:12px}
+    .empty{padding:24px;color:var(--muted);text-align:center}
+    @media (max-width: 1024px) { main { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
   <header>
-    <h1>Frozen-Bid Vacancy Cascade</h1>
-    <div class="muted">Data-driven mock bid with frozen preferences. “0” = stay in current base/seat.</div>
+    <div class="row">
+      <h1>Frozen-Bid Vacancy Cascade</h1>
+      <span class="badge" id="loadStatus">No data loaded</span>
+    </div>
+    <div class="row">
+      <button class="ghost btn-sm" id="btnFetch">Load /data/*.json</button>
+      <label class="ghost btn-sm" style="display:inline-flex;align-items:center;gap:6px;">
+        capacities.json <input type="file" id="fCap" accept=".json">
+      </label>
+      <label class="ghost btn-sm" style="display:inline-flex;align-items:center;gap:6px;">
+        roster.json <input type="file" id="fRos" accept=".json">
+      </label>
+      <label class="ghost btn-sm" style="display:inline-flex;align-items:center;gap:6px;">
+        preferences.json <input type="file" id="fPref" accept=".json">
+      </label>
+      <button id="btnRun">Run Cascade</button>
+      <button class="ghost" id="btnCSV" disabled>Download CSV</button>
+    </div>
   </header>
+
   <main>
-    <section class="card">
-      <div class="row">
-        <strong>Data:</strong>
-        <button class="ghost" id="btnFetch">Load from <span class="code">/data/*.json</span></button>
-        <span class="muted">or upload:</span>
-        <label>capacities.json <input type="file" id="fCap" accept=".json"></label>
-        <label>roster.json <input type="file" id="fRos" accept=".json"></label>
-        <label>preferences.json <input type="file" id="fPref" accept=".json"></label>
-        <button id="btnRun">Run Cascade</button>
-        <button class="ghost" id="btnCSV" disabled>Download CSV</button>
-      </div>
-    </section>
+    <aside>
+      <h2>Capacities</h2>
+      <div class="muted" style="font-size:12px;margin-bottom:8px">Edit <b>Delta</b> to create vacancies. Total = Start + Delta.</div>
 
-    <section class="card" id="capBox" style="display:none;">
-      <h3 style="margin:0 0 8px;">Capacities</h3>
-      <div id="capTable"></div>
-    </section>
-
-    <section class="card" id="outBox" style="display:none;">
-      <div class="row" style="justify-content:space-between;">
-        <h3 style="margin:0;">Results</h3>
-        <div id="summary" class="muted small"></div>
+      <!-- Quick Delta Bar -->
+      <div class="row" style="margin-bottom:8px;">
+        <select id="qdbBase">
+          <option>ANC</option><option>LAX</option><option>PDX</option><option>SEA</option><option>SFO</option>
+        </select>
+        <select id="qdbSeat"><option>CA</option><option>FO</option></select>
+        <input id="qdbAmt" type="number" value="10" style="width:90px">
+        <button class="ghost btn-sm" id="qdbApply">Apply Δ</button>
+        <label class="muted" style="display:inline-flex;align-items:center;gap:6px;margin-left:8px;">
+          <input type="checkbox" id="autoRun"> Auto-run after change
+        </label>
       </div>
-      <div id="outTable" style="max-height:60vh; overflow:auto; margin-top:8px;"></div>
+
+      <div class="capTable" id="capTable"></div>
+      <div class="toolbar">
+        <div class="row">
+          <span class="muted">Nudge all:</span>
+          <button class="ghost btn-sm" data-nudge="+1">+1</button>
+          <button class="ghost btn-sm" data-nudge="+5">+5</button>
+          <button class="ghost btn-sm" data-nudge="+10">+10</button>
+          <button class="ghost btn-sm" data-nudge="-1">−1</button>
+          <button class="ghost btn-sm" data-nudge="-5">−5</button>
+          <button class="ghost btn-sm" data-nudge="-10">−10</button>
+        </div>
+        <div class="row">
+          <button class="ghost btn-sm" id="btnResetDelta">Reset Deltas</button>
+        </div>
+      </div>
+    </aside>
+
+    <section class="resultsWrap">
+      <div class="resultsHeader">
+        <div class="filters">
+          <strong>Awards</strong>
+          <input id="q" type="text" placeholder="Search name or seniority…" style="width:220px">
+          <select id="fltMove">
+            <option value="all">All awards</option>
+            <option value="movers">Movers only</option>
+            <option value="upgrades">Upgrades only (FO→CA)</option>
+          </select>
+          <select id="fltBase">
+            <option value="">Any awarded base</option>
+          </select>
+          <select id="fltSeat">
+            <option value="">Any awarded seat</option>
+            <option value="CA">CA</option>
+            <option value="FO">FO</option>
+          </select>
+          <button class="ghost btn-sm" id="btnClear">Clear filters</button>
+        </div>
+        <div class="count" id="summary">No run yet</div>
+      </div>
+      <div id="resultsTable" style="max-height:70vh;overflow:auto">
+        <div class="empty">Run the cascade to see awards.</div>
+      </div>
+      <div class="stickyFooter">
+        <span class="muted" id="footerHint">Tip: click a pilot to peek preferences.</span>
+      </div>
     </section>
   </main>
 
+  <!-- Peek Prefs Modal -->
+  <div id="modal" style="position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:1000;">
+    <div style="background:#fff;width:min(560px,92vw);border-radius:12px;padding:16px;border:1px solid var(--line)">
+      <div class="row" style="justify-content:space-between;align-items:center;">
+        <h3 style="margin:0;">Pilot Preferences</h3>
+        <button class="ghost btn-sm" id="closeModal">Close</button>
+      </div>
+      <div id="modalBody" style="margin-top:8px"></div>
+    </div>
+  </div>
+
   <script>
+    // ---------- Utilities ----------
     const key = (b,s)=> String(b).toUpperCase()+'|'+String(s).toUpperCase();
     const parsePref = (p) => {
       if (p===null || p===undefined) return null;
@@ -81,95 +171,208 @@
       kids.flat().forEach(k => n.appendChild(typeof k==='string'? document.createTextNode(k): k));
       return n;
     };
-    const toCSV = (rows, headers) => {
-      const esc = v => `"${String(v ?? '').replace(/"/g,'""')}"`;
-      return [headers.join(','), ...rows.map(r => headers.map(h => esc(r[h])).join(','))].join('\\n');
-    };
+    const escCSV = v => `"${String(v ?? '').replace(/"/g,'""')}"`;
+    const toCSV = (rows, headers) => [headers.join(',') , ...rows.map(r => headers.map(h => escCSV(r[h])).join(','))].join('\\n');
 
+    // ---------- State ----------
     let capacities=[], roster=[], prefs=[], results=[];
+    let sortKey='seniority', sortDir=1;
+    let filterMove='all', filterBase='', filterSeat='', qStr='';
 
-    async function fetchDefault() {
+    // ---------- Loaders ----------
+    async function fetchDefault(){
       const base = location.pathname.endsWith('/') ? location.pathname : location.pathname.replace(/\\/[^/]*$/, '/');
       const prefix = base + 'data/';
       capacities = await (await fetch(prefix+'capacities.json')).json();
       roster     = await (await fetch(prefix+'roster.json')).json();
       prefs      = await (await fetch(prefix+'preferences.json')).json();
-      normalizeAndShow();
+      normalizeState();
+      showLoaded('Loaded /data');
     }
+    async function readLocalJSON(file){ return JSON.parse(await file.text()); }
+    function showLoaded(msg){ const s=document.getElementById('loadStatus'); s.textContent=msg; s.style.background='#eef2ff'; s.style.borderColor='#cbd5ff'; }
 
-    async function readLocalJSON(file) { return JSON.parse(await file.text()); }
-
-    function normalizeAndShow() {
+    // ---------- Normalize & Render ----------
+    function normalizeState(){
       capacities = capacities.map(r=>({ base:String(r.base).toUpperCase().trim(), seat:String(r.seat).toUpperCase().trim(), startCapacity:Number(r.startCapacity)||0, delta:Number(r.delta)||0 }));
       roster = roster.map(r=>({ seniority:Number(r.seniority)||0, name:String(r.name||''), currentBase:String(r.currentBase||'').toUpperCase().trim(), currentSeat:String(r.currentSeat||'').toUpperCase().trim() })).filter(r=>r.seniority>0).sort((a,b)=>a.seniority-b.seniority);
-      document.getElementById('capBox').style.display='block';
       renderCapacities();
-      document.getElementById('outBox').style.display='none';
-      results=[]; document.getElementById('btnCSV').disabled=true;
+      const bases=[...new Set(capacities.map(r=>r.base))].sort(); const fltBase=document.getElementById('fltBase'); fltBase.innerHTML = '<option value=\"\">Any awarded base</option>' + bases.map(b=>`<option value=\"${b}\">${b}</option>`).join('');
+      results=[]; renderResults();
     }
 
-    function renderCapacities() {
-      const holder = document.getElementById('capTable'); holder.innerHTML='';
-      const tbl = el('table'); const thead = el('thead',{}, el('tr',{}, el('th',{},'Base'), el('th',{},'Seat'), el('th',{},'Start'), el('th',{},'Delta'), el('th',{},'Total')));
-      const tbody = el('tbody');
-      capacities.forEach((r,i)=>{
-        const total = r.startCapacity + r.delta;
-        const tr = el('tr',{}, el('td',{},r.base), el('td',{},r.seat), el('td',{},String(r.startCapacity)),
-          el('td',{}, el('input',{type:'number', value:r.delta, style:'width:90px;', oninput: e=>{ r.delta = Number(e.target.value)||0; tr.lastChild.firstChild.textContent = String(r.startCapacity + r.delta); } })),
-          el('td',{}, el('span',{class:'pill'}, String(total))));
+    function renderCapacities(){
+      const holder=document.getElementById('capTable'); holder.innerHTML='';
+      // group by base
+      const byBase=new Map(); capacities.forEach(r=>{ if(!byBase.has(r.base)) byBase.set(r.base,[]); byBase.get(r.base).push(r); });
+      for (const base of Array.from(byBase.keys()).sort()){
+        const rows = byBase.get(base).sort((a,b)=>a.seat.localeCompare(b.seat));
+        const tbl = el('table');
+        const thead = el('thead',{}, el('tr',{}, el('th',{}, base), el('th',{},'Seat'), el('th',{},'Start'), el('th',{},'Delta'), el('th',{},'Total')));
+        const tbody = el('tbody');
+        rows.forEach((r)=>{
+          const tr = el('tr',{},
+            el('td',{}, base),
+            el('td',{}, r.seat),
+            el('td',{}, String(r.startCapacity)),
+            el('td',{}, el('div',{class:'row'},
+              el('button',{class:'ghost btn-sm', onclick:()=>{ r.delta--; upd(); }}, '–'),
+              el('input',{type:'number', value:r.delta, style:'width:80px', oninput:e=>{ r.delta=Number(e.target.value)||0; upd(); }}),
+              el('button',{class:'ghost btn-sm', onclick:()=>{ r.delta++; upd(); }}, '+')
+            )),
+            el('td',{}, el('span',{class:'pill'}, String(r.startCapacity + r.delta)))
+          );
+          function upd(){ tr.lastChild.firstChild.textContent = String(r.startCapacity + r.delta); if (document.getElementById('autoRun').checked) runCascade(); }
+          tbody.appendChild(tr);
+        });
+        tbl.appendChild(thead); tbl.appendChild(tbody);
+        holder.appendChild(tbl);
+      }
+    }
+
+    // quick nudge all
+    document.addEventListener('click', (e)=>{
+      const btn = e.target.closest('button[data-nudge]');
+      if (!btn) return;
+      const n = Number(btn.getAttribute('data-nudge'));
+      capacities.forEach(r => r.delta = (r.delta||0) + n);
+      renderCapacities();
+      if (document.getElementById('autoRun').checked) runCascade();
+    });
+    document.getElementById('btnResetDelta').addEventListener('click', ()=>{
+      capacities.forEach(r=> r.delta=0);
+      renderCapacities();
+      if (document.getElementById('autoRun').checked) runCascade();
+    });
+
+    // quick delta bar
+    function applyQuickDelta(){
+      const b=document.getElementById('qdbBase').value;
+      const s=document.getElementById('qdbSeat').value;
+      const amt=Number(document.getElementById('qdbAmt').value)||0;
+      let changed=false;
+      capacities.forEach(r=>{ if(r.base===b && r.seat===s){ r.delta = (r.delta||0) + amt; changed=true; }});
+      if (changed){ renderCapacities(); if (document.getElementById('autoRun').checked) runCascade(); }
+    }
+    document.getElementById('qdbApply').addEventListener('click', applyQuickDelta);
+
+    // ---------- Cascade ----------
+    function runCascade(){
+      if (!capacities.length || !roster.length){
+        alert('Load capacities and roster first (via /data or the file pickers).');
+        return;
+      }
+      const capMap=new Map();
+      capacities.forEach(r=> capMap.set(key(r.base,r.seat), {cap:Math.max(0, r.startCapacity + r.delta), used:0}) );
+
+      const prefBySen = new Map();
+      (prefs||[]).forEach(p => prefBySen.set(Number(p.seniority)||0, Array.isArray(p.prefs)? p.prefs.slice(): []));
+
+      const out=[];
+      for (const r of roster){
+        let list = (prefBySen.get(r.seniority) || []).map(parsePref).filter(Boolean);
+        if (!list.length || list.some(x=>x.stay)){
+          list = [{base:r.currentBase, seat:r.currentSeat, stay:true}].concat(list.filter(x=>!x.stay));
+        }
+        let awardedBase='', awardedSeat='', awardedPrefNum=0, note='';
+        for (let i=0;i<list.length;i++){
+          const pref=list[i]; const b=pref.base ?? r.currentBase; const s=pref.seat ?? r.currentSeat;
+          const rec = capMap.get(key(b,s));
+          if (rec && rec.used < rec.cap){
+            rec.used++; awardedBase=b; awardedSeat=s; awardedPrefNum=i+1;
+            note = pref.stay ? 'Stayed in place (Pref 1 = current)' : ('Awarded pref #'+awardedPrefNum);
+            break;
+          }
+        }
+        if (!awardedBase){
+          const cur=capMap.get(key(r.currentBase,r.currentSeat));
+          if (cur && cur.used < cur.cap){
+            cur.used++; awardedBase=r.currentBase; awardedSeat=r.currentSeat; awardedPrefNum=0; note='Stayed in place';
+          }else{
+            note='UNPLACED – no capacity';
+          }
+        }
+        out.push({
+          seniority:r.seniority, name:r.name,
+          fromBase:r.currentBase, fromSeat:r.currentSeat,
+          awardedBase, awardedSeat, awardedPrefNum,
+          moved: (awardedBase!==r.currentBase)||(awardedSeat!==r.currentSeat),
+          upgrade: (r.currentSeat==='FO' && awardedSeat==='CA'),
+          note
+        });
+      }
+      results=out; renderResults();
+    }
+
+    // ---------- Results ----------
+    function renderResults(){
+      const holder=document.getElementById('resultsTable'); holder.innerHTML='';
+      if (!results.length){ holder.appendChild(el('div',{class:'empty'}, 'Run the cascade to see awards.')); document.getElementById('summary').textContent='No run yet'; document.getElementById('btnCSV').disabled=true; return; }
+      // filters
+      const q=document.getElementById('q').value.trim().toLowerCase();
+      const mv=document.getElementById('fltMove').value;
+      const fb=document.getElementById('fltBase').value;
+      const fs=document.getElementById('fltSeat').value;
+      let rows=results.slice();
+      if (mv==='movers') rows=rows.filter(r=>r.moved);
+      if (mv==='upgrades') rows=rows.filter(r=>r.upgrade);
+      if (fb) rows=rows.filter(r=>r.awardedBase===fb);
+      if (fs) rows=rows.filter(r=>r.awardedSeat===fs);
+      if (q) rows=rows.filter(r=> String(r.seniority).includes(q) || (r.name||'').toLowerCase().includes(q) );
+      document.getElementById('summary').textContent = `${rows.length} shown • ${results.length} total`;
+      document.getElementById('btnCSV').disabled = rows.length===0;
+
+      const tbl=el('table');
+      const thead=el('thead',{}, el('tr',{},
+        el('th',{},'Seniority'),
+        el('th',{},'Pilot'),
+        el('th',{},'From'),
+        el('th',{},'Awarded'),
+        el('th',{},'Pref #'),
+        el('th',{},'Tags'),
+        el('th',{},'Note')
+      ));
+      const tbody=el('tbody');
+      rows.forEach(r=>{
+        const tags=[]; if (r.moved) tags.push('<span class="pill tag-move">moved</span>'); if (r.upgrade) tags.push('<span class="pill tag-up">upgrade</span>'); if (!r.moved && !r.upgrade) tags.push('<span class="pill tag-ok">no change</span>');
+        const tr=el('tr',{},
+          el('td',{}, String(r.seniority)),
+          el('td',{}, r.name),
+          el('td',{}, `${r.fromBase} ${r.fromSeat}`),
+          el('td',{}, `${r.awardedBase} ${r.awardedSeat}`),
+          el('td',{}, String(r.awardedPrefNum)),
+          el('td',{html:tags.join(' ')}),
+          el('td',{}, r.note || '')
+        );
         tbody.appendChild(tr);
       });
       tbl.appendChild(thead); tbl.appendChild(tbody); holder.appendChild(tbl);
     }
 
-    function runCascade() {
-      const capMap = new Map();
-      capacities.forEach(r=> capMap.set(key(r.base,r.seat), {cap:Math.max(0, r.startCapacity + r.delta), used:0}) );
-      const prefBySen = new Map(); prefs.forEach(p => prefBySen.set(Number(p.seniority)||0, Array.isArray(p.prefs)? p.prefs.slice(): []) );
-      const out=[];
-      for (const r of roster) {
-        let list = (prefBySen.get(r.seniority) || []).map(parsePref).filter(x=>x);
-        if (!list.length || list.some(x=>x.stay)) list = [{base:r.currentBase, seat:r.currentSeat, stay:true}].concat(list.filter(x=>!x.stay));
-        let awardedBase='', awardedSeat='', awardedPrefNum=0, note='';
-        for (let i=0;i<list.length;i++){
-          const pref=list[i]; const b=pref.base ?? r.currentBase; const s=pref.seat ?? r.currentSeat;
-          const k=key(b,s), rec=capMap.get(k);
-          if (rec && rec.used < rec.cap) { rec.used++; awardedBase=b; awardedSeat=s; awardedPrefNum=i+1; note=pref.stay?'Stayed in place (Pref 1 = 0)':'Awarded pref #'+awardedPrefNum; break; }
-        }
-        if (!awardedBase) {
-          const k2=key(r.currentBase,r.currentSeat), rec2=capMap.get(k2);
-          if (rec2 && rec2.used < rec2.cap) { rec2.used++; awardedBase=r.currentBase; awardedSeat=r.currentSeat; awardedPrefNum=0; note='Stayed in place'; }
-          else { note='UNPLACED – no capacity for prefs or current seat'; }
-        }
-        out.push({seniority:r.seniority, name:r.name, awardedBase, awardedSeat, awardedPrefNum, fromBase:r.currentBase, fromSeat:r.currentSeat, note});
-      }
-      results=out; renderResults();
-    }
-
-    function renderResults(){
-      const box=document.getElementById('outBox'), holder=document.getElementById('outTable'); holder.innerHTML='';
-      const hdrs=['seniority','name','awardedBase','awardedSeat','awardedPrefNum','fromBase','fromSeat','note'];
-      const tbl=el('table'), thead=el('thead',{}, el('tr',{}, ...hdrs.map(h=>el('th',{},h)))), tbody=el('tbody');
-      results.forEach(r=> tbody.appendChild(el('tr',{}, ...hdrs.map(h=>el('td',{}, String(r[h]??''))))));
-      tbl.appendChild(thead); tbl.appendChild(tbody); holder.appendChild(tbl); box.style.display='block';
-      document.getElementById('btnCSV').disabled = results.length===0;
-      document.getElementById('summary').textContent = results.length ? `${results.length} awards computed` : '';
-    }
-
-    function downloadCSV(){
+    // ---------- CSV ----------
+    document.getElementById('btnCSV').addEventListener('click', ()=>{
       if (!results.length) return;
-      const headers=['Seniority','Pilot_Name','Awarded_Base','Awarded_Seat','Awarded_Pref_Num','From_Base','From_Seat','Note'];
-      const rows = results.map(r=>({'Seniority':r.seniority,'Pilot_Name':r.name,'Awarded_Base':r.awardedBase,'Awarded_Seat':r.awardedSeat,'Awarded_Pref_Num':r.awardedPrefNum,'From_Base':r.fromBase,'From_Seat':r.fromSeat,'Note':r.note}));
-      const csv = toCSV(rows, headers); const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}); const url=URL.createObjectURL(blob);
+      const headers=['Seniority','Pilot_Name','From_Base','From_Seat','Awarded_Base','Awarded_Seat','Awarded_Pref_Num','Moved','Upgrade','Note'];
+      const rows=results.map(r=>({'Seniority':r.seniority,'Pilot_Name':r.name,'From_Base':r.fromBase,'From_Seat':r.fromSeat,'Awarded_Base':r.awardedBase,'Awarded_Seat':r.awardedSeat,'Awarded_Pref_Num':r.awardedPrefNum,'Moved':r.moved?'Y':'','Upgrade':r.upgrade?'Y':'','Note':r.note||''}));
+      const csv=toCSV(rows, headers); const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}); const url=URL.createObjectURL(blob);
       const a=document.createElement('a'); a.href=url; a.download='frozen_bid_results.csv'; document.body.appendChild(a); a.click(); URL.revokeObjectURL(url); a.remove();
-    }
+    });
 
-    document.getElementById('btnFetch').addEventListener('click', async ()=>{ try{ await fetchDefault(); } catch(e){ alert('Could not fetch /data/*.json. Upload files or ensure they exist.\\n\\n'+e); } });
+    // ---------- Hooks ----------
+    document.getElementById('btnFetch').addEventListener('click', async ()=>{ try{ await fetchDefault(); } catch(e){ alert('Could not fetch /data/*.json. Ensure data/ has the 3 files.\n\n'+e); } });
     document.getElementById('btnRun').addEventListener('click', runCascade);
-    document.getElementById('btnCSV').addEventListener('click', downloadCSV);
-    document.getElementById('fCap').addEventListener('change', async (e)=>{ capacities = await readLocalJSON(e.target.files[0]); normalizeAndShow(); });
-    document.getElementById('fRos').addEventListener('change', async (e)=>{ roster     = await readLocalJSON(e.target.files[0]); normalizeAndShow(); });
-    document.getElementById('fPref').addEventListener('change', async (e)=>{ prefs      = await readLocalJSON(e.target.files[0]); normalizeAndShow(); });
+    document.getElementById('fCap').addEventListener('change', async (e)=>{ capacities = await readLocalJSON(e.target.files[0]); normalizeState(); showLoaded('capacities loaded'); });
+    document.getElementById('fRos').addEventListener('change', async (e)=>{ roster     = await readLocalJSON(e.target.files[0]); normalizeState(); showLoaded('roster loaded'); });
+    document.getElementById('fPref').addEventListener('change', async (e)=>{ prefs      = await readLocalJSON(e.target.files[0]); normalizeState(); showLoaded('preferences loaded'); });
+
+    // filters
+    ['q','fltMove','fltBase','fltSeat'].forEach(id=>{
+      document.getElementById(id).addEventListener('input', renderResults);
+      document.getElementById(id).addEventListener('change', renderResults);
+    });
+    document.getElementById('btnClear').addEventListener('click', ()=>{
+      document.getElementById('q').value=''; document.getElementById('fltMove').value='all'; document.getElementById('fltBase').value=''; document.getElementById('fltSeat').value=''; renderResults();
+    });
   </script>
 </body>
 </html>
