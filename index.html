@@ -1,68 +1,91 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Frozen-Bid Vacancy Cascade — Auto</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8"/>
+  <title>Position Bid Simulator — Fresh UI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <style>
-    :root{ --fg:#0b1320; --muted:#6a7487; --bg:#f6f8fb; --card:#fff; --line:#e6ebf2; --accent:#2b5be9; }
+    :root{
+      --fg:#101828; --muted:#667085; --bg:#f7f9fc; --card:#fff; --line:#e6eaf0;
+      --accent:#2f6df6; --ok:#17a673; --warn:#d98d12; --bad:#cf3a57;
+    }
     *{box-sizing:border-box}
-    html,body{margin:0;color:var(--fg);background:var(--bg);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-    header{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:space-between}
-    h1{font-size:18px;margin:0}
-    .badge{padding:2px 8px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:12px}
-    main{display:grid;grid-template-columns:360px 1fr;gap:16px;max-width:1400px;margin:16px auto;padding:0 16px}
-    section.card,aside{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 1px 2px rgba(10,20,40,.05)}
-    aside{padding:14px}
-    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-    input[type="file"],input[type="number"],input[type="text"],select{border:1px solid var(--line);border-radius:10px;padding:8px;background:#fff}
-    button{border:1px solid var(--line);background:#111;color:#fff;border-radius:10px;padding:8px 12px;cursor:pointer}
-    button.ghost{background:#fff;color:#111}
-    table{width:100%;border-collapse:collapse;font-size:13px}
-    th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
-    th{background:#fafbfe;position:sticky;top:0;z-index:1}
-    .pill{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid var(--line);font-size:12px;background:#fff}
-    .capTable{max-height:60vh;overflow:auto}
-    .resultsHeader{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:12px;border-bottom:1px solid var(--line)}
-    .filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-    .empty{padding:24px;color:#6a7487;text-align:center}
-    @media (max-width:1024px){main{grid-template-columns:1fr}}
+    html,body{margin:0;color:var(--fg);background:var(--bg);
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial}
+    header{
+      position:sticky; top:0; z-index:20; background:var(--card);
+      border-bottom:1px solid var(--line); padding:12px 16px;
+      display:flex; align-items:center; gap:10px; justify-content:space-between; flex-wrap:wrap;
+    }
+    h1{margin:0; font-size:18px}
+    .status{font-size:12px; padding:3px 10px; border:1px solid var(--line); border-radius:999px; background:#fff}
+    .status.ok{background:#eef7ff; border-color:#cfe4ff}
+    .status.err{background:#fff2f2; border-color:#ffd7dc; color:#a61e2a}
+    .row{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+    main{display:grid; grid-template-columns:360px 1fr; gap:16px; padding:16px; max-width:1400px; margin:0 auto}
+    section.card, aside.card{
+      background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px;
+      box-shadow: 0 1px 2px rgba(16,24,40,.05);
+    }
+    .muted{color:var(--muted)}
+    button{border:1px solid var(--line); background:#111; color:#fff; border-radius:10px; padding:8px 12px; cursor:pointer}
+    button.ghost{background:#fff; color:#111}
+    button:disabled{opacity:.6; cursor:not-allowed}
+    input[type="number"], input[type="text"], select {
+      border:1px solid var(--line); border-radius:10px; padding:8px; background:#fff;
+    }
+    table{width:100%; border-collapse:collapse; font-size:13px}
+    th,td{padding:8px 10px; border-bottom:1px solid var(--line); text-align:left; white-space:nowrap}
+    thead th{position:sticky; top:0; z-index:1; background:#fbfdff; cursor:pointer}
+    .pill{display:inline-block; padding:2px 8px; border-radius:999px; border:1px solid var(--line); background:#fff; font-size:12px}
+    .tag-move{background:#eef2ff; border-color:#d9e1ff}
+    .tag-up{background:#fff6e6; border-color:#ffe1b3}
+    .tag-stay{background:#e9fbf3; border-color:#cfeee1}
+    .empty{padding:24px; text-align:center; color:var(--muted)}
+    .cap-grid{max-height:65vh; overflow:auto}
+    .toolbar{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-top:10px}
+    .statbar{display:grid; grid-auto-flow:column; gap:8px}
+    .stat{background:#f5f8ff; border:1px solid var(--line); padding:6px 10px; border-radius:8px; font-size:12px}
+    @media (max-width: 1024px){ main{grid-template-columns:1fr} }
+    .errbox{padding:10px; border:1px solid #ffd7dc; background:#fff6f7; border-radius:10px; color:#a61e2a; margin:6px 0}
+    .okbox{padding:10px; border:1px solid #cfe4ff; background:#eef7ff; border-radius:10px}
   </style>
 </head>
 <body>
   <header>
     <div class="row">
-      <h1>Frozen-Bid Vacancy Cascade</h1>
-      <span class="badge" id="status">Booting…</span>
+      <h1>Position Bid Simulator</h1>
+      <span id="status" class="status">Booting…</span>
     </div>
     <div class="row">
-      <button class="ghost" id="btnFetch">Load /data</button>
-      <label class="ghost" style="display:inline-flex;align-items:center;gap:6px;">
-        capacities.json <input type="file" id="fCap" accept=".json">
-      </label>
-      <label class="ghost" style="display:inline-flex;align-items:center;gap:6px;">
-        roster.json <input type="file" id="fRos" accept=".json">
-      </label>
-      <label class="ghost" style="display:inline-flex;align-items:center;gap:6px;">
-        preferences.json <input type="file" id="fPref" accept=".json">
-      </label>
-      <button id="btnRun">Run Cascade</button>
-      <button class="ghost" id="btnCSV" disabled>Download CSV</button>
+      <button id="btnReload" class="ghost">Reload & Re-award</button>
+      <button id="btnCSV" class="ghost" disabled>Export CSV</button>
     </div>
   </header>
 
   <main>
-    <aside>
-      <h3 style="margin:4px 0 10px;">Capacities</h3>
-      <div class="row" style="margin-bottom:8px;">
-        <select id="qdbBase"><option>ANC</option><option>LAX</option><option>PDX</option><option>SEA</option><option>SFO</option></select>
-        <select id="qdbSeat"><option>CA</option><option>FO</option></select>
-        <input id="qdbAmt" type="number" value="10" style="width:90px">
-        <button class="ghost" id="qdbApply">Apply Δ</button>
-        <label style="display:inline-flex;align-items:center;gap:6px;margin-left:8px;"><input type="checkbox" id="autoRun" checked> Auto-run</label>
+    <!-- Left: Capacities -->
+    <aside class="card">
+      <div class="row" style="justify-content:space-between">
+        <h3 style="margin:0;font-size:14px">Capacities</h3>
+        <label class="muted" style="display:flex; align-items:center; gap:6px; font-size:12px">
+          <input id="autoRun" type="checkbox" checked> Auto-run after edits
+        </label>
       </div>
-      <div class="capTable" id="capTable"></div>
-      <div class="row" style="justify-content:space-between;margin-top:8px;">
+      <div class="muted" style="font-size:12px; margin:6px 0 10px">
+        Edit <b>Delta</b> to add/remove positions. <span class="pill">Total = Start + Delta</span>
+      </div>
+
+      <div class="row" style="margin-bottom:8px">
+        <select id="quickBase"></select>
+        <select id="quickSeat"><option>CA</option><option>FO</option></select>
+        <input id="quickAmt" type="number" value="10" style="width:90px"/>
+        <button id="quickApply" class="ghost">Apply Δ</button>
+      </div>
+
+      <div id="capGrid" class="cap-grid"></div>
+
+      <div class="toolbar">
         <div class="row">
           <span class="muted">Nudge all:</span>
           <button class="ghost" data-nudge="+1">+1</button>
@@ -72,213 +95,380 @@
           <button class="ghost" data-nudge="-5">−5</button>
           <button class="ghost" data-nudge="-10">−10</button>
         </div>
-        <button class="ghost" id="btnResetDelta">Reset Deltas</button>
+        <div class="row">
+          <button id="btnReset" class="ghost">Reset Deltas</button>
+        </div>
       </div>
     </aside>
 
+    <!-- Right: Results -->
     <section class="card">
-      <div class="resultsHeader">
-        <div class="filters">
+      <div class="row" style="justify-content:space-between">
+        <div class="row">
           <strong>Awards</strong>
-          <input id="q" type="text" placeholder="Search name or seniority…" style="width:220px">
+          <input id="q" type="text" placeholder="Search name or seniority…" style="width:220px; margin-left:10px"/>
           <select id="fltMove">
             <option value="all">All awards</option>
             <option value="movers">Movers only</option>
-            <option value="upgrades">Upgrades only</option>
+            <option value="upgrades">Upgrades only (FO→CA)</option>
           </select>
-          <select id="fltBase"><option value="">Any awarded base</option></select>
-          <select id="fltSeat"><option value="">Any awarded seat</option><option>CA</option><option>FO</option></select>
-          <button class="ghost" id="btnClear">Clear</button>
+          <select id="fltBase"><option value="">Awarded Base: All</option></select>
+          <select id="fltSeat"><option value="">Awarded Seat: All</option><option>CA</option><option>FO</option></select>
+          <button id="btnClear" class="ghost">Clear</button>
         </div>
-        <div class="muted" id="summary">No run yet</div>
+        <div class="statbar">
+          <div class="stat">Shown: <b id="shown">0</b></div>
+          <div class="stat">Total: <b id="total">0</b></div>
+          <div class="stat">Upgrades: <b id="upCnt">0</b></div>
+          <div class="stat">Movers: <b id="mvCnt">0</b></div>
+        </div>
       </div>
-      <div id="resultsTable" style="max-height:70vh;overflow:auto">
-        <div class="empty">Waiting for data…</div>
+      <div id="notice"></div>
+      <div id="results" style="max-height:68vh; overflow:auto; margin-top:8px">
+        <div class="empty">Loading data and computing awards…</div>
       </div>
     </section>
   </main>
 
   <script>
-    // ---------- Utilities ----------
+    // ---------- Helpers ----------
+    const $ = id => document.getElementById(id);
     const key = (b,s)=> String(b).toUpperCase()+'|'+String(s).toUpperCase();
-    const parsePref = (p) => {
-      if (p===null || p===undefined) return null;
-      const t = String(p).trim().toUpperCase();
+    const asInt = v => (v==null || v==='') ? 0 : Number(v)||0;
+    const parsePref = str => {
+      const t = String(str||'').trim().toUpperCase();
       if (!t) return null;
-      if (t === '0') return {base:null, seat:null, stay:true};
-      const parts = t.replace(/\\s*[-/]\\s*/g,' ').split(/\\s+/);
-      if (parts.length >= 2) return {base:parts[0], seat:parts[1], stay:false};
+      if (t==='0') return {base:null, seat:null, stay:true};
+      const m = t.replace(/\\s*[-/]\\s*/g,' ').split(/\\s+/);
+      if (m.length>=2) return {base:m[0], seat:m[1], stay:false};
       return null;
     };
-    const el = (tag, attrs={}, ...kids) => {
+    const mk = (tag, attrs={}, ...kids) => {
       const n = document.createElement(tag);
-      Object.entries(attrs).forEach(([k,v])=>{
-        if (k==='class') n.className=v; else if (k==='html') n.innerHTML=v;
+      for (const [k,v] of Object.entries(attrs)){
+        if (k==='class') n.className=v;
+        else if (k==='html') n.innerHTML=v;
         else if (k.startsWith('on') && typeof v==='function') n.addEventListener(k.slice(2), v);
         else n.setAttribute(k, v);
-      });
+      }
       kids.flat().forEach(k => n.appendChild(typeof k==='string'? document.createTextNode(k) : k));
       return n;
     };
-    const escCSV = v => `"${String(v ?? '').replace(/"/g,'""')}"`;
-    const toCSV = (rows, headers) => [headers.join(','), ...rows.map(r => headers.map(h => escCSV(r[h])).join(','))].join('\\n');
-    const $ = (id)=> document.getElementById(id);
+    const toCSV = (rows, headers) => {
+      const esc = v => `"${String(v??'').replace(/"/g,'""')}"`;
+      return [headers.join(','), ...rows.map(r => headers.map(h=>esc(r[h])).join(','))].join('\\n');
+    };
 
-    // ---------- State ----------
+    // ---------- Global state ----------
     let capacities=[], roster=[], prefs=[], results=[];
+    let sortKey='seniority', sortDir=1;
 
-    // ---------- Auto-load & autorun ----------
-    document.addEventListener('DOMContentLoaded', async () => {
-      try {
-        await fetchDefault();
-        $('btnFetch').style.display = 'none';
-        $('status').textContent = `Loaded /data • ${roster.length} pilots`;
-        runCascade(); // auto-run immediately
-      } catch (e) {
-        $('status').textContent = 'Auto-load failed';
-        console.warn(e);
-        $('resultsTable').innerHTML = '<div class="empty">Could not auto-load /data/*.json. Use the file pickers above, or check that <code>data/capacities.json</code>, <code>data/roster.json</code>, and <code>data/preferences.json</code> exist in your repo.</div>';
+    // ---------- Auto-load then award ----------
+    (async function init(){
+      try{
+        const base = new URL('data/', document.baseURI);
+        const [cap, ros, pre] = await Promise.all([
+          fetch(new URL('capacities.json', base)).then(r=>{ if(!r.ok) throw new Error('capacities.json '+r.status); return r.json(); }),
+          fetch(new URL('roster.json', base)).then(r=>{ if(!r.ok) throw new Error('roster.json '+r.status); return r.json(); }),
+          fetch(new URL('preferences.json', base)).then(r=>{ if(!r.ok) throw new Error('preferences.json '+r.status); return r.json(); }),
+        ]);
+        capacities = cap; roster = ros; prefs = pre;
+        normalize(); buildCapacityUI(); runCascade();
+        setStatus(`Loaded & awarded • ${roster.length} pilots`, true);
+      }catch(e){
+        setStatus('Load failed', false);
+        $('notice').innerHTML = `
+          <div class="errbox"><b>Couldn’t auto-load /data/*.json</b><br/>
+          Make sure these exist (case-sensitive):<br/>
+          <code>data/capacities.json</code>, <code>data/roster.json</code>, <code>data/preferences.json</code><br/>
+          Error: ${e}</div>`;
+        $('results').innerHTML = '<div class="empty">Fix files and click “Reload & Re-award”.</div>';
       }
-    });
+    })();
 
-    // ---------- Loaders ----------
-    async function fetchDefault(){
-      const basePath = location.pathname.endsWith('/') ? location.pathname : location.pathname.replace(/\\/[^/]*$/, '/');
-      const prefix = basePath + 'data/';
-      const tryFetch = async (url) => {
-        const r = await fetch(url);
-        if (!r.ok) throw new Error(url + ' → ' + r.status);
-        return r.json();
-      };
-      [capacities, roster, prefs] = await Promise.all([
-        tryFetch(prefix+'capacities.json'),
-        tryFetch(prefix+'roster.json'),
-        tryFetch(prefix+'preferences.json'),
-      ]);
-      normalizeState();
+    function setStatus(text, ok){
+      const s=$('status'); s.textContent=text; s.classList.remove('err','ok'); s.classList.add(ok?'ok':'err');
     }
-    async function readLocalJSON(file){ return JSON.parse(await file.text()); }
 
     // ---------- Normalize ----------
-    function normalizeState(){
-      capacities = capacities.map(r=>({ base:String(r.base).toUpperCase().trim(), seat:String(r.seat).toUpperCase().trim(), startCapacity:Number(r.startCapacity)||0, delta:Number(r.delta)||0 }));
-      roster = roster.map(r=>({ seniority:Number(r.seniority)||0, name:String(r.name||''), currentBase:String(r.currentBase||'').toUpperCase().trim(), currentSeat:String(r.currentSeat||'').toUpperCase().trim() })).filter(r=>r.seniority>0).sort((a,b)=>a.seniority-b.seniority);
-      renderCapacities();
-      const bases=[...new Set(capacities.map(r=>r.base))].sort(); $('fltBase').innerHTML='<option value=\"\">Any awarded base</option>'+bases.map(b=>`<option>${b}</option>`).join('');
-      results=[]; renderResults();
+    function normalize(){
+      capacities = (capacities||[]).map(r=>({
+        base: String(r.base||'').toUpperCase().trim(),
+        seat: String(r.seat||'').toUpperCase().trim(),
+        startCapacity: asInt(r.startCapacity),
+        delta: asInt(r.delta)
+      }));
+      // sort capacities for stable UI
+      capacities.sort((a,b)=> a.base.localeCompare(b.base) || a.seat.localeCompare(b.seat));
+
+      roster = (roster||[]).map(r=>({
+        seniority: asInt(r.seniority),
+        name: String(r.name||''),
+        currentBase: String(r.currentBase||'').toUpperCase().trim(),
+        currentSeat: String(r.currentSeat||'').toUpperCase().trim()
+      })).filter(r=>r.seniority>0).sort((a,b)=> a.seniority - b.seniority);
+
+      // map of prefs by seniority (raw strings)
+      const by = new Map();
+      (prefs||[]).forEach(p=>{
+        const s = asInt(p.seniority);
+        const list = Array.isArray(p.prefs) ? p.prefs.map(String) : [];
+        by.set(s, list);
+      });
+      prefs = by;
+
+      // fill quick base selector
+      const bases = [...new Set(capacities.map(c=>c.base))].sort();
+      $('quickBase').innerHTML = bases.map(b=>`<option>${b}</option>`).join('');
+      $('fltBase').innerHTML = '<option value="">Awarded Base: All</option>' + bases.map(b=>`<option>${b}</option>`).join('');
     }
 
     // ---------- Capacity UI ----------
-    function renderCapacities(){
-      const holder=$('capTable'); holder.innerHTML='';
-      const by = new Map(); capacities.forEach(r=>{ if(!by.has(r.base)) by.set(r.base,[]); by.get(r.base).push(r); });
-      for (const base of Array.from(by.keys()).sort()){
-        const rows = by.get(base).sort((a,b)=>a.seat.localeCompare(b.seat));
-        const tbl = el('table'), thead = el('thead',{}, el('tr',{}, el('th',{}, base), el('th',{}, 'Seat'), el('th',{}, 'Start'), el('th',{}, 'Delta'), el('th',{}, 'Total'))), tbody = el('tbody');
-        rows.forEach(r=>{
-          const tr = el('tr',{},
-            el('td',{}, base),
-            el('td',{}, r.seat),
-            el('td',{}, String(r.startCapacity)),
-            el('td',{}, el('div',{class:'row'},
-              el('button',{class:'ghost', onclick:()=>{ r.delta--; upd(); }}, '–'),
-              el('input',{type:'number', value:r.delta, style:'width:80px', oninput:e=>{ r.delta=Number(e.target.value)||0; upd(); }}),
-              el('button',{class:'ghost', onclick:()=>{ r.delta++; upd(); }}, '+')
-            )),
-            el('td',{}, el('span',{class:'pill'}, String(r.startCapacity + r.delta)))
-          );
-          function upd(){ tr.lastChild.firstChild.textContent = String(r.startCapacity + r.delta); if ($('autoRun').checked) runCascade(); }
-          tbody.appendChild(tr);
-        });
-        tbl.appendChild(thead); tbl.appendChild(tbody); holder.appendChild(tbl);
-      }
+    function buildCapacityUI(){
+      const holder = $('capGrid');
+      holder.innerHTML = '';
+      let curBase = null, tbl=null, tbody=null;
+
+      capacities.forEach((r, idx)=>{
+        if (r.base !== curBase){
+          curBase = r.base;
+          tbl = mk('table');
+          tbl.appendChild(mk('thead',{}, mk('tr',{},
+            mk('th',{}, curBase),
+            mk('th',{}, 'Seat'),
+            mk('th',{}, 'Start'),
+            mk('th',{}, 'Delta'),
+            mk('th',{}, 'Total')
+          )));
+          tbody = mk('tbody');
+          tbl.appendChild(tbody);
+          holder.appendChild(tbl);
+        }
+        const totalCell = mk('td',{}, mk('span',{class:'pill'}, String(r.startCapacity + r.delta)));
+        const input = mk('input',{type:'number', value:r.delta, style:'width:80px', oninput:(e)=>{ r.delta = asInt(e.target.value); totalCell.firstChild.textContent = String(r.startCapacity + r.delta); if ($('autoRun').checked) runCascade(); }});
+        const tr = mk('tr',{},
+          mk('td',{}, r.base),
+          mk('td',{}, r.seat),
+          mk('td',{}, String(r.startCapacity)),
+          mk('td',{}, mk('div',{class:'row'},
+            mk('button',{class:'ghost', onclick:()=>{ r.delta--; input.value=r.delta; totalCell.firstChild.textContent=String(r.startCapacity + r.delta); if ($('autoRun').checked) runCascade(); }}, '–'),
+            input,
+            mk('button',{class:'ghost', onclick:()=>{ r.delta++; input.value=r.delta; totalCell.firstChild.textContent=String(r.startCapacity + r.delta); if ($('autoRun').checked) runCascade(); }}, '+')
+          )),
+          totalCell
+        );
+        tbody.appendChild(tr);
+      });
     }
 
-    // Quick delta bar
-    $('qdbApply').addEventListener('click', ()=>{
-      const b=$('qdbBase').value, s=$('qdbSeat').value, amt=Number($('qdbAmt').value)||0;
-      let changed=false; capacities.forEach(r=>{ if(r.base===b && r.seat===s){ r.delta=(r.delta||0)+amt; changed=true; }});
-      if (changed){ renderCapacities(); if ($('autoRun').checked) runCascade(); }
+    // quick delta bar
+    $('quickApply').addEventListener('click', ()=>{
+      const b=$('quickBase').value, s=$('quickSeat').value, amt=asInt($('quickAmt').value)||0;
+      capacities.forEach(c=>{ if (c.base===b && c.seat===s) c.delta += amt; });
+      buildCapacityUI();
+      if ($('autoRun').checked) runCascade();
     });
-    // Nudge all
+
+    // nudge all
     document.addEventListener('click', (e)=>{
-      const btn=e.target.closest('button[data-nudge]'); if(!btn) return;
-      const n=Number(btn.getAttribute('data-nudge')); capacities.forEach(r=> r.delta=(r.delta||0)+n );
-      renderCapacities(); if ($('autoRun').checked) runCascade();
+      const btn = e.target.closest('button[data-nudge]');
+      if (!btn) return;
+      const n = asInt(btn.getAttribute('data-nudge'));
+      capacities.forEach(c=> c.delta += n);
+      buildCapacityUI();
+      if ($('autoRun').checked) runCascade();
     });
-    $('btnResetDelta').addEventListener('click', ()=>{ capacities.forEach(r=> r.delta=0); renderCapacities(); if ($('autoRun').checked) runCascade(); });
+    $('btnReset').addEventListener('click', ()=>{
+      capacities.forEach(c=> c.delta = 0);
+      buildCapacityUI();
+      if ($('autoRun').checked) runCascade();
+    });
 
     // ---------- Cascade ----------
     function runCascade(){
+      $('notice').innerHTML = '';
       if (!capacities.length || !roster.length){
-        $('resultsTable').innerHTML = '<div class="empty">No data loaded.</div>';
+        $('results').innerHTML = '<div class="empty">Missing capacities or roster.</div>';
         return;
       }
-      const capMap=new Map(); capacities.forEach(r=> capMap.set(key(r.base,r.seat), {cap:Math.max(0,r.startCapacity+r.delta), used:0}) );
-      const prefBySen = new Map(); (prefs||[]).forEach(p=> prefBySen.set(Number(p.seniority)||0, Array.isArray(p.prefs)? p.prefs.slice() : []) );
-      const out=[];
+      const capMap = new Map(); // key -> {cap, used}
+      capacities.forEach(c=> capMap.set(key(c.base,c.seat), {cap: Math.max(0, c.startCapacity + c.delta), used:0}));
+
+      const out = [];
       for (const r of roster){
-        let list=(prefBySen.get(r.seniority)||[]).map(parsePref).filter(Boolean);
-        if (!list.length || list.some(x=>x.stay)){ list=[{base:r.currentBase, seat:r.currentSeat, stay:true}].concat(list.filter(x=>!x.stay)); }
+        // build frozen list: if any '0' OR empty, ensure current seat first
+        const raw = (prefs.get(r.seniority) || []).map(x=>x.trim()).filter(Boolean);
+        let list = raw.map(parsePref).filter(Boolean);
+        if (!list.length || list.some(x=>x.stay)){
+          list = [{base:r.currentBase, seat:r.currentSeat, stay:true}, ...list.filter(x=>!x.stay)];
+        }
+        // remove exact duplicates while preserving order
+        const seen = new Set(); list = list.filter(p=>{ const k=key(p.base??r.currentBase, p.seat??r.currentSeat); if (seen.has(k)) return false; seen.add(k); return true; });
+
         let awardedBase='', awardedSeat='', awardedPrefNum=0, note='';
         for (let i=0;i<list.length;i++){
           const pref=list[i]; const b=pref.base ?? r.currentBase; const s=pref.seat ?? r.currentSeat;
-          const rec=capMap.get(key(b,s));
-          if (rec && rec.used < rec.cap){ rec.used++; awardedBase=b; awardedSeat=s; awardedPrefNum=i+1; note=pref.stay?'Stayed (Pref 1 = current)':'Awarded pref #'+awardedPrefNum; break; }
+          const rec = capMap.get(key(b,s));
+          if (rec && rec.used < rec.cap){
+            rec.used++;
+            awardedBase=b; awardedSeat=s; awardedPrefNum=i+1;
+            note = pref.stay ? 'Stayed (Pref 1 = current)' : ('Awarded pref #'+awardedPrefNum);
+            break;
+          }
         }
         if (!awardedBase){
           const rec2=capMap.get(key(r.currentBase,r.currentSeat));
-          if (rec2 && rec2.used < rec2.cap){ rec2.used++; awardedBase=r.currentBase; awardedSeat=r.currentSeat; awardedPrefNum=0; note='Stayed (capacity)'; }
-          else { note='UNPLACED – no capacity'; }
+          if (rec2 && rec2.used < rec2.cap){
+            rec2.used++; awardedBase=r.currentBase; awardedSeat=r.currentSeat; awardedPrefNum=0; note='Stayed (capacity hold)';
+          } else {
+            note='UNPLACED — no capacity for prefs or current seat';
+          }
         }
-        out.push({ seniority:r.seniority, name:r.name, fromBase:r.currentBase, fromSeat:r.currentSeat, awardedBase, awardedSeat, awardedPrefNum, moved:(awardedBase!==r.currentBase)||(awardedSeat!==r.currentSeat), upgrade:(r.currentSeat==='FO'&&awardedSeat==='CA'), note });
+        out.push({
+          seniority:r.seniority, name:r.name,
+          fromBase:r.currentBase, fromSeat:r.currentSeat,
+          awardedBase, awardedSeat, awardedPrefNum,
+          moved: (awardedBase!==r.currentBase)||(awardedSeat!==r.currentSeat),
+          upgrade: (r.currentSeat==='FO' && awardedSeat==='CA'),
+          note
+        });
       }
-      results=out; renderResults();
+      results = out;
+      renderResults();
     }
 
     // ---------- Results ----------
     function renderResults(){
-      const holder=$('resultsTable'); holder.innerHTML='';
-      if (!results.length){ holder.appendChild(el('div',{class:'empty'}, 'Run the cascade to see awards.')); $('summary').textContent='No run yet'; $('btnCSV').disabled=true; return; }
-      const q=$('q').value.trim().toLowerCase(), mv=$('fltMove').value, fb=$('fltBase').value, fs=$('fltSeat').value;
-      let rows=results.slice();
-      if (mv==='movers') rows=rows.filter(r=>r.moved);
-      if (mv==='upgrades') rows=rows.filter(r=>r.upgrade);
-      if (fb) rows=rows.filter(r=>r.awardedBase===fb);
-      if (fs) rows=rows.filter(r=>r.awardedSeat===fs);
-      if (q) rows=rows.filter(r=> String(r.seniority).includes(q) || (r.name||'').toLowerCase().includes(q) );
-      $('summary').textContent = `${rows.length} shown • ${results.length} total`; $('btnCSV').disabled = rows.length===0;
+      const holder = $('results'); holder.innerHTML='';
+      if (!results.length){
+        holder.innerHTML = '<div class="empty">No awards computed.</div>';
+        return;
+      }
 
-      const tbl=el('table'); const thead=el('thead',{}, el('tr',{}, el('th',{},'Seniority'), el('th',{},'Pilot'), el('th',{},'From'), el('th',{},'Awarded'), el('th',{},'Pref #'), el('th',{},'Tags'), el('th',{},'Note'))); const tbody=el('tbody');
+      // filters
+      const q = $('q').value.trim().toLowerCase();
+      const mv = $('fltMove').value;
+      const fb = $('fltBase').value;
+      const fs = $('fltSeat').value;
+
+      let rows = results.slice();
+      if (q) rows = rows.filter(r=> String(r.seniority).includes(q) || (r.name||'').toLowerCase().includes(q) );
+      if (mv==='movers') rows = rows.filter(r=>r.moved);
+      if (mv==='upgrades') rows = rows.filter(r=>r.upgrade);
+      if (fb) rows = rows.filter(r=>r.awardedBase===fb);
+      if (fs) rows = rows.filter(r=>r.awardedSeat===fs);
+
+      // counts
+      $('shown').textContent = rows.length;
+      $('total').textContent = results.length;
+      $('upCnt').textContent = results.filter(r=>r.upgrade).length;
+      $('mvCnt').textContent = results.filter(r=>r.moved).length;
+
+      // sort
+      rows.sort((a,b)=>{
+        const A=a[sortKey], B=b[sortKey];
+        if (A<B) return -1*sortDir; if (A>B) return 1*sortDir; return 0;
+      });
+
+      const tbl = mk('table');
+      const thead = mk('thead',{}, mk('tr',{},
+        th('seniority','Seniority'),
+        th('name','Pilot'),
+        th('fromBase','From Base'),
+        th('fromSeat','From Seat'),
+        th('awardedBase','Award Base'),
+        th('awardedSeat','Award Seat'),
+        th('awardedPrefNum','Pref#'),
+        mk('th',{}, 'Tags'),
+        mk('th',{}, 'Note')
+      ));
+      const tbody = mk('tbody');
+
       rows.forEach(r=>{
-        const tags=[]; if (r.moved) tags.push('<span class="pill">moved</span>'); if (r.upgrade) tags.push('<span class="pill">upgrade</span>'); if (!r.moved && !r.upgrade) tags.push('<span class="pill">no change</span>');
-        const tr=el('tr',{}, el('td',{}, String(r.seniority)), el('td',{}, r.name), el('td',{}, `${r.fromBase} ${r.fromSeat}`), el('td',{}, `${r.awardedBase} ${r.awardedSeat}`), el('td',{}, String(r.awardedPrefNum)), el('td',{html:tags.join(' ')}), el('td',{}, r.note||''));
+        const tags=[];
+        if (r.moved) tags.push('<span class="pill tag-move">moved</span>');
+        if (r.upgrade) tags.push('<span class="pill tag-up">upgrade</span>');
+        if (!r.moved && !r.upgrade) tags.push('<span class="pill tag-stay">no change</span>');
+        const tr = mk('tr',{},
+          mk('td',{}, String(r.seniority)),
+          mk('td',{}, r.name||''),
+          mk('td',{}, r.fromBase),
+          mk('td',{}, r.fromSeat),
+          mk('td',{}, r.awardedBase),
+          mk('td',{}, r.awardedSeat),
+          mk('td',{}, String(r.awardedPrefNum)),
+          mk('td',{html:tags.join(' ')}),
+          mk('td',{}, r.note||'')
+        );
         tbody.appendChild(tr);
       });
-      tbl.appendChild(thead); tbl.appendChild(tbody); holder.appendChild(tbl);
+
+      tbl.appendChild(thead); tbl.appendChild(tbody);
+      holder.appendChild(tbl);
+
+      $('btnCSV').disabled = rows.length===0;
+
+      function th(k,label){
+        const t = mk('th',{}, label);
+        t.addEventListener('click', ()=>{
+          if (sortKey===k) sortDir*=-1; else {sortKey=k; sortDir=1;}
+          renderResults();
+        });
+        return t;
+      }
     }
 
-    // ---------- CSV ----------
+    // ---------- Export ----------
     $('btnCSV').addEventListener('click', ()=>{
-      if (!results.length) return;
-      const headers=['Seniority','Pilot_Name','From_Base','From_Seat','Awarded_Base','Awarded_Seat','Awarded_Pref_Num','Moved','Upgrade','Note'];
-      const rows=results.map(r=>({'Seniority':r.seniority,'Pilot_Name':r.name,'From_Base':r.fromBase,'From_Seat':r.fromSeat,'Awarded_Base':r.awardedBase,'Awarded_Seat':r.awardedSeat,'Awarded_Pref_Num':r.awardedPrefNum,'Moved':r.moved?'Y':'','Upgrade':r.upgrade?'Y':'','Note':r.note||''}));
-      const csv=toCSV(rows, headers); const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='frozen_bid_results.csv'; document.body.appendChild(a); a.click(); URL.revokeObjectURL(url); a.remove();
+      let rows = results.slice();
+      const headers = ['Seniority','Pilot_Name','From_Base','From_Seat','Awarded_Base','Awarded_Seat','Awarded_Pref_Num','Moved','Upgrade','Note'];
+      const data = rows.map(r=>({
+        'Seniority': r.seniority,
+        'Pilot_Name': r.name,
+        'From_Base': r.fromBase,
+        'From_Seat': r.fromSeat,
+        'Awarded_Base': r.awardedBase,
+        'Awarded_Seat': r.awardedSeat,
+        'Awarded_Pref_Num': r.awardedPrefNum,
+        'Moved': r.moved?'Y':'',
+        'Upgrade': r.upgrade?'Y':'',
+        'Note': r.note||''
+      }));
+      const csv = toCSV(data, headers);
+      const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href=url; a.download='bid_awards.csv';
+      document.body.appendChild(a); a.click(); URL.revokeObjectURL(url); a.remove();
     });
 
-    // ---------- Manual buttons (still available) ----------
-    $('btnFetch').addEventListener('click', async ()=>{ try{ await fetchDefault(); $('btnFetch').style.display='none'; $('status').textContent = `Loaded /data • ${roster.length} pilots`; runCascade(); } catch(e){ alert('Could not fetch /data/*.json. Ensure files exist.\n\n'+e); } });
-    $('btnRun').addEventListener('click', runCascade);
-    $('fCap').addEventListener('change', async (e)=>{ capacities = await readLocalJSON(e.target.files[0]); normalizeState(); $('status').textContent='capacities loaded'; if ($('autoRun').checked) runCascade(); });
-    $('fRos').addEventListener('change', async (e)=>{ roster     = await readLocalJSON(e.target.files[0]); normalizeState(); $('status').textContent='roster loaded'; if ($('autoRun').checked) runCascade(); });
-    $('fPref').addEventListener('change', async (e)=>{ prefs      = await readLocalJSON(e.target.files[0]); normalizeState(); $('status').textContent='preferences loaded'; if ($('autoRun').checked) runCascade(); });
+    // ---------- Controls ----------
+    $('btnReload').addEventListener('click', async ()=>{
+      setStatus('Reloading…', true);
+      try{
+        const base = new URL('data/', document.baseURI);
+        const [cap, ros, pre] = await Promise.all([
+          fetch(new URL('capacities.json', base)).then(r=>r.json()),
+          fetch(new URL('roster.json', base)).then(r=>r.json()),
+          fetch(new URL('preferences.json', base)).then(r=>r.json()),
+        ]);
+        capacities = cap; roster = ros; prefs = pre;
+        normalize(); buildCapacityUI(); runCascade();
+        setStatus(`Loaded & awarded • ${roster.length} pilots`, true);
+      }catch(e){
+        setStatus('Reload failed', false);
+        $('notice').innerHTML = `<div class="errbox">Reload failed: ${e}</div>`;
+      }
+    });
 
-    // ---------- Filters ----------
+    // filters
     ['q','fltMove','fltBase','fltSeat'].forEach(id=>{
       $(id).addEventListener('input', renderResults);
       $(id).addEventListener('change', renderResults);
     });
-    $('btnClear').addEventListener('click', ()=>{ $('q').value=''; $('fltMove').value='all'; $('fltBase').value=''; $('fltSeat').value=''; renderResults(); });
+    $('btnClear').addEventListener('click', ()=>{
+      $('q').value=''; $('fltMove').value='all'; $('fltBase').value=''; $('fltSeat').value='';
+      renderResults();
+    });
   </script>
 </body>
 </html>
