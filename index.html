@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
-  <title>Vacancy Cascade — Capped Entries & Stay-on-listed-current</title>
+  <title>Vacancy Cascade — Toggle: Upgrades-only ↔ CA/FO Compete</title>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <style>
     :root{ --fg:#101828; --muted:#667085; --bg:#f7f9fc; --card:#fff; --line:#e6eaf0; --accent:#2f6df6; }
@@ -34,6 +34,7 @@
     .stat{background:#f5f8ff;border:1px solid var(--line);padding:6px 10px;border-radius:8px;font-size:12px}
     @media (max-width: 1024px){ main{grid-template-columns:1fr} }
     .ok{padding:10px;border:1px solid #cfe4ff;background:#eef7ff;border-radius:10px;margin-bottom:8px}
+    .warn{padding:10px;border:1px solid #ffe2a8;background:#fff9ec;border-radius:10px;margin-bottom:8px}
   </style>
 </head>
 <body>
@@ -43,6 +44,13 @@
       <span id="status" class="status">Booting…</span>
     </div>
     <div class="row">
+      <label class="row" style="font-size:12px">
+        Mode:
+        <select id="mode">
+          <option value="upgrades">CA Δ = Upgrades only (FO→CA)</option>
+          <option value="compete">CA Δ = CA/FO compete by seniority</option>
+        </select>
+      </label>
       <button id="btnCSV" class="ghost" disabled>Export CSV</button>
     </div>
   </header>
@@ -56,7 +64,7 @@
         </label>
       </div>
       <div class="muted" style="font-size:12px;margin:6px 0 10px">
-        Rules: <b>Stay when current seat is listed</b> (even without "0"), and <b>cap external entries</b> into each seat to ≤ its seeded Δ. CA Δ are upgrade-only.
+        Per-seat external entry cap ≤ seeded Δ. Backfills are consumed first, then seeded. Pilots <b>stay</b> if their current seat appears in their prefs. Awards are <b>strict</b> to prefs.
       </div>
       <div class="row" style="margin-bottom:8px">
         <select id="qBase"></select>
@@ -80,7 +88,7 @@
     </aside>
 
     <section class="card">
-      <div id="diag" class="ok">Capped-entries mode active. Per-seat external awards will not exceed seeded Δ.</div>
+      <div id="diag" class="ok">Toggle between “Upgrades only” and “CA/FO compete” in the header.</div>
       <div class="row" style="justify-content:space-between">
         <div class="row">
           <strong>Awards</strong>
@@ -152,28 +160,32 @@
       capacities.forEach(c=>{
         if (c.base!==cur){
           cur=c.base; tbl=document.createElement('table'); const thead=document.createElement('thead'); const tr=document.createElement('tr');
-          ['Base','Seat','Vacancies Δ (CA=upgrades only)','Working Vacancies'].forEach(h=>{ const th=document.createElement('th'); th.textContent=h; tr.appendChild(th); });
+          ['Base','Seat','Seeded Δ','Backfill Vacancies (dynamic)'].forEach(h=>{ const th=document.createElement('th'); th.textContent=h; tr.appendChild(th); });
           thead.appendChild(tr); tbl.appendChild(thead); tbody=document.createElement('tbody'); tbl.appendChild(tbody); holder.appendChild(tbl);
         }
-        const workCell=document.createElement('td'); const pill=document.createElement('span'); pill.className='pill'; pill.textContent=String(c.delta); workCell.appendChild(pill);
+        const seededCell=document.createElement('td'); const pill1=document.createElement('span'); pill1.className='pill'; pill1.textContent=String(c.delta); seededCell.appendChild(pill1);
+        const backfillCell=document.createElement('td'); const pill2=document.createElement('span'); pill2.className='pill'; pill2.textContent='0'; backfillCell.appendChild(pill2);
         const inp=document.createElement('input'); inp.type='number'; inp.value=String(c.delta); inp.style.width='90px';
         const row=document.createElement('tr');
         row.appendChild(cell(c.base));
         row.appendChild(cell(c.seat));
         const deltaCell=cell(); const wrap=document.createElement('div'); wrap.className='row';
-        wrap.appendChild(btn('–', ()=>{ c.delta--; inp.value=String(c.delta); pill.textContent=String(c.delta); if ($('autoRun').checked) runCascade(); }));
+        wrap.appendChild(btn('–', ()=>{ c.delta--; inp.value=String(c.delta); pill1.textContent=String(c.delta); if ($('autoRun').checked) runCascade(); }));
         wrap.appendChild(inp);
-        wrap.appendChild(btn('+', ()=>{ c.delta++; inp.value=String(c.delta); pill.textContent=String(c.delta); if ($('autoRun').checked) runCascade(); }));
+        wrap.appendChild(btn('+', ()=>{ c.delta++; inp.value=String(c.delta); pill1.textContent=String(c.delta); if ($('autoRun').checked) runCascade(); }));
         deltaCell.appendChild(wrap);
         row.appendChild(deltaCell);
-        row.appendChild(workCell);
-        inp.addEventListener('input', ()=>{ c.delta=asInt(inp.value); pill.textContent=String(c.delta); if ($('autoRun').checked) runCascade(); });
+        row.appendChild(backfillCell);
+        inp.addEventListener('input', ()=>{ c.delta=asInt(inp.value); pill1.textContent=String(c.delta); if ($('autoRun').checked) runCascade(); });
         tbody.appendChild(row);
+        // hook to update backfill pill live
+        c._backfillPill = pill2;
       });
       function cell(txt=''){ const td=document.createElement('td'); td.textContent=txt; return td; }
       function btn(label,fn){ const b=document.createElement('button'); b.className='ghost'; b.textContent=label; b.addEventListener('click',fn); return b; }
     }
 
+    ['mode'].forEach(id=> $(id).addEventListener('change', ()=> runCascade()));
     $('qApply').addEventListener('click', ()=>{
       const b=$('qBase').value, s=$('qSeat').value, amt=asInt($('qAmt').value)||0;
       capacities.forEach(c=>{ if(c.base===b && c.seat===s) c.delta += amt; });
@@ -191,16 +203,15 @@
     });
 
     function runCascade(){
-      // vacancy buckets and entry caps
-      const vac = new Map(); // key -> {any, up}
-      const cap = new Map(); // key -> remaining external entries allowed (<= seeded Δ total)
+      const mode = $('mode').value; // "upgrades" or "compete"
+      // seeded and backfill maps
+      const seeded = new Map(); // key -> number of seeded vacancies
+      const backfill = new Map(); // key -> number of backfill vacancies
       capacities.forEach(c=>{
         const k=key(c.base,c.seat);
         const v = Math.max(0, asInt(c.delta));
-        const up = (c.seat==='CA') ? v : 0;
-        const any = (c.seat==='CA') ? 0 : v;
-        vac.set(k, {any:any, up:up});
-        cap.set(k, v); // cap total external entries to seeded Δ
+        seeded.set(k, v);
+        backfill.set(k, 0);
       });
 
       const out=[];
@@ -210,12 +221,11 @@
         const raw = prefMap.get(r.seniority) || [];
         let list = raw.map(parsePref).filter(Boolean);
 
-        // Treat current seat in list as implicit stay at that rank
+        // Implicit stay: current seat in list becomes a stay marker
         const idxCurrent = list.findIndex(p=> (p.base??r.currentBase)===r.currentBase && (p.seat??r.currentSeat)===r.currentSeat);
         if (idxCurrent>=0){
           list[idxCurrent] = {base:r.currentBase, seat:r.currentSeat, stay:true};
         }
-
         const hasStay = list.some(x=>x.stay===true);
         if (hasStay){
           list = list.map(x=> x.stay ? {base:r.currentBase, seat:r.currentSeat, stay:true} : x);
@@ -226,44 +236,44 @@
 
         for (let i=0;i<list.length;i++){
           const pref=list[i]; const b=pref.base ?? r.currentBase; const s=pref.seat ?? r.currentSeat;
-          const k=key(b,s); const bucket = vac.get(k) || {any:0, up:0};
-          const fromKey = key(r.currentBase, r.currentSeat);
+          const k=key(b,s); const fromKey = key(r.currentBase, r.currentSeat);
 
           if (b===r.currentBase && s===r.currentSeat){
             if (pref.stay){ awardedPrefNum=i+1; note='Stayed (listed current base/seat)'; }
             break;
           }
 
-          // entry cap: if moving into a different seat than origin and cap is exhausted, skip
-          if (k !== fromKey){
-            const remain = cap.get(k) ?? 0;
-            if (remain <= 0) continue;
+          // Prefer consuming backfill first
+          let bf = backfill.get(k) || 0;
+          let sd = seeded.get(k) || 0;
+          if (bf<=0 && sd<=0) continue; // no vacancy to take
+
+          // In "upgrades" mode: only allow FO→CA to consume seeded CA (backfill is fine for anyone)
+          if (bf<=0 && sd>0 && s==='CA' && mode==='upgrades'){
+            const isUpgrade = (r.currentSeat==='FO');
+            if (!isUpgrade) continue; // a CA cannot take a seeded CA in upgrades-only mode
           }
 
-          let can=false;
-          if (s==='CA' && r.currentSeat==='FO'){
-            if (bucket.up>0){ bucket.up--; can=true; }
-            else if (bucket.any>0){ bucket.any--; can=true; }
-          } else {
-            if (bucket.any>0){ bucket.any--; can=true; }
-          }
+          // Award: consume backfill first, otherwise seeded
+          if (bf>0){ backfill.set(k, bf-1); note = (s==='CA' && r.currentSeat==='FO')? 'Upgrade (FO→CA) • used backfill' : 'Awarded (lateral) • used backfill'; }
+          else { seeded.set(k, sd-1); note = (s==='CA' && r.currentSeat==='FO')? 'Upgrade (FO→CA) • used seeded' : 'Awarded (lateral) • used seeded'; }
 
-          if (can){
-            if (k !== fromKey){
-              cap.set(k, Math.max(0, (cap.get(k)||0)-1));
-            }
-            const ob = vac.get(fromKey) || {any:0, up:0};
-            ob.any += 1; vac.set(fromKey, ob);
+          // Backfill at origin
+          backfill.set(fromKey, (backfill.get(fromKey)||0)+1);
 
-            awardedBase=b; awardedSeat=s; awardedPrefNum=i+1; moved=true; upgrade=(r.currentSeat==='FO' && s==='CA');
-            note = upgrade? 'Upgrade (FO→CA)' : 'Awarded (lateral)';
-            break;
-          }
+          awardedBase=b; awardedSeat=s; awardedPrefNum=i+1; moved=true; upgrade=(r.currentSeat==='FO' && s==='CA');
+          break;
         }
 
         out.push({seniority:r.seniority, name:r.name, fromBase:r.currentBase, fromSeat:r.currentSeat, awardedBase, awardedSeat, awardedPrefNum, moved, upgrade, note});
         r.currentBase=awardedBase; r.currentSeat=awardedSeat;
       }
+
+      // update backfill pills
+      capacities.forEach(c=>{
+        const k=key(c.base,c.seat);
+        if (c._backfillPill) c._backfillPill.textContent = String(backfill.get(k)||0);
+      });
 
       results=out;
       renderResults();
