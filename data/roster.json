@@ -66,12 +66,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 12,
-    "name": "Sidney K. Graham, Jr",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 14,
     "name": "Gregory B. Roger",
     "currentBase": "SEA",
@@ -92,12 +86,6 @@
   {
     "seniority": 20,
     "name": "Matthew P. Raterman",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 20,
-    "name": "R. Mike Cox",
     "currentBase": "SEA",
     "currentSeat": "CA"
   },
@@ -150,12 +138,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 29,
-    "name": "Philip L. Long, Jr",
-    "currentBase": "LAX",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 30,
     "name": "Bernard T. Moran",
     "currentBase": "SEA",
@@ -192,12 +174,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 36,
-    "name": "Richard A. Madden, III",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 37,
     "name": "Richard D. Burton",
     "currentBase": "LAX",
@@ -225,12 +201,6 @@
     "seniority": 41,
     "name": "Toni M. Hale",
     "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 41,
-    "name": "S. Scott Cagley",
-    "currentBase": "ANC",
     "currentSeat": "CA"
   },
   {
@@ -267,12 +237,6 @@
     "seniority": 50,
     "name": "John N. Morgan",
     "currentBase": "LAX",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 50,
-    "name": "B. Russ Smith",
-    "currentBase": "SEA",
     "currentSeat": "CA"
   },
   {
@@ -325,7 +289,7 @@
   },
   {
     "seniority": 62,
-    "name": "Patricia León Tomich",
+    "name": "Patricia Le\u00f3n Tomich",
     "currentBase": "SEA",
     "currentSeat": "CA"
   },
@@ -338,12 +302,6 @@
   {
     "seniority": 64,
     "name": "Jeffrey J. Deignan",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 64,
-    "name": "Chuck T. Nelson",
     "currentBase": "SEA",
     "currentSeat": "CA"
   },
@@ -480,12 +438,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 89,
-    "name": "M. Jim McDonough",
-    "currentBase": "PDX",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 90,
     "name": "Michael M. Hanson",
     "currentBase": "SEA",
@@ -537,12 +489,6 @@
     "seniority": 99,
     "name": "Scott R. Smith",
     "currentBase": "ANC",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 99,
-    "name": "Ken K. Schmid",
-    "currentBase": "SEA",
     "currentSeat": "CA"
   },
   {
@@ -633,12 +579,6 @@
     "seniority": 116,
     "name": "Christian F. McLaughlin",
     "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 116,
-    "name": "Donald C. Kayler, III",
-    "currentBase": "PDX",
     "currentSeat": "CA"
   },
   {
@@ -756,12 +696,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 137,
-    "name": "R. Scott Klinger",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 138,
     "name": "Trygve S. Figenskau",
     "currentBase": "SEA",
@@ -861,12 +795,6 @@
     "seniority": 157,
     "name": "Adrienne M. Grechman",
     "currentBase": "SFO",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 157,
-    "name": "E. Al Smith",
-    "currentBase": "LAX",
     "currentSeat": "CA"
   },
   {
@@ -987,12 +915,6 @@
     "seniority": 178,
     "name": "Randall W. Oefelein",
     "currentBase": "ANC",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 178,
-    "name": "Clement Terino, III",
-    "currentBase": "SFO",
     "currentSeat": "CA"
   },
   {
@@ -1200,12 +1122,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 214,
-    "name": "G. Duke Ellington",
-    "currentBase": "LAX",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 215,
     "name": "Christian J. Herzberger",
     "currentBase": "SEA",
@@ -1251,12 +1167,6 @@
     "seniority": 223,
     "name": "Steven D. Skidds",
     "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 223,
-    "name": "Luke S. St. Maur-Windle",
-    "currentBase": "ANC",
     "currentSeat": "CA"
   },
   {
@@ -1422,12 +1332,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 255,
-    "name": "Robert R. Montgomery, JR",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 256,
     "name": "Gary Vinant-Tang",
     "currentBase": "LAX",
@@ -1446,12 +1350,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 259,
-    "name": "W. Jeff Wittenfeld",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 260,
     "name": "James C. Betty",
     "currentBase": "PDX",
@@ -1461,12 +1359,6 @@
     "seniority": 261,
     "name": "Thomas Werner",
     "currentBase": "SFO",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 261,
-    "name": "R. Joe Therriault",
-    "currentBase": "LAX",
     "currentSeat": "CA"
   },
   {
@@ -1533,12 +1425,6 @@
     "seniority": 275,
     "name": "Steven Monterosso",
     "currentBase": "SFO",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 275,
-    "name": "R. Sean Phipps",
-    "currentBase": "LAX",
     "currentSeat": "CA"
   },
   {
@@ -1620,12 +1506,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 289,
-    "name": "Grant Van Steenkist",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 290,
     "name": "David B. Dotson",
     "currentBase": "SEA",
@@ -1647,12 +1527,6 @@
     "seniority": 293,
     "name": "Kendall B. James",
     "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 293,
-    "name": "H. Peter Brandorff",
-    "currentBase": "ANC",
     "currentSeat": "CA"
   },
   {
@@ -1731,12 +1605,6 @@
     "seniority": 310,
     "name": "Tracey Kasmar",
     "currentBase": "SFO",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 310,
-    "name": "Donald Olsen, JR",
-    "currentBase": "SEA",
     "currentSeat": "CA"
   },
   {
@@ -1819,12 +1687,6 @@
   },
   {
     "seniority": 325,
-    "name": "Jeffrey H. Parker",
-    "currentBase": "LAX",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 325,
     "name": "Jeffrey S. Parker",
     "currentBase": "PDX",
     "currentSeat": "CA"
@@ -1860,12 +1722,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 330,
-    "name": "Andrew S. Van Ornum",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 331,
     "name": "Todd C. Hunter",
     "currentBase": "LAX",
@@ -1893,12 +1749,6 @@
     "seniority": 335,
     "name": "Eric J. Hrivnak",
     "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 335,
-    "name": "Trace A. Weisenburger",
-    "currentBase": "LAX",
     "currentSeat": "CA"
   },
   {
@@ -2208,12 +2058,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 390,
-    "name": "Stephen Robertson, JR",
-    "currentBase": "SFO",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 391,
     "name": "Benjamin Madey",
     "currentBase": "SFO",
@@ -2324,12 +2168,6 @@
   {
     "seniority": 410,
     "name": "Jared F. Furtwangler",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 410,
-    "name": "Steve E. Brodersen",
     "currentBase": "SEA",
     "currentSeat": "CA"
   },
@@ -2880,12 +2718,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 506,
-    "name": "Craig J. Davidson",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 507,
     "name": "Gabriel Rankin",
     "currentBase": "SFO",
@@ -3186,12 +3018,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 560,
-    "name": "Emet Dunn, III",
-    "currentBase": "SFO",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 561,
     "name": "Brian Patterson",
     "currentBase": "LAX",
@@ -3390,12 +3216,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 595,
-    "name": "Bert Lee Van Komen",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 596,
     "name": "Christopher R. Pries",
     "currentBase": "PDX",
@@ -3480,12 +3300,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 609,
-    "name": "Rick L. Russek",
-    "currentBase": "LAX",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 610,
     "name": "Michael Braunschmidt",
     "currentBase": "SFO",
@@ -3513,12 +3327,6 @@
     "seniority": 616,
     "name": "Paul Harrison",
     "currentBase": "LAX",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 616,
-    "name": "Steven Van Metre",
-    "currentBase": "SFO",
     "currentSeat": "CA"
   },
   {
@@ -3726,12 +3534,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 652,
-    "name": "Heidi L. De Koster",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 653,
     "name": "Sean L. Brown",
     "currentBase": "SEA",
@@ -3765,12 +3567,6 @@
     "seniority": 658,
     "name": "Roger B. Holterman",
     "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 658,
-    "name": "Thomas J. Van Hoomissen",
-    "currentBase": "ANC",
     "currentSeat": "CA"
   },
   {
@@ -3840,20 +3636,8 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 669,
-    "name": "Kirt E. Van Dyke",
-    "currentBase": "ANC",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 670,
     "name": "James Rodriguez",
-    "currentBase": "LAX",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 670,
-    "name": "Joel Rodgers, JR",
     "currentBase": "LAX",
     "currentSeat": "CA"
   },
@@ -4026,12 +3810,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 704,
-    "name": "Carl J. Peecher, II",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 705,
     "name": "Scott E. Cope",
     "currentBase": "SEA",
@@ -4122,12 +3900,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 719,
-    "name": "Aaron J. Mackey",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 720,
     "name": "Irene Curren",
     "currentBase": "LAX",
@@ -4188,12 +3960,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 731,
-    "name": "Michael Walker, JR",
-    "currentBase": "LAX",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 732,
     "name": "Richard S. Bradley",
     "currentBase": "SEA",
@@ -4240,12 +4006,6 @@
     "name": "Mark Jones",
     "currentBase": "LAX",
     "currentSeat": "CA"
-  },
-  {
-    "seniority": 740,
-    "name": "Eric W. Von Trotha",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
   },
   {
     "seniority": 742,
@@ -4404,12 +4164,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 770,
-    "name": "Douglas C. McLaren, II",
-    "currentBase": "PDX",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 771,
     "name": "Chad M. Marien",
     "currentBase": "SEA",
@@ -4554,12 +4308,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 795,
-    "name": "Larry Biddle, JR",
-    "currentBase": "LAX",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 796,
     "name": "Bertram W. Wagner",
     "currentBase": "PDX",
@@ -4686,12 +4434,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 821,
-    "name": "Larry Mitchell, JR",
-    "currentBase": "LAX",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 822,
     "name": "Todd A. Swenson",
     "currentBase": "PDX",
@@ -4752,12 +4494,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 831,
-    "name": "Nathan Plumb",
-    "currentBase": "SFO",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 832,
     "name": "Matthew J. Dixon",
     "currentBase": "LAX",
@@ -4798,12 +4534,6 @@
     "name": "Joseph Youngerman",
     "currentBase": "SFO",
     "currentSeat": "CA"
-  },
-  {
-    "seniority": 839,
-    "name": "Melissa L. Van Dyke",
-    "currentBase": "ANC",
-    "currentSeat": "FO"
   },
   {
     "seniority": 840,
@@ -5106,12 +4836,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 893,
-    "name": "William E. Swoveland, II",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 894,
     "name": "John Garramone",
     "currentBase": "LAX",
@@ -5247,12 +4971,6 @@
     "seniority": 917,
     "name": "Allen L. Cassino",
     "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 917,
-    "name": "Steven La Mascus",
-    "currentBase": "SFO",
     "currentSeat": "CA"
   },
   {
@@ -5451,12 +5169,6 @@
     "seniority": 953,
     "name": "Joshua Cadieux",
     "currentBase": "SFO",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 953,
-    "name": "John H. Howard, III",
-    "currentBase": "SEA",
     "currentSeat": "CA"
   },
   {
@@ -5808,12 +5520,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 1013,
-    "name": "Miguel Carrillo Cabrera",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1014,
     "name": "Tristan D. Anderson",
     "currentBase": "SEA",
@@ -5836,12 +5542,6 @@
     "name": "Jane M. Tuomi",
     "currentBase": "ANC",
     "currentSeat": "FO"
-  },
-  {
-    "seniority": 1017,
-    "name": "Robert Quinn, III",
-    "currentBase": "LAX",
-    "currentSeat": "CA"
   },
   {
     "seniority": 1018,
@@ -5912,12 +5612,6 @@
   {
     "seniority": 1029,
     "name": "Brandon A. Fisher",
-    "currentBase": "PDX",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1029,
-    "name": "James P. Wilson, II",
     "currentBase": "PDX",
     "currentSeat": "CA"
   },
@@ -6099,12 +5793,6 @@
     "seniority": 1063,
     "name": "Paul S. Akulschin",
     "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1063,
-    "name": "Jeff Sharples",
-    "currentBase": "PDX",
     "currentSeat": "CA"
   },
   {
@@ -6570,20 +6258,8 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 1144,
-    "name": "John Andriulli, Jr",
-    "currentBase": "LAX",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1145,
     "name": "Andrew Taylor",
-    "currentBase": "PDX",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1145,
-    "name": "Chris Neff",
     "currentBase": "PDX",
     "currentSeat": "CA"
   },
@@ -6633,12 +6309,6 @@
     "seniority": 1153,
     "name": "Audrey Lee Cole",
     "currentBase": "ANC",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1153,
-    "name": "Matt Kalouner",
-    "currentBase": "SEA",
     "currentSeat": "CA"
   },
   {
@@ -6762,21 +6432,9 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 1175,
-    "name": "Joe Humbert",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1176,
     "name": "Andrew Ward",
     "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1176,
-    "name": "Robert Edwards, Jr",
-    "currentBase": "PDX",
     "currentSeat": "CA"
   },
   {
@@ -6819,12 +6477,6 @@
     "seniority": 1185,
     "name": "Julie Erickson",
     "currentBase": "LAX",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1185,
-    "name": "Jeff Bakken",
-    "currentBase": "SEA",
     "currentSeat": "CA"
   },
   {
@@ -6966,12 +6618,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 1211,
-    "name": "Josh Carlstrom",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1213,
     "name": "Jessica Reinschmidt",
     "currentBase": "SEA",
@@ -7029,12 +6675,6 @@
     "seniority": 1222,
     "name": "Robert Reisback",
     "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1223,
-    "name": "Shawn Smith",
-    "currentBase": "LAX",
     "currentSeat": "CA"
   },
   {
@@ -7098,12 +6738,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 1232,
-    "name": "John Grieff, III",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1233,
     "name": "Wade Bridges",
     "currentBase": "PDX",
@@ -7113,12 +6747,6 @@
     "seniority": 1234,
     "name": "Jason Onstot",
     "currentBase": "PDX",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1234,
-    "name": "Drew Majer",
-    "currentBase": "SEA",
     "currentSeat": "CA"
   },
   {
@@ -7146,12 +6774,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 1240,
-    "name": "Josh Vestal",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1241,
     "name": "Ryan Lovell",
     "currentBase": "SEA",
@@ -7162,12 +6784,6 @@
     "name": "David Rodgers",
     "currentBase": "PDX",
     "currentSeat": "CA"
-  },
-  {
-    "seniority": 1242,
-    "name": "Josh Seidenstein",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
   },
   {
     "seniority": 1243,
@@ -7374,21 +6990,9 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 1280,
-    "name": "Charles Prchal, Jr",
-    "currentBase": "PDX",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1281,
     "name": "Matthew Cunningham",
     "currentBase": "SFO",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1281,
-    "name": "Ross Mostowy",
-    "currentBase": "ANC",
     "currentSeat": "CA"
   },
   {
@@ -7446,12 +7050,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 1291,
-    "name": "Katherine Van Arsdale",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 1292,
     "name": "Christopher Graves",
     "currentBase": "PDX",
@@ -7467,12 +7065,6 @@
     "seniority": 1295,
     "name": "Cameron Miller",
     "currentBase": "PDX",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1295,
-    "name": "Brent Carricaburu",
-    "currentBase": "ANC",
     "currentSeat": "CA"
   },
   {
@@ -7584,12 +7176,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 1315,
-    "name": "Nick Corsaro",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1316,
     "name": "Jeffrey Lewis",
     "currentBase": "LAX",
@@ -7617,12 +7203,6 @@
     "seniority": 1320,
     "name": "Andrea Manville",
     "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1320,
-    "name": "Tim Ireland",
-    "currentBase": "PDX",
     "currentSeat": "CA"
   },
   {
@@ -7758,12 +7338,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 1349,
-    "name": "Jeff Gartman",
-    "currentBase": "ANC",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1350,
     "name": "Colt Hubbell",
     "currentBase": "SEA",
@@ -7779,12 +7353,6 @@
     "seniority": 1352,
     "name": "Hyong Sop Joseph Yoon",
     "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1352,
-    "name": "Nate Facklam",
-    "currentBase": "PDX",
     "currentSeat": "CA"
   },
   {
@@ -7815,12 +7383,6 @@
     "seniority": 1357,
     "name": "Bryan Cox",
     "currentBase": "PDX",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1357,
-    "name": "Brad Beachler",
-    "currentBase": "SEA",
     "currentSeat": "CA"
   },
   {
@@ -7872,12 +7434,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 1365,
-    "name": "Chad Purdy",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1366,
     "name": "David Simonsen",
     "currentBase": "SEA",
@@ -7906,12 +7462,6 @@
     "name": "Mark P. Reimann",
     "currentBase": "SEA",
     "currentSeat": "FO"
-  },
-  {
-    "seniority": 1370,
-    "name": "Ben Payne",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
   },
   {
     "seniority": 1371,
@@ -8016,12 +7566,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 1390,
-    "name": "Rob Sandberg",
-    "currentBase": "LAX",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1391,
     "name": "John Fairchild",
     "currentBase": "SEA",
@@ -8073,12 +7617,6 @@
     "seniority": 1401,
     "name": "Todd Lightle",
     "currentBase": "LAX",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1401,
-    "name": "Chad Van Someren",
-    "currentBase": "SEA",
     "currentSeat": "CA"
   },
   {
@@ -8184,12 +7722,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 1421,
-    "name": "Matt Ruotsi",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1422,
     "name": "Robert Grillo",
     "currentBase": "LAX",
@@ -8204,12 +7736,6 @@
   {
     "seniority": 1424,
     "name": "Justin Persich",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 1424,
-    "name": "AJ Gaston",
     "currentBase": "SEA",
     "currentSeat": "FO"
   },
@@ -8334,21 +7860,9 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 1448,
-    "name": "Chris Jones",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1450,
     "name": "Matthew James Jones",
     "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1450,
-    "name": "Tim Larson",
-    "currentBase": "PDX",
     "currentSeat": "CA"
   },
   {
@@ -8356,12 +7870,6 @@
     "name": "Corey Pflueger",
     "currentBase": "SEA",
     "currentSeat": "CA"
-  },
-  {
-    "seniority": 1451,
-    "name": "Ben Staulcup",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
   },
   {
     "seniority": 1453,
@@ -8388,12 +7896,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 1456,
-    "name": "Ben Halverson",
-    "currentBase": "LAX",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1457,
     "name": "Brad Montgomery",
     "currentBase": "SEA",
@@ -8414,12 +7916,6 @@
   {
     "seniority": 1460,
     "name": "Andrew Molitor",
-    "currentBase": "LAX",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1460,
-    "name": "Dell Mance",
     "currentBase": "LAX",
     "currentSeat": "CA"
   },
@@ -8574,12 +8070,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 1491,
-    "name": "Matt Ratkowski",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1492,
     "name": "Frank Suarez",
     "currentBase": "LAX",
@@ -8676,12 +8166,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 1508,
-    "name": "Jeff Jackson",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 1509,
     "name": "Anthony Gaona",
     "currentBase": "SFO",
@@ -8709,12 +8193,6 @@
     "seniority": 1513,
     "name": "Thomas Reifein",
     "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1513,
-    "name": "Torin O'Sullivan",
-    "currentBase": "LAX",
     "currentSeat": "CA"
   },
   {
@@ -8844,12 +8322,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 1539,
-    "name": "Kyle Duncan",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1540,
     "name": "Ali Kobaissi",
     "currentBase": "LAX",
@@ -8904,12 +8376,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 1549,
-    "name": "Aaron Van Arsdale",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1550,
     "name": "Erin Peltier",
     "currentBase": "SEA",
@@ -8961,12 +8427,6 @@
     "seniority": 1558,
     "name": "Benjamin Cage",
     "currentBase": "LAX",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1558,
-    "name": "Ted Davis",
-    "currentBase": "ANC",
     "currentSeat": "CA"
   },
   {
@@ -9237,12 +8697,6 @@
     "seniority": 1610,
     "name": "Aaron Pulido",
     "currentBase": "LAX",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 1610,
-    "name": "Chris Mazurkiewicz",
-    "currentBase": "SEA",
     "currentSeat": "FO"
   },
   {
@@ -9530,12 +8984,6 @@
   {
     "seniority": 1660,
     "name": "Sean Smith",
-    "currentBase": "LAX",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1660,
-    "name": "Sean Smith",
     "currentBase": "SEA",
     "currentSeat": "CA"
   },
@@ -9559,19 +9007,7 @@
   },
   {
     "seniority": 1665,
-    "name": "Daniel C. Richards",
-    "currentBase": "PDX",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1665,
     "name": "Daniel Richards",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 1665,
-    "name": "Jason De Kruyf",
     "currentBase": "SEA",
     "currentSeat": "FO"
   },
@@ -9616,12 +9052,6 @@
     "name": "Stuart Hargrove",
     "currentBase": "PDX",
     "currentSeat": "CA"
-  },
-  {
-    "seniority": 1672,
-    "name": "Scott Putnam",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
   },
   {
     "seniority": 1673,
@@ -10080,12 +9510,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 1752,
-    "name": "Thomas Hatch",
-    "currentBase": "PDX",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1753,
     "name": "Ryan Sis",
     "currentBase": "SEA",
@@ -10442,12 +9866,6 @@
   {
     "seniority": 1823,
     "name": "Christopher Harris",
-    "currentBase": "SFO",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1823,
-    "name": "Christopher Harris",
     "currentBase": "ANC",
     "currentSeat": "FO"
   },
@@ -10524,12 +9942,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 1836,
-    "name": "Kyle McElheran",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 1837,
     "name": "Randall Smith",
     "currentBase": "ANC",
@@ -10566,12 +9978,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 1842,
-    "name": "Tim Cummins",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 1843,
     "name": "Paul Lockhart",
     "currentBase": "SEA",
@@ -10590,12 +9996,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 1845,
-    "name": "Ty Frisby",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1846,
     "name": "Briana Bulger",
     "currentBase": "SEA",
@@ -10612,12 +10012,6 @@
     "name": "Terez Grady",
     "currentBase": "SEA",
     "currentSeat": "FO"
-  },
-  {
-    "seniority": 1848,
-    "name": "Jim Hansen",
-    "currentBase": "PDX",
-    "currentSeat": "CA"
   },
   {
     "seniority": 1849,
@@ -10642,12 +10036,6 @@
     "name": "Cecil Wall",
     "currentBase": "LAX",
     "currentSeat": "CA"
-  },
-  {
-    "seniority": 1852,
-    "name": "Jeff Kannberg",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
   },
   {
     "seniority": 1853,
@@ -10704,12 +10092,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 1861,
-    "name": "Greg Forrester",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 1862,
     "name": "Michael Stewart",
     "currentBase": "PDX",
@@ -10740,12 +10122,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 1868,
-    "name": "Ron Hebert",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1869,
     "name": "Marc Dalton",
     "currentBase": "SFO",
@@ -10754,12 +10130,6 @@
   {
     "seniority": 1870,
     "name": "Kurt Nicholson",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1870,
-    "name": "Ted Van Der Kolk",
     "currentBase": "SEA",
     "currentSeat": "CA"
   },
@@ -10839,12 +10209,6 @@
     "seniority": 1890,
     "name": "Adam Haverkost",
     "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 1890,
-    "name": "Jeff Boesche",
-    "currentBase": "ANC",
     "currentSeat": "FO"
   },
   {
@@ -10950,21 +10314,9 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 1911,
-    "name": "Tom Stanley",
-    "currentBase": "SFO",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1912,
     "name": "Jason Williams",
     "currentBase": "SFO",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1912,
-    "name": "Dan Tarleton",
-    "currentBase": "SEA",
     "currentSeat": "CA"
   },
   {
@@ -10992,12 +10344,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 1917,
-    "name": "Tom O'Connor",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1918,
     "name": "Michael Ortega",
     "currentBase": "SEA",
@@ -11008,12 +10354,6 @@
     "name": "Justin Chambers",
     "currentBase": "SEA",
     "currentSeat": "CA"
-  },
-  {
-    "seniority": 1919,
-    "name": "Mike Little",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
   },
   {
     "seniority": 1920,
@@ -11094,12 +10434,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 1933,
-    "name": "Jake Wilkens",
-    "currentBase": "ANC",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1934,
     "name": "Arthur Bogie",
     "currentBase": "SEA",
@@ -11138,12 +10472,6 @@
   {
     "seniority": 1947,
     "name": "Jennifer Smith",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1947,
-    "name": "Matt Stewart",
     "currentBase": "SEA",
     "currentSeat": "CA"
   },
@@ -11187,12 +10515,6 @@
     "seniority": 1959,
     "name": "David Bushre",
     "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 1959,
-    "name": "Michael De Mey",
-    "currentBase": "LAX",
     "currentSeat": "FO"
   },
   {
@@ -11286,34 +10608,16 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 1984,
-    "name": "Nick Miller",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 1985,
     "name": "Thomas Palmer",
     "currentBase": "SEA",
     "currentSeat": "CA"
   },
   {
-    "seniority": 1985,
-    "name": "Joe Butler",
-    "currentBase": "LAX",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 1986,
     "name": "Wade Petersen",
     "currentBase": "SEA",
     "currentSeat": "CA"
-  },
-  {
-    "seniority": 1986,
-    "name": "Christyna Assink",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
   },
   {
     "seniority": 1987,
@@ -11370,33 +10674,15 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 1997,
-    "name": "Phil Kaye",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1998,
     "name": "Reed Willis",
     "currentBase": "SEA",
     "currentSeat": "FO"
   },
   {
-    "seniority": 1998,
-    "name": "Mike Wellner",
-    "currentBase": "ANC",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 1999,
     "name": "Garrett Schiller",
     "currentBase": "SFO",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 1999,
-    "name": "Blake Reynolds",
-    "currentBase": "SEA",
     "currentSeat": "CA"
   },
   {
@@ -11406,22 +10692,10 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 2000,
-    "name": "Zach Smith",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 2001,
     "name": "Matthew Davis",
     "currentBase": "SFO",
     "currentSeat": "CA"
-  },
-  {
-    "seniority": 2001,
-    "name": "Dan Scholl",
-    "currentBase": "LAX",
-    "currentSeat": "FO"
   },
   {
     "seniority": 2002,
@@ -11442,22 +10716,10 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 2004,
-    "name": "Pearson MacNaughton",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 2005,
     "name": "Russell Smith",
     "currentBase": "LAX",
     "currentSeat": "FO"
-  },
-  {
-    "seniority": 2005,
-    "name": "Nate Grubbs",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
   },
   {
     "seniority": 2006,
@@ -11490,12 +10752,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 2010,
-    "name": "TJ Thomas",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 2011,
     "name": "David Ticich",
     "currentBase": "SEA",
@@ -11509,21 +10765,9 @@
   },
   {
     "seniority": 2013,
-    "name": "Ryan Smith",
-    "currentBase": "LAX",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 2013,
     "name": "Ryan N. Smith",
     "currentBase": "SFO",
     "currentSeat": "CA"
-  },
-  {
-    "seniority": 2013,
-    "name": "Dan Kozak",
-    "currentBase": "ANC",
-    "currentSeat": "FO"
   },
   {
     "seniority": 2014,
@@ -11616,12 +10860,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 2039,
-    "name": "Cliff Cooley",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 2040,
     "name": "Cary Freeman",
     "currentBase": "SEA",
@@ -11656,12 +10894,6 @@
     "name": "Grady Girard",
     "currentBase": "SEA",
     "currentSeat": "CA"
-  },
-  {
-    "seniority": 2047,
-    "name": "Joe Bertsch",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
   },
   {
     "seniority": 2049,
@@ -11736,12 +10968,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 2065,
-    "name": "Steve Brissette",
-    "currentBase": "ANC",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 2066,
     "name": "Tyler Hinshaw",
     "currentBase": "SFO",
@@ -11802,12 +11028,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 2079,
-    "name": "Pasha Saleh",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 2081,
     "name": "Michael Agostino",
     "currentBase": "LAX",
@@ -11854,12 +11074,6 @@
     "name": "Bradley Boggess",
     "currentBase": "SFO",
     "currentSeat": "CA"
-  },
-  {
-    "seniority": 2090,
-    "name": "Jessica Prince",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
   },
   {
     "seniority": 2093,
@@ -11958,12 +11172,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 2113,
-    "name": "Jeff Turcotte",
-    "currentBase": "SFO",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 2114,
     "name": "Nathan Gold",
     "currentBase": "ANC",
@@ -12012,12 +11220,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 2121,
-    "name": "Toby Benefield",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 2123,
     "name": "Kyle Rabiyan",
     "currentBase": "SEA",
@@ -12057,12 +11259,6 @@
     "seniority": 2129,
     "name": "Steven Blocher",
     "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 2129,
-    "name": "Mike Kalinski",
-    "currentBase": "SFO",
     "currentSeat": "CA"
   },
   {
@@ -12138,12 +11334,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 2142,
-    "name": "Brad Moesges",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 2143,
     "name": "James Hodgson",
     "currentBase": "SEA",
@@ -12184,12 +11374,6 @@
     "name": "Trevor Templin",
     "currentBase": "LAX",
     "currentSeat": "FO"
-  },
-  {
-    "seniority": 2151,
-    "name": "Tom Samson",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
   },
   {
     "seniority": 2152,
@@ -12274,12 +11458,6 @@
     "name": "Cody Hamilton",
     "currentBase": "SFO",
     "currentSeat": "FO"
-  },
-  {
-    "seniority": 2168,
-    "name": "Denise Stecconi Ferraro",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
   },
   {
     "seniority": 2169,
@@ -12408,12 +11586,6 @@
     "currentSeat": "CA"
   },
   {
-    "seniority": 2196,
-    "name": "Clif Tinkham",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 2197,
     "name": "Kenneth Armstrong",
     "currentBase": "SEA",
@@ -12438,12 +11610,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 2202,
-    "name": "Chris Bacchus",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
-  },
-  {
     "seniority": 2203,
     "name": "Patrick Teems",
     "currentBase": "SEA",
@@ -12454,12 +11620,6 @@
     "name": "Bradley Koch",
     "currentBase": "SEA",
     "currentSeat": "FO"
-  },
-  {
-    "seniority": 2204,
-    "name": "Chris Girardet",
-    "currentBase": "SEA",
-    "currentSeat": "CA"
   },
   {
     "seniority": 2205,
@@ -12544,12 +11704,6 @@
     "name": "Kurt Russell",
     "currentBase": "SEA",
     "currentSeat": "CA"
-  },
-  {
-    "seniority": 2220,
-    "name": "Mike Riggs",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
   },
   {
     "seniority": 2222,
@@ -12735,12 +11889,6 @@
     "seniority": 2266,
     "name": "Joel Wees",
     "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 2266,
-    "name": "Barend J. Van der Walt",
-    "currentBase": "LAX",
     "currentSeat": "FO"
   },
   {
@@ -12984,12 +12132,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 2318,
-    "name": "Brent R. Kennedy",
-    "currentBase": "ANC",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 2319,
     "name": "Michael J. Antonini",
     "currentBase": "SEA",
@@ -13094,12 +12236,6 @@
   {
     "seniority": 2338,
     "name": "Logan D. Goldie",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 2338,
-    "name": "Jon R. Friedman",
     "currentBase": "SEA",
     "currentSeat": "FO"
   },
@@ -13230,12 +12366,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 2368,
-    "name": "Ben N. Nygren",
-    "currentBase": "ANC",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 2369,
     "name": "Andrew W. White",
     "currentBase": "SEA",
@@ -13314,20 +12444,8 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 2384,
-    "name": "Jeffrey D. Van Orsow",
-    "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 2385,
     "name": "Christopher Jones",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 2385,
-    "name": "Tim W. Bartholomew",
     "currentBase": "SEA",
     "currentSeat": "FO"
   },
@@ -13641,12 +12759,6 @@
     "seniority": 2452,
     "name": "William R. Post",
     "currentBase": "ANC",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 2452,
-    "name": "Charles J. Wilson, III",
-    "currentBase": "LAX",
     "currentSeat": "FO"
   },
   {
@@ -14424,12 +13536,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 2613,
-    "name": "Howard P. Morgan, III",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 2614,
     "name": "Christopher J. Carey",
     "currentBase": "SEA",
@@ -14529,12 +13635,6 @@
     "seniority": 2630,
     "name": "Gavin M. Pearson",
     "currentBase": "LAX",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 2630,
-    "name": "Wisdom O.Y. Agyel",
-    "currentBase": "SEA",
     "currentSeat": "FO"
   },
   {
@@ -14748,12 +13848,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 2675,
-    "name": "Darrel F. Carter, JR",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 2676,
     "name": "Nathaniel H. Perlman",
     "currentBase": "SEA",
@@ -14852,12 +13946,6 @@
   {
     "seniority": 2694,
     "name": "Arshad A. Saeed",
-    "currentBase": "LAX",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 2694,
-    "name": "Dominic A. Dal Pra",
     "currentBase": "LAX",
     "currentSeat": "FO"
   },
@@ -15000,12 +14088,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 2719,
-    "name": "Frank J. Siri, III",
-    "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 2720,
     "name": "William F. Tinsley",
     "currentBase": "LAX",
@@ -15075,12 +14157,6 @@
     "seniority": 2736,
     "name": "Zachary W. Moore",
     "currentBase": "LAX",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 2736,
-    "name": "Steve J. VanLandingham",
-    "currentBase": "SEA",
     "currentSeat": "FO"
   },
   {
@@ -15379,7 +14455,7 @@
   },
   {
     "seniority": 2797,
-    "name": "Kenneth  . Gibson",
+    "name": "Kenneth \u00a0. Gibson",
     "currentBase": "SEA",
     "currentSeat": "FO"
   },
@@ -15481,7 +14557,7 @@
   },
   {
     "seniority": 2816,
-    "name": "Tyler  . West",
+    "name": "Tyler \u00a0. West",
     "currentBase": "LAX",
     "currentSeat": "FO"
   },
@@ -15501,12 +14577,6 @@
     "seniority": 2820,
     "name": "Steven L. Bastuba",
     "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 2820,
-    "name": "Elias Garcia, Jr.",
-    "currentBase": "LAX",
     "currentSeat": "FO"
   },
   {
@@ -15693,12 +14763,6 @@
     "seniority": 2854,
     "name": "Whitney R. Welch",
     "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 2854,
-    "name": "Ward B. Hurlburt, V",
-    "currentBase": "ANC",
     "currentSeat": "FO"
   },
   {
@@ -16206,12 +15270,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 2957,
-    "name": "Martin J. Lovelady, II",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 2959,
     "name": "Emily H. Knisely",
     "currentBase": "SEA",
@@ -16326,12 +15384,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 2978,
-    "name": "Christopher D. St. Charles",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 2979,
     "name": "Geoffrey K. Wood",
     "currentBase": "LAX",
@@ -16358,12 +15410,6 @@
   {
     "seniority": 2983,
     "name": "Annie L. Johnston",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 2983,
-    "name": "James L. Thomaston, II",
     "currentBase": "SEA",
     "currentSeat": "FO"
   },
@@ -16425,12 +15471,6 @@
     "seniority": 2995,
     "name": "Scott D. Wathey",
     "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 2995,
-    "name": "Thomas J. von Olszewski",
-    "currentBase": "ANC",
     "currentSeat": "FO"
   },
   {
@@ -16692,12 +15732,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 3047,
-    "name": "Steven S. Bunch, Jr.",
-    "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 3048,
     "name": "Paul M. Skipworth",
     "currentBase": "SEA",
@@ -16794,12 +15828,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 3065,
-    "name": "Donald E. Lucy, III",
-    "currentBase": "LAX",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 3067,
     "name": "James A. Thompson",
     "currentBase": "SEA",
@@ -16838,12 +15866,6 @@
   {
     "seniority": 3074,
     "name": "Chad A. Nelson",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 3074,
-    "name": "Chad L. Nelson",
     "currentBase": "SEA",
     "currentSeat": "FO"
   },
@@ -16934,12 +15956,6 @@
   {
     "seniority": 3092,
     "name": "William B. Kaminski",
-    "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 3092,
-    "name": "John M. Drozdowski, Jr.",
     "currentBase": "SFO",
     "currentSeat": "FO"
   },
@@ -17036,12 +16052,6 @@
   {
     "seniority": 3109,
     "name": "Samuel Peterson",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 3109,
-    "name": "Donald G. Hanson, II",
     "currentBase": "SEA",
     "currentSeat": "FO"
   },
@@ -17232,12 +16242,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 3144,
-    "name": "David A. Van Kampen",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 3145,
     "name": "William B. Morse",
     "currentBase": "SEA",
@@ -17253,12 +16257,6 @@
     "seniority": 3148,
     "name": "Lowell E. Silver",
     "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 3148,
-    "name": "Jorge A. Huerta Cervantes",
-    "currentBase": "LAX",
     "currentSeat": "FO"
   },
   {
@@ -17379,12 +16377,6 @@
     "seniority": 3172,
     "name": "Nicholas J. Wilkerson",
     "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 3172,
-    "name": "Ivan de la Pena",
-    "currentBase": "SEA",
     "currentSeat": "FO"
   },
   {
@@ -17539,12 +16531,6 @@
   },
   {
     "seniority": 3202,
-    "name": "Matthew Miller",
-    "currentBase": "PDX",
-    "currentSeat": "CA"
-  },
-  {
-    "seniority": 3202,
     "name": "Matthew J. Miller",
     "currentBase": "LAX",
     "currentSeat": "FO"
@@ -17652,12 +16638,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 3220,
-    "name": "Nicholas Carver",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 3221,
     "name": "Joseph W. Miller",
     "currentBase": "SEA",
@@ -17732,12 +16712,6 @@
   {
     "seniority": 3233,
     "name": "Robert L. Fairbanks",
-    "currentBase": "SEA",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 3233,
-    "name": "Kimlong Ngor",
     "currentBase": "SEA",
     "currentSeat": "FO"
   },
@@ -17822,12 +16796,6 @@
   {
     "seniority": 3247,
     "name": "John S. Boctor",
-    "currentBase": "LAX",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 3247,
-    "name": "Shahin Mashayekh Esfahani",
     "currentBase": "LAX",
     "currentSeat": "FO"
   },
@@ -17924,12 +16892,6 @@
   {
     "seniority": 3263,
     "name": "James C. Simmons",
-    "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 3263,
-    "name": "Josh J. Morris",
     "currentBase": "SFO",
     "currentSeat": "FO"
   },
@@ -18066,12 +17028,6 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 3286,
-    "name": "Frank Rouse, III",
-    "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 3287,
     "name": "Timothy K. Kochert",
     "currentBase": "SFO",
@@ -18134,12 +17090,6 @@
   {
     "seniority": 3298,
     "name": "Liam R. Kennedy",
-    "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 3298,
-    "name": "Micah B. Vander Veen",
     "currentBase": "SFO",
     "currentSeat": "FO"
   },
@@ -18468,32 +17418,14 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 3354,
-    "name": "Jae S. Park",
-    "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 3355,
     "name": "Michael j. Olah",
     "currentBase": "SFO",
     "currentSeat": "FO"
   },
   {
-    "seniority": 3355,
-    "name": "Christopher S. McGoffin",
-    "currentBase": "LAX",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 3356,
     "name": "Justin R. Sabelhaus",
-    "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 3356,
-    "name": "Joshua L. Cornelius",
     "currentBase": "SFO",
     "currentSeat": "FO"
   },
@@ -18504,21 +17436,9 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 3357,
-    "name": "Yoandris Aguilar",
-    "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 3358,
     "name": "Leslie N. Blohm",
     "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 3358,
-    "name": "Joshua M. Whipp",
-    "currentBase": "LAX",
     "currentSeat": "FO"
   },
   {
@@ -18528,21 +17448,9 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 3359,
-    "name": "James Schaak",
-    "currentBase": "LAX",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 3360,
     "name": "Philip A. Corbett",
     "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 3360,
-    "name": "Michael  Woodson",
-    "currentBase": "LAX",
     "currentSeat": "FO"
   },
   {
@@ -18552,20 +17460,8 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 3361,
-    "name": "Jordy H. Call",
-    "currentBase": "LAX",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 3362,
     "name": "Tanner B. Stephens",
-    "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 3362,
-    "name": "Charles Hubbard",
     "currentBase": "SFO",
     "currentSeat": "FO"
   },
@@ -18576,20 +17472,8 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 3363,
-    "name": "Richard D. Carter",
-    "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 3364,
     "name": "Faith R. Hatfield",
-    "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 3364,
-    "name": "William F. Montgomery",
     "currentBase": "SFO",
     "currentSeat": "FO"
   },
@@ -18600,32 +17484,14 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 3365,
-    "name": "Nikita  Clark",
-    "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 3366,
     "name": "Dana L. Griffin",
     "currentBase": "LAX",
     "currentSeat": "FO"
   },
   {
-    "seniority": 3366,
-    "name": "Robert Shunk",
-    "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 3367,
     "name": "Megan Schrum",
-    "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 3367,
-    "name": "Nicholas  Biron",
     "currentBase": "SFO",
     "currentSeat": "FO"
   },
@@ -18636,20 +17502,8 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 3368,
-    "name": "Kasey Richardson",
-    "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 3369,
     "name": "Jason S. Downing",
-    "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 3369,
-    "name": "Samuel Matthews",
     "currentBase": "SFO",
     "currentSeat": "FO"
   },
@@ -18660,20 +17514,8 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 3370,
-    "name": "James  B. Wunder",
-    "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 3371,
     "name": "Brycen A. Lechner",
-    "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 3371,
-    "name": "Nathan A. Greenberg",
     "currentBase": "SFO",
     "currentSeat": "FO"
   },
@@ -18684,20 +17526,8 @@
     "currentSeat": "FO"
   },
   {
-    "seniority": 3372,
-    "name": "Mandi  McMahon",
-    "currentBase": "LAX",
-    "currentSeat": "FO"
-  },
-  {
     "seniority": 3373,
     "name": "Rutger AW Thiele",
-    "currentBase": "LAX",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 3373,
-    "name": "Alexander J. Koch",
     "currentBase": "LAX",
     "currentSeat": "FO"
   },
@@ -18783,12 +17613,6 @@
     "seniority": 3387,
     "name": "Anthony F. Parsons",
     "currentBase": "SFO",
-    "currentSeat": "FO"
-  },
-  {
-    "seniority": 3388,
-    "name": "Matthew T. Clark",
-    "currentBase": "LAX",
     "currentSeat": "FO"
   },
   {
