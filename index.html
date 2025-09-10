@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
-  <title>Vacancy Cascade — CA vs FO compete by seniority</title>
+  <title>Vacancy Cascade — Capped Entries & Stay-on-listed-current</title>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <style>
     :root{ --fg:#101828; --muted:#667085; --bg:#f7f9fc; --card:#fff; --line:#e6eaf0; --accent:#2f6df6; }
@@ -56,7 +56,7 @@
         </label>
       </div>
       <div class="muted" style="font-size:12px;margin:6px 0 10px">
-        CA vacancies seeded by Δ can be taken by <b>either CA→CA or FO→CA</b>. Seniority order decides who wins. Per-seat entry cap ≤ Δ, and pilots <b>stay</b> when their current seat appears in their list.
+        Rules: <b>Stay when current seat is listed</b> (even without "0"), and <b>cap external entries</b> into each seat to ≤ its seeded Δ. CA Δ are upgrade-only.
       </div>
       <div class="row" style="margin-bottom:8px">
         <select id="qBase"></select>
@@ -80,7 +80,7 @@
     </aside>
 
     <section class="card">
-      <div id="diag" class="ok">CA vs FO compete by seniority • Caps and stay logic active.</div>
+      <div id="diag" class="ok">Capped-entries mode active. Per-seat external awards will not exceed seeded Δ.</div>
       <div class="row" style="justify-content:space-between">
         <div class="row">
           <strong>Awards</strong>
@@ -145,14 +145,14 @@
     function buildCapUI(){
       const bases=[...new Set(capacities.map(c=>c.base))].sort();
       $('qBase').innerHTML = bases.map(b=>`<option>${b}</option>`).join('');
-      $('fltBase').innerHTML = '<option value=\"\">Awarded Base: All</option>' + bases.map(b=>`<option>${b}</option>`).join('');
+      $('fltBase').innerHTML = '<option value="">Awarded Base: All</option>' + bases.map(b=>`<option>${b}</option>`).join('');
 
       const holder=$('capGrid'); holder.innerHTML='';
       let cur=null, tbl=null, tbody=null;
       capacities.forEach(c=>{
         if (c.base!==cur){
           cur=c.base; tbl=document.createElement('table'); const thead=document.createElement('thead'); const tr=document.createElement('tr');
-          ['Base','Seat','Vacancies Δ (cap)','Working Vacancies'].forEach(h=>{ const th=document.createElement('th'); th.textContent=h; tr.appendChild(th); });
+          ['Base','Seat','Vacancies Δ (CA=upgrades only)','Working Vacancies'].forEach(h=>{ const th=document.createElement('th'); th.textContent=h; tr.appendChild(th); });
           thead.appendChild(tr); tbl.appendChild(thead); tbody=document.createElement('tbody'); tbl.appendChild(tbody); holder.appendChild(tbl);
         }
         const workCell=document.createElement('td'); const pill=document.createElement('span'); pill.className='pill'; pill.textContent=String(c.delta); workCell.appendChild(pill);
@@ -192,13 +192,15 @@
 
     function runCascade(){
       // vacancy buckets and entry caps
-      const vac = new Map(); // key -> available vacancies (single bucket usable by CA or FO)
+      const vac = new Map(); // key -> {any, up}
       const cap = new Map(); // key -> remaining external entries allowed (<= seeded Δ total)
       capacities.forEach(c=>{
         const k=key(c.base,c.seat);
         const v = Math.max(0, asInt(c.delta));
-        vac.set(k, v);        // usable by any entrant
-        cap.set(k, v);        // per-seat cap for external entrants
+        const up = (c.seat==='CA') ? v : 0;
+        const any = (c.seat==='CA') ? 0 : v;
+        vac.set(k, {any:any, up:up});
+        cap.set(k, v); // cap total external entries to seeded Δ
       });
 
       const out=[];
@@ -208,11 +210,12 @@
         const raw = prefMap.get(r.seniority) || [];
         let list = raw.map(parsePref).filter(Boolean);
 
-        // Strict: only award seats on the list; also "stay when current seat appears"
+        // Treat current seat in list as implicit stay at that rank
         const idxCurrent = list.findIndex(p=> (p.base??r.currentBase)===r.currentBase && (p.seat??r.currentSeat)===r.currentSeat);
         if (idxCurrent>=0){
           list[idxCurrent] = {base:r.currentBase, seat:r.currentSeat, stay:true};
         }
+
         const hasStay = list.some(x=>x.stay===true);
         if (hasStay){
           list = list.map(x=> x.stay ? {base:r.currentBase, seat:r.currentSeat, stay:true} : x);
@@ -223,35 +226,39 @@
 
         for (let i=0;i<list.length;i++){
           const pref=list[i]; const b=pref.base ?? r.currentBase; const s=pref.seat ?? r.currentSeat;
-          const k=key(b,s); const fromKey = key(r.currentBase, r.currentSeat);
+          const k=key(b,s); const bucket = vac.get(k) || {any:0, up:0};
+          const fromKey = key(r.currentBase, r.currentSeat);
 
           if (b===r.currentBase && s===r.currentSeat){
             if (pref.stay){ awardedPrefNum=i+1; note='Stayed (listed current base/seat)'; }
             break;
           }
 
-          // entry cap: entering a *different* seat consumes cap and cannot exceed seeded Δ
+          // entry cap: if moving into a different seat than origin and cap is exhausted, skip
           if (k !== fromKey){
-            const remainCap = cap.get(k) ?? 0;
-            if (remainCap <= 0) continue;
+            const remain = cap.get(k) ?? 0;
+            if (remain <= 0) continue;
           }
 
-          let avail = vac.get(k) || 0;
-          if (avail <= 0) continue;
-
-          // Award
-          vac.set(k, avail-1);
-          if (k !== fromKey){
-            cap.set(k, Math.max(0, (cap.get(k)||0)-1));
+          let can=false;
+          if (s==='CA' && r.currentSeat==='FO'){
+            if (bucket.up>0){ bucket.up--; can=true; }
+            else if (bucket.any>0){ bucket.any--; can=true; }
+          } else {
+            if (bucket.any>0){ bucket.any--; can=true; }
           }
 
-          // backfill at origin: create a generic vacancy (can be used by anyone later)
-          const originAvail = vac.get(fromKey) || 0;
-          vac.set(fromKey, originAvail + 1);
+          if (can){
+            if (k !== fromKey){
+              cap.set(k, Math.max(0, (cap.get(k)||0)-1));
+            }
+            const ob = vac.get(fromKey) || {any:0, up:0};
+            ob.any += 1; vac.set(fromKey, ob);
 
-          awardedBase=b; awardedSeat=s; awardedPrefNum=i+1; moved=true; upgrade=(r.currentSeat==='FO' && s==='CA');
-          note = upgrade? 'Upgrade (FO→CA)' : 'Awarded (lateral)';
-          break;
+            awardedBase=b; awardedSeat=s; awardedPrefNum=i+1; moved=true; upgrade=(r.currentSeat==='FO' && s==='CA');
+            note = upgrade? 'Upgrade (FO→CA)' : 'Awarded (lateral)';
+            break;
+          }
         }
 
         out.push({seniority:r.seniority, name:r.name, fromBase:r.currentBase, fromSeat:r.currentSeat, awardedBase, awardedSeat, awardedPrefNum, moved, upgrade, note});
