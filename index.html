@@ -3,34 +3,31 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Position Bid — Full Cascade (No BPL)</title>
+<title>Position Bid — All Bases (Single File, No BPL)</title>
 <style>
   :root{ --fg:#101828; --muted:#667085; --bg:#f7f9fc; --card:#fff; --line:#e6eaf0; }
-  *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+  *{box-sizing:border-box} html,body{margin:0;background:#f7f9fc;color:var(--fg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
   header{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap}
   h1{margin:0;font-size:18px}
   .status{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:3px 10px}
   .ok{background:#eef7ff;border-color:#cfe4ff} .err{background:#fff2f2;border-color:#ffd7dc;color:#a61e2a}
-  main{max-width:1400px;margin:0 auto;padding:16px;display:grid;gap:16px;grid-template-columns:420px 1fr}
-  @media (max-width: 1100px){ main{grid-template-columns:1fr} }
+  main{max-width:1200px;margin:0 auto;padding:16px;display:grid;gap:16px;grid-template-columns:1fr}
   .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}
   .muted{color:var(--muted)}
   table{width:100%;border-collapse:collapse;font-size:13px}
   th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
-  thead th{position:sticky;top:60px;background:#fbfdff;z-index:1}
   input[type=number]{width:80px;border:1px solid var(--line);border-radius:10px;padding:6px;background:#fff}
   button{border:1px solid var(--line);background:#111;color:#fff;border-radius:10px;padding:6px 10px;cursor:pointer}
   button.ghost{background:#fff;color:#111}
   .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .pill{display:inline-block;padding:2px 8px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:12px}
-  .tag{display:inline-block;padding:2px 8px;border:1px solid var(--line);border-radius:999px;font-size:12px}
-  .tag-move{background:#eef2ff;border-color:#d9e1ff} .tag-up{background:#fff6e6;border-color:#ffe1b3} .tag-stay{background:#e9fbf3;border-color:#cfeee1}
+  .errbox{background:#fff2f2;border:1px solid #ffd7dc;color:#7f1d1d;padding:10px;border-radius:10px;margin:8px 0;font-size:12px}
 </style>
 </head>
 <body>
 <header>
   <div class="row">
-    <h1>Position Bid — Full Cascade (No BPL)</h1>
+    <h1>Position Bid — All Bases (No BPL)</h1>
     <span id="status" class="status">Booting…</span>
   </div>
   <div class="row">
@@ -40,49 +37,23 @@
         <option value="compete">CA Δ = CA/FO compete by seniority</option>
       </select>
     </label>
-    <button id="btnCSV" class="ghost" disabled>Export CSV</button>
+    <button id="btnRun" class="ghost">Run Cascade</button>
   </div>
 </header>
 
 <main>
-  <aside class="card">
-    <div class="row" style="justify-content:space-between">
-      <h3 style="margin:0;font-size:14px">Vacancy Controls</h3>
-      <label class="row muted" style="font-size:12px"><input id="autoRun" type="checkbox" checked> Auto-run</label>
+  <section class="card">
+    <h3 style="margin:0 0 8px 0;font-size:14px">Vacancy Controls</h3>
+    <div class="muted" style="font-size:12px;margin-bottom:8px">
+      Loads <code>/data/capacities.json</code> (or <code>capacities.json.txt</code>), <code>/data/roster.json</code>, <code>/data/preferences.json</code> relative to this page.
     </div>
-    <div class="muted" style="font-size:12px;margin:6px 0 10px">
-      Reads <code>data/capacities.json</code> (or <code>capacities.json.txt</code>), <code>data/roster.json</code>, <code>data/preferences.json</code>.
-    </div>
-
-    <div class="row" style="justify-content:space-between;margin-bottom:8px">
-      <div class="row">
-        <button class="ghost" data-nudge="+1">+1</button>
-        <button class="ghost" data-nudge="+5">+5</button>
-        <button class="ghost" data-nudge="+10">+10</button>
-        <button class="ghost" data-nudge="-1">−1</button>
-        <button class="ghost" data-nudge="-5">−5</button>
-        <button class="ghost" data-nudge="-10">−10</button>
-      </div>
-      <button id="btnReset" class="ghost">Reset All Δ to 0</button>
-    </div>
-
-    <div id="capGrid" style="max-height:65vh;overflow:auto"></div>
-  </aside>
+    <div id="errors"></div>
+    <div id="grid"></div>
+  </section>
 
   <section class="card">
     <div class="row" style="justify-content:space-between">
-      <div class="row">
-        <strong>Awards</strong>
-        <input id="q" type="text" placeholder="Search name or seniority…" style="width:220px;margin-left:10px"/>
-        <select id="fltMove">
-          <option value="all">All awards</option>
-          <option value="movers">Movers only</option>
-          <option value="upgrades">Upgrades only</option>
-        </select>
-        <select id="fltBase"><option value="">Awarded Base: All</option></select>
-        <select id="fltSeat"><option value="">Awarded Seat: All</option><option>CA</option><option>FO</option></select>
-        <button id="btnClear" class="ghost">Clear</button>
-      </div>
+      <strong>Awards</strong>
       <div class="row">
         <span class="pill">Shown <b id="shown">0</b></span>
         <span class="pill">Total <b id="total">0</b></span>
@@ -90,12 +61,219 @@
         <span class="pill">Movers <b id="mvCnt">0</b></span>
       </div>
     </div>
-    <div id="results" style="max-height:68vh;overflow:auto;margin-top:8px">
-      <div class="muted">Loading data and running cascade…</div>
-    </div>
+    <div id="results" style="max-height:65vh;overflow:auto;margin-top:8px"></div>
   </section>
 </main>
 
-<script src="app_full.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const asInt = v => (v==null||v==='')?0:(Number(v)||0);
+const key = (b,s) => \`\${String(b).toUpperCase()}|\${String(s).toUpperCase()}\`;
+
+async function fetchJSON(paths){
+  for (const p of paths){
+    try{ const r=await fetch(p+'?v='+Date.now(), {cache:'no-store'}); if(r.ok) return r.json(); }catch(e){}
+  }
+  throw new Error('Failed '+paths.join(', '));
+}
+
+let CAP=[], ROST=[], PREFS=new Map(), RESULTS=[];
+
+function setStatus(t, ok){ const s=$('status'); s.textContent=t; s.classList.remove('ok','err'); s.classList.add(ok?'ok':'err'); }
+function errBox(msg){ const d=$('errors'); const div=document.createElement('div'); div.className='errbox'; div.textContent=msg; d.appendChild(div); }
+
+function normalizeCaps(raw){
+  const rows=[];
+  if (Array.isArray(raw)){
+    raw.forEach(c => {
+      const base=String(c.base||'').toUpperCase();
+      const seat=String(c.seat||'').toUpperCase();
+      const inc=asInt(c.startCapacity ?? c.incumbents ?? 0);
+      const d=asInt(c.delta ?? 0);
+      if (base && seat) rows.push({base,seat,incumbents:inc,delta:d});
+    });
+  } else {
+    Object.entries(raw||{}).forEach(([k,obj])=>{
+      const t=String(k).split(/[\|\s\/\-_]+/).filter(Boolean);
+      const seat=(t.pop()||'').toUpperCase();
+      const base=(t.pop()||'').toUpperCase();
+      const inc=asInt(obj?.incumbents ?? obj?.startCapacity ?? 0);
+      const d = asInt(obj?.delta ?? 0);
+      if (base && seat) rows.push({base,seat,incumbents:inc,delta:d});
+    });
+  }
+  // Ensure both CA and FO exist for every base
+  const bases=[...new Set(rows.map(r=>r.base))];
+  const by= new Map(rows.map(r=>[key(r.base,r.seat), r]));
+  for (const b of bases){
+    for (const s of ['CA','FO']){
+      const k=key(b,s);
+      if (!by.has(k)) by.set(k, {base:b, seat:s, incumbents:0, delta:0});
+    }
+  }
+  return [...by.values()].sort((a,b)=> a.base.localeCompare(b.base)||a.seat.localeCompare(b.seat));
+}
+
+function normalizeRoster(raw){
+  if (!Array.isArray(raw)) return [];
+  return raw.map(r=>({sen:asInt(r.sen ?? r.seniority ?? r.Sen),
+                      name:String(r.name||''),
+                      currentBase:String(r.current?.base||'').toUpperCase(),
+                      currentSeat:String(r.current?.seat||'').toUpperCase()}))
+            .filter(r=>r.sen>0 && r.currentBase && r.currentSeat)
+            .sort((a,b)=>a.sen-b.sen);
+}
+
+function parsePrefString(s){
+  const t=String(s||'').trim().toUpperCase();
+  if(!t) return null;
+  if(t==='0') return {stay:true};
+  const parts=t.split(/[\s\/\-\_]+/).filter(Boolean);
+  if(parts.length>=2){ return {base:parts[parts.length-2], seat:parts[parts.length-1]}; }
+  return null;
+}
+
+function normalizePrefs(raw){
+  const map=new Map();
+  const values = Array.isArray(raw) ? raw : Object.values(raw||{});
+  for (const obj of values){
+    const sen=asInt(obj.sen ?? obj.seniority ?? obj.Sen);
+    const arr = Array.isArray(obj.preferences)? [...obj.preferences] : (Array.isArray(obj.prefs)? [...obj.prefs] : []);
+    arr.sort((a,b)=> (asInt(a?.order) - asInt(b?.order)));
+    const rows = arr.map(x=>{
+      if (typeof x === 'string' || typeof x === 'number'){ const p=parsePrefString(x); return p||null; }
+      if (x && (x.stay || x.base || x.seat)){
+        return { stay: !!x.stay, base:String(x.base||'').toUpperCase(), seat:String(x.seat||'').toUpperCase() };
+      }
+      return null;
+    }).filter(Boolean);
+    map.set(sen, rows);
+  }
+  return map;
+}
+
+function buildGrid(){
+  const holder=$('grid'); holder.innerHTML='';
+  const tbl=document.createElement('table');
+  tbl.innerHTML = `<thead><tr>
+    <th>Base</th><th>Seat</th><th>Incumbents</th><th>Seeded Δ</th><th>Controls</th>
+  </tr></thead>`;
+  const tb=document.createElement('tbody');
+  for (const r of CAP){
+    const tr=document.createElement('tr');
+    const td=t=>{ const d=document.createElement('td'); d.textContent=t; return d; };
+    tr.appendChild(td(r.base)); tr.appendChild(td(r.seat)); tr.appendChild(td(String(r.incumbents)));
+    const dtd=document.createElement('td');
+    const input=document.createElement('input'); input.type='number'; input.value=String(r.delta); input.style.width='80px';
+    input.oninput=()=>{ r.delta = asInt(input.value); };
+    dtd.appendChild(input); tr.appendChild(dtd);
+    const ctd=document.createElement('td');
+    const minus=document.createElement('button'); minus.className='ghost'; minus.textContent='–';
+    const plus=document.createElement('button'); plus.className='ghost'; plus.textContent='+';
+    minus.onclick=()=>{ r.delta--; input.value=String(r.delta); };
+    plus.onclick =()=>{ r.delta++; input.value=String(r.delta); };
+    ctd.appendChild(minus); ctd.appendChild(plus); tr.appendChild(ctd);
+    tb.appendChild(tr);
+  }
+  tbl.appendChild(tb); holder.appendChild(tbl);
+}
+
+function seatIndex(roster){
+  const m=new Map();
+  for (const r of roster){
+    const k=key(r.currentBase, r.currentSeat);
+    if(!m.has(k)) m.set(k, []);
+    m.get(k).push(r.sen);
+  }
+  for (const arr of m.values()) arr.sort((a,b)=>a-b);
+  return m;
+}
+
+function cascade(){
+  const seeded=new Map(), backfill=new Map();
+  for (const c of CAP){
+    const k=key(c.base,c.seat);
+    seeded.set(k,(seeded.get(k)||0)+Math.max(0, asInt(c.delta)));
+    if(!backfill.has(k)) backfill.set(k,0);
+  }
+  const mode = $('mode').value;
+  const pilots = ROST.map(r=>({...r}));
+  const idx = seatIndex(pilots);
+  const awards=[];
+
+  for (const r of pilots){
+    const prefs = PREFS.get(r.sen)||[];
+    const seen=new Set(); const ordered=[];
+    for (const p of prefs){
+      if (p.stay){ ordered.push({base:r.currentBase, seat:r.currentSeat, stay:true}); continue; }
+      if (!p.base || !p.seat) continue;
+      const kn=key(p.base,p.seat);
+      if (seen.has(kn)) continue; seen.add(kn);
+      ordered.push({base:p.base, seat:p.seat, stay:false});
+    }
+
+    let awardB=r.currentBase, awardS=r.currentSeat, pref=0, moved=false, upgrade=false, note='Stayed';
+    for (let i=0;i<ordered.length;i++){
+      const p=ordered[i]; const toK=key(p.base,p.seat); const fromK=key(r.currentBase,r.currentSeat);
+      if (p.stay || (p.base===r.currentBase && p.seat===r.currentSeat)){ pref=i+1; note='Stayed (listed)'; break; }
+      let bf=backfill.get(toK)||0, sd=seeded.get(toK)||0;
+      if (bf<=0 && sd<=0) continue;
+      if (sd>0 && p.seat==='CA' && mode==='upgrades' && r.currentSeat!=='FO'){ if (bf<=0) continue; }
+      if (bf>0) backfill.set(toK,bf-1); else seeded.set(toK,sd-1);
+      backfill.set(fromK,(backfill.get(fromK)||0)+1);
+      const arr=idx.get(fromK)||[]; idx.set(fromK, arr.filter(s=>s!==r.sen));
+      const d=idx.get(toK)||[]; let j=0; while(j<d.length && d[j]<r.sen) j++; d.splice(j,0,r.sen); idx.set(toK,d);
+      awardB=p.base; awardS=p.seat; pref=i+1; moved=true; upgrade=(r.currentSeat==='FO' && p.seat==='CA'); note=upgrade?'Upgrade':'Lateral';
+      r.currentBase=p.base; r.currentSeat=p.seat;
+      break;
+    }
+    awards.push({sen:r.sen, name:r.name, from:`${r.currentBase} ${r.currentSeat}`, to:`${awardB} ${awardS}`, pref, moved, upgrade, note});
+  }
+  return {awards, backfill};
+}
+
+function renderAwards(data){
+  const {awards}=data;
+  const holder=$('results'); holder.innerHTML='';
+  const tbl=document.createElement('table');
+  tbl.innerHTML = `<thead><tr>
+    <th>Seniority</th><th>Pilot</th><th>From</th><th>Awarded</th><th>Pref#</th><th>Tags</th><th>Note</th>
+  </tr></thead>`;
+  const tb=document.createElement('tbody');
+  awards.forEach(r=>{
+    const tr=document.createElement('tr');
+    const tags=[]; if (r.moved) tags.push('moved'); if (r.upgrade) tags.push('upgrade');
+    tr.innerHTML = `<td>${r.sen}</td><td>${r.name||''}</td><td>${r.from||''}</td><td>${r.to||''}</td><td>${r.pref||0}</td><td>${tags.join(', ')||'—'}</td><td>${r.note||''}</td>`;
+    tb.appendChild(tr);
+  });
+  tbl.appendChild(tb); holder.appendChild(tbl);
+  $('shown').textContent = String(awards.length);
+  $('total').textContent = String(awards.length);
+  $('upCnt').textContent = String(awards.filter(r=>r.upgrade).length);
+  $('mvCnt').textContent = String(awards.filter(r=>r.moved).length);
+}
+
+async function init(){
+  try{
+    const base = new URL('data/', document.baseURI);
+    const caps = await fetchJSON([new URL('capacities.json', base), new URL('capacities.json.txt', base)]);
+    const rost = await fetchJSON([new URL('roster.json', base)]);
+    const prefs= await fetchJSON([new URL('preferences.json', base)]);
+    CAP = normalizeCaps(caps);
+    ROST = normalizeRoster(rost);
+    PREFS = normalizePrefs(prefs);
+
+    setStatus(\`Loaded \${ROST.length} pilots • \${CAP.length} seat rows\`, true);
+    buildGrid();
+  }catch(e){
+    setStatus('Load failed', false);
+    errBox(e.message||String(e));
+  }
+}
+
+$('btnRun').addEventListener('click', ()=>{ const data=cascade(); renderAwards(data); });
+
+window.addEventListener('DOMContentLoaded', init);
+</script>
 </body>
 </html>
