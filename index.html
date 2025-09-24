@@ -2,12 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
-  <title>Vacancy Cascade — Toggle: Upgrades-only ↔ CA/FO Compete</title>
+  <title>Vacancy Cascade</title>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <style>
     :root{ --fg:#101828; --muted:#667085; --bg:#f7f9fc; --card:#fff; --line:#e6eaf0; --accent:#2f6df6; }
-    *{box-sizing:border-box}
-    html,body{margin:0;color:var(--fg);background:#f7f9fc;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial}
+    *{box-sizing:border-box} html,body{margin:0;color:var(--fg);background:#f7f9fc;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial}
     header{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap}
     h1{margin:0;font-size:18px}
     .status{font-size:12px;padding:3px 10px;border:1px solid var(--line);border-radius:999px;background:#fff}
@@ -16,25 +15,16 @@
     main{display:grid;grid-template-columns:360px 1fr;gap:16px;padding:16px;max-width:1400px;margin:0 auto}
     section.card,aside.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:0 1px 2px rgba(16,24,40,.05)}
     .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-    .muted{color:var(--muted)}
-    input[type="number"], input[type="text"], select{border:1px solid var(--line);border-radius:10px;padding:8px;background:#fff}
-    button{border:1px solid var(--line);background:#111;color:#fff;border-radius:10px;padding:8px 12px;cursor:pointer}
-    button.ghost{background:#fff;color:#111}
-    table{width:100%;border-collapse:collapse;font-size:13px}
-    th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+    .muted{color:var(--muted)} input,select{border:1px solid var(--line);border-radius:10px;padding:8px;background:#fff}
+    button{border:1px solid var(--line);background:#111;color:#fff;border-radius:10px;padding:8px 12px;cursor:pointer} button.ghost{background:#fff;color:#111}
+    table{width:100%;border-collapse:collapse;font-size:13px} th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
     thead th{position:sticky;top:0;z-index:1;background:#fbfdff}
     .pill{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:#fff;font-size:12px}
-    .cap-grid{max-height:65vh;overflow:auto}
-    .empty{padding:24px;text-align:center;color:var(--muted)}
+    .cap-grid{max-height:65vh;overflow:auto} .empty{padding:24px;text-align:center;color:var(--muted)}
     .tag{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid var(--line);font-size:12px}
-    .tag-move{background:#eef2ff;border-color:#d9e1ff}
-    .tag-up{background:#fff6e6;border-color:#ffe1b3}
-    .tag-stay{background:#e9fbf3;border-color:#cfeee1}
-    .statbar{display:grid;grid-auto-flow:column;gap:8px}
-    .stat{background:#f5f8ff;border:1px solid var(--line);padding:6px 10px;border-radius:8px;font-size:12px}
+    .tag-move{background:#eef2ff;border-color:#d9e1ff} .tag-up{background:#fff6e6;border-color:#ffe1b3} .tag-stay{background:#e9fbf3;border-color:#cfeee1}
+    .statbar{display:grid;grid-auto-flow:column;gap:8px} .stat{background:#f5f8ff;border:1px solid var(--line);padding:6px 10px;border-radius:8px;font-size:12px}
     @media (max-width: 1024px){ main{grid-template-columns:1fr} }
-    .ok{padding:10px;border:1px solid #cfe4ff;background:#eef7ff;border-radius:10px;margin-bottom:8px}
-    .warn{padding:10px;border:1px solid #ffe2a8;background:#fff9ec;border-radius:10px;margin-bottom:8px}
   </style>
 </head>
 <body>
@@ -64,12 +54,12 @@
         </label>
       </div>
       <div class="muted" style="font-size:12px;margin:6px 0 10px">
-        Per-seat external entry cap ≤ seeded Δ. Backfills are consumed first, then seeded. Pilots <b>stay</b> if their current seat appears in their prefs. Awards are <b>strict</b> to prefs.
+        Reads <code>capacities.json</code> (dict with <code>incumbents/target</code>), <code>roster.json</code> (array with <code>current</code>), and rich <code>preferences.json</code> (object with detailed rows). BPL applies only when filed (>0).
       </div>
       <div class="row" style="margin-bottom:8px">
         <select id="qBase"></select>
         <select id="qSeat"><option>CA</option><option>FO</option></select>
-        <input id="qAmt" type="number" value="10" style="width:90px"/>
+        <input id="qAmt" type="number" value="1" style="width:90px"/>
         <button id="qApply" class="ghost">Apply Δ</button>
       </div>
       <div id="capGrid" class="cap-grid"></div>
@@ -88,7 +78,6 @@
     </aside>
 
     <section class="card">
-      <div id="diag" class="ok">Toggle between “Upgrades only” and “CA/FO compete” in the header.</div>
       <div class="row" style="justify-content:space-between">
         <div class="row">
           <strong>Awards</strong>
@@ -117,62 +106,80 @@
 
   <script>
     const $ = id => document.getElementById(id);
-    const key = (b,s)=> String(b).toUpperCase()+'|'+String(s).toUpperCase();
     const asInt = v => (v==null||v==='')?0:(Number(v)||0);
-    const parsePref = s=>{
-      const t=String(s||'').trim().toUpperCase(); if(!t) return null;
-      if(t==='0') return {base:null,seat:null,stay:true};
-      const m=t.replace(/\s*[-/]\s*/g,' ').split(/\s+/);
-      if(m.length>=2) return {base:m[0],seat:m[1],stay:false};
-      return null;
-    };
+    const key = (b,s)=> String(b).toUpperCase()+'|'+String(s).toUpperCase();
 
-    let capacities=[], roster=[], prefMap=new Map(), prefDetails=new Map(), results=[];
+    function parsePrefString(s){
+      const t = String(s || '').trim().toUpperCase();
+      if (!t) return null;
+      if (t === '0') return { base: null, seat: null, stay: true };
+      const parts = t.replace(/\s*[-/]\s*/g, ' ').split(/\s+/).filter(Boolean);
+      if (parts.length >= 2) {
+        const seat = parts[parts.length - 1];
+        const base = parts[parts.length - 2];
+        return { base, seat, stay: false };
+      }
+      return null;
+    }
 
     async function fetchJSON(url){
       const r = await fetch(url, {cache:'no-store'});
-      if(!r.ok) throw new Error(url+' '+r.status);
+      if (!r.ok) throw new Error(url+' '+r.status);
       return r.json();
     }
+
+    let CAP=[], ROST=[], PREF_MAP=new Map(), PREF_DETAILS=new Map(), RESULTS=[];
 
     (async function init(){
       try{
         const base = new URL('data/', document.baseURI);
-        const [cap, ros, preRaw] = await Promise.all([
+        const [caps, rost, prefs] = await Promise.all([
           fetchJSON(new URL('capacities.json', base)),
           fetchJSON(new URL('roster.json', base)),
           fetchJSON(new URL('preferences.json', base)),
         ]);
 
-        // capacities
-        capacities = (cap||[]).map(r=>({base:String(r.base||'').toUpperCase().trim(), seat:String(r.seat||'').toUpperCase().trim(), delta:asInt(r.delta)}));
-        capacities.sort((a,b)=>a.base.localeCompare(b.base)||a.seat.localeCompare(b.seat));
+        // Normalize capacities (dict: seatKey -> {incumbents,target})
+        // We render as an array with base, seat, incumbents, delta (=target-incumbents)
+        CAP = Object.entries(caps||{}).map(([seatKey,obj])=>{
+          const [equip,baseStr,seatStr] = String(seatKey).split('|'); // equip is ignored for gating
+          const incumbents = asInt(obj?.incumbents);
+          const target = asInt(obj?.target);
+          return { base: baseStr.toUpperCase(), seat: seatStr.toUpperCase(), incumbents, delta: (target - incumbents) };
+        }).sort((a,b)=> a.base.localeCompare(b.base) || a.seat.localeCompare(b.seat));
 
-        // roster
-        roster = (ros||[]).map(r=>({seniority:asInt(r.seniority), name:String(r.name||''), currentBase:String(r.currentBase||'').toUpperCase().trim(), currentSeat:String(r.currentSeat||'').toUpperCase().trim()})).filter(r=>r.seniority>0).sort((a,b)=>a.seniority-b.seniority);
+        // Normalize roster (array with current {equip,base,seat})
+        ROST = (rost||[]).map(r=>({
+          seniority: asInt(r.sen ?? r.seniority ?? r.Sen),
+          name: String(r.name||''),
+          currentBase: String(r.current?.base || r.currentBase || '').toUpperCase(),
+          currentSeat: String(r.current?.seat || r.currentSeat || '').toUpperCase(),
+        })).filter(r=>r.seniority>0).sort((a,b)=>a.seniority-b.seniority);
 
-        // --- normalize preferences: accept legacy array or rich object ---
-        prefMap = new Map();
-        prefDetails = new Map();
-        if (Array.isArray(preRaw)){
-          preRaw.forEach(p=>{
-            const sen = asInt(p.seniority);
-            const prefs = Array.isArray(p.prefs)? p.prefs.map(String): [];
-            prefMap.set(sen, prefs);
-          });
-        } else {
-          Object.values(preRaw||{}).forEach(p=>{
-            const sen = asInt(p.sen ?? p.seniority ?? p.Sen);
-            const prefsArray = Array.isArray(p.preferences)? [...p.preferences]: [];
-            prefsArray.sort((a,b)=> (a.order??0)-(b.order??0));
-            const prefsStrings = prefsArray.map(x=> x.stay? '0' : [x.equip,x.base,x.seat].filter(Boolean).join(' ')).filter(Boolean);
-            prefMap.set(sen, prefsStrings);
-            prefDetails.set(sen, prefsArray);
-          });
-        }
-        // ---------------------------------------------------------------
+        // Normalize preferences (rich object keyed by id)
+        PREF_MAP = new Map();     // sen -> ["SEA CA","0",...]
+        PREF_DETAILS = new Map(); // sen -> detailed rows
+        Object.values(prefs||{}).forEach(p=>{
+          const sen = asInt(p.sen ?? p.seniority ?? p.Sen);
+          const arr = Array.isArray(p.preferences)? [...p.preferences]: [];
+          arr.sort((a,b)=> (a.order??0)-(b.order??0));
+          const strings = arr.map(x=> x.stay? '0' : [x.base,x.seat].filter(Boolean).join(' ')).filter(Boolean);
+          PREF_MAP.set(sen, strings);
+          // normalize detail rows to upper-case base/seat and fallback bpl_min
+          const det = arr.map(x=> ({
+            order: asInt(x.order),
+            stay: !!x.stay,
+            equip: x.equip || '',
+            base: String(x.base||'').toUpperCase(),
+            seat: String(x.seat||'').toUpperCase(),
+            bpl_min: asInt(x.bpl_min || x.bpl || 0)
+          }));
+          PREF_DETAILS.set(sen, det);
+        });
 
-        buildCapUI(); runCascade(); setStatus(`Loaded & cascaded • ${roster.length} pilots`, true);
+        buildCapUI();
+        runCascade();
+        setStatus(`Loaded & cascaded • ${ROST.length} pilots`, true);
       }catch(e){
         setStatus('Load failed', false);
         $('results').innerHTML = `<div class="empty">Couldn’t auto-load /data/*.json. ${e}</div>`;
@@ -182,13 +189,13 @@
     function setStatus(t, ok){ const s=$('status'); s.textContent=t; s.classList.remove('err','ok'); s.classList.add(ok?'ok':'err'); }
 
     function buildCapUI(){
-      const bases=[...new Set(capacities.map(c=>c.base))].sort();
+      const bases=[...new Set(CAP.map(c=>c.base))].sort();
       $('qBase').innerHTML = bases.map(b=>`<option>${b}</option>`).join('');
       $('fltBase').innerHTML = '<option value="">Awarded Base: All</option>' + bases.map(b=>`<option>${b}</option>`).join('');
 
       const holder=$('capGrid'); holder.innerHTML='';
       let cur=null, tbl=null, tbody=null;
-      capacities.forEach(c=>{
+      CAP.forEach(c=>{
         if (c.base!==cur){
           cur=c.base; tbl=document.createElement('table'); const thead=document.createElement('thead'); const tr=document.createElement('tr');
           ['Base','Seat','Seeded Δ','Backfill Vacancies (dynamic)'].forEach(h=>{ const th=document.createElement('th'); th.textContent=h; tr.appendChild(th); });
@@ -218,17 +225,17 @@
     ['mode'].forEach(id=> $(id).addEventListener('change', ()=> runCascade()));
     $('qApply').addEventListener('click', ()=>{
       const b=$('qBase').value, s=$('qSeat').value, amt=asInt($('qAmt').value)||0;
-      capacities.forEach(c=>{ if(c.base===b && c.seat===s) c.delta += amt; });
+      CAP.forEach(c=>{ if(c.base===b && c.seat===s) c.delta += amt; });
       buildCapUI(); if ($('autoRun').checked) runCascade();
     });
     document.addEventListener('click', (e)=>{
       const btn=e.target.closest('button[data-nudge]'); if(!btn) return;
       const n=asInt(btn.getAttribute('data-nudge'));
-      capacities.forEach(c=> c.delta += n);
+      CAP.forEach(c=> c.delta += n);
       buildCapUI(); if ($('autoRun').checked) runCascade();
     });
     $('btnReset').addEventListener('click', ()=>{
-      capacities.forEach(c=> c.delta = 0);
+      CAP.forEach(c=> c.delta = 0);
       buildCapUI(); if ($('autoRun').checked) runCascade();
     });
 
@@ -251,10 +258,10 @@
       return i+1; // 1-based
     }
     function getBplMin(seniority, base, seat){
-      const rows = prefDetails.get(seniority) || [];
+      const rows = PREF_DETAILS.get(seniority) || [];
       const b = String(base).toUpperCase(), s = String(seat).toUpperCase();
       const row = rows.find(r => !r.stay && String(r.base||'').toUpperCase()===b && String(r.seat||'').toUpperCase()===s);
-      const n = row && (typeof row.bpl_min==='number' ? row.bpl_min : (typeof row.bpl==='number' ? row.bpl : 0));
+      const n = row ? asInt(row.bpl_min || row.bpl || 0) : 0;
       return (n && n>0) ? n : 0;
     }
     // ---------------------
@@ -264,36 +271,34 @@
       const seeded = new Map(); // key -> seeded vacancies
       const backfill = new Map(); // key -> backfill vacancies
 
-      capacities.forEach(c=>{
-        const k=key(c.base,c.seat);
+      CAP.forEach(c=>{
+        const k=seatKey(c.base,c.seat);
         const v=Math.max(0, asInt(c.delta));
         seeded.set(k, v); backfill.set(k, 0);
       });
 
       const out=[];
-      const pilots = roster.map(r=>({ ...r }));
+      const pilots = ROST.map(r=>({ ...r }));
       const seatMap = initSeatRosters(pilots);
 
       for (const r of pilots){
-        const raw = prefMap.get(r.seniority) || [];
-        let list = raw.map(parsePref).filter(Boolean);
+        const raw = PREF_MAP.get(r.seniority) || [];
+        let list = raw.map(parsePrefString).filter(Boolean);
 
-        // Implicit stay: current seat in list becomes a stay marker
+        // Implicit stay: if current seat appears as a pref, mark it as stay
         const idxCurrent = list.findIndex(p=> (p.base??r.currentBase)===r.currentBase && (p.seat??r.currentSeat)===r.currentSeat);
-        if (idxCurrent>=0){
-          list[idxCurrent] = {base:r.currentBase, seat:r.currentSeat, stay:true};
-        }
+        if (idxCurrent>=0){ list[idxCurrent] = {base:r.currentBase, seat:r.currentSeat, stay:true}; }
         const hasStay = list.some(x=>x.stay===true);
-        if (hasStay){
-          list = list.map(x=> x.stay ? {base:r.currentBase, seat:r.currentSeat, stay:true} : x);
-        }
-        const seen=new Set(); list = list.filter(p=>{ const b=p.base??r.currentBase, s=p.seat??r.currentSeat; const k=key(b,s); if(seen.has(k)) return false; seen.add(k); return true; });
+        if (hasStay){ list = list.map(x=> x.stay ? {base:r.currentBase, seat:r.currentSeat, stay:true} : x); }
+
+        // Dedup exact base/seat combos in their list
+        const seen=new Set(); list = list.filter(p=>{ const b=p.base??r.currentBase, s=p.seat??r.currentSeat; const k=seatKey(b,s); if(seen.has(k)) return false; seen.add(k); return true; });
 
         let awardedBase=r.currentBase, awardedSeat=r.currentSeat, awardedPrefNum=0, moved=false, upgrade=false, note='Stayed (no vacancy chain)';
 
         for (let i=0;i<list.length;i++){
           const pref=list[i]; const b=pref.base ?? r.currentBase; const s=pref.seat ?? r.currentSeat;
-          const k=key(b,s); const fromKey = key(r.currentBase, r.currentSeat);
+          const k=seatKey(b,s); const fromKey = seatKey(r.currentBase, r.currentSeat);
 
           if (b===r.currentBase && s===r.currentSeat){
             if (pref.stay){ awardedPrefNum=i+1; note='Stayed (listed current base/seat)'; }
@@ -338,26 +343,26 @@
       }
 
       // update backfill pills
-      capacities.forEach(c=>{
-        const k=key(c.base,c.seat);
+      CAP.forEach(c=>{
+        const k=seatKey(c.base,c.seat);
         if (c._backfillPill) c._backfillPill.textContent = String(backfill.get(k)||0);
       });
 
-      results=out;
+      RESULTS=out;
       renderResults();
     }
 
     function renderResults(){
       const holder=$('results'); holder.innerHTML='';
-      if (!results.length){ holder.innerHTML='<div class="empty">No awards yet.</div>'; return; }
+      if (!RESULTS.length){ holder.innerHTML='<div class="empty">No awards yet.</div>'; return; }
       const q=$('q').value.trim().toLowerCase(), mv=$('fltMove').value, fb=$('fltBase').value, fs=$('fltSeat').value;
-      let rows=results.slice();
+      let rows=RESULTS.slice();
       if (q) rows=rows.filter(r=> String(r.seniority).includes(q) || (r.name||'').toLowerCase().includes(q));
       if (mv==='movers') rows=rows.filter(r=>r.moved);
       if (mv==='upgrades') rows=rows.filter(r=>r.upgrade);
       if (fb) rows=rows.filter(r=>r.awardedBase===fb);
       if (fs) rows=rows.filter(r=>r.awardedSeat===fs);
-      $('shown').textContent=rows.length; $('total').textContent=results.length; $('upCnt').textContent=results.filter(r=>r.upgrade).length; $('mvCnt').textContent=results.filter(r=>r.moved).length;
+      $('shown').textContent=rows.length; $('total').textContent=RESULTS.length; $('upCnt').textContent=RESULTS.filter(r=>r.upgrade).length; $('mvCnt').textContent=RESULTS.filter(r=>r.moved).length;
 
       const tbl=document.createElement('table'); const thead=document.createElement('thead'); const tr=document.createElement('tr');
       ['Seniority','Pilot','From','Awarded','Pref#','Tags','Note'].forEach(h=>{ const th=document.createElement('th'); th.textContent=h; tr.appendChild(th); });
@@ -386,7 +391,7 @@
     $('btnCSV').addEventListener('click', ()=>{
       const headers=['Seniority','Pilot_Name','From_Base','From_Seat','Awarded_Base','Awarded_Seat','Awarded_Pref_Num','Moved','Upgrade','Note'];
       const esc=s=>`"${String(s??'').replace(/"/g,'""')}"`;
-      const csv=[headers.join(',')].concat(results.map(r=>[
+      const csv=[headers.join(',')].concat(RESULTS.map(r=>[
         r.seniority, r.name, r.fromBase, r.fromSeat, r.awardedBase, r.awardedSeat, r.awardedPrefNum, r.moved?'Y':'', r.upgrade?'Y':'', r.note||''
       ].map(esc).join(','))).join('\n');
       const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}), url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='vacancy_cascade_awards.csv'; document.body.appendChild(a); a.click(); URL.revokeObjectURL(url); a.remove();
