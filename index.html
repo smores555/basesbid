@@ -142,7 +142,9 @@
         // Normalize capacities (dict: seatKey -> {incumbents,target})
         // We render as an array with base, seat, incumbents, delta (=target-incumbents)
         CAP = Object.entries(caps||{}).map(([seatKey,obj])=>{
-          const [equip,baseStr,seatStr] = String(seatKey).split('|'); // equip is ignored for gating
+          const parts = String(seatKey).split('|').filter(Boolean);
+          const seatStr = parts.length >= 1 ? parts[parts.length - 1] : '';
+          const baseStr = parts.length >= 2 ? parts[parts.length - 2] : '';
           const incumbents = asInt(obj?.incumbents);
           const target = asInt(obj?.target);
           return { base: baseStr.toUpperCase(), seat: seatStr.toUpperCase(), incumbents, delta: (target - incumbents) };
