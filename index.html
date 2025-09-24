@@ -1,108 +1,28 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Position Bid — Seniority Cascade (No BPL)</title>
-<style>
-  :root{ --fg:#101828; --muted:#667085; --bg:#f7f9fc; --card:#fff; --line:#e6eaf0; --accent:#2f6df6; }
-  *{box-sizing:border-box} html,body{margin:0;color:var(--fg);background:#f7f9fc;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial}
-  header{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap}
-  h1{margin:0;font-size:18px}
-  .status{font-size:12px;padding:3px 10px;border:1px solid var(--line);border-radius:999px;background:#fff}
-  .status.ok{background:#eef7ff;border-color:#cfe4ff}
-  .status.err{background:#fff2f2;border-color:#ffd7dc;color:#a61e2a}
-  main{display:grid;grid-template-columns:360px 1fr;gap:16px;padding:16px;max-width:1400px;margin:0 auto}
-  section.card,aside.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:0 1px 2px rgba(16,24,40,.05)}
-  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  .muted{color:var(--muted)} input,select{border:1px solid var(--line);border-radius:10px;padding:8px;background:#fff}
-  button{border:1px solid var(--line);background:#111;color:#fff;border-radius:10px;padding:8px 12px;cursor:pointer} button.ghost{background:#fff;color:#111}
-  table{width:100%;border-collapse:collapse;font-size:13px} th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
-  thead th{position:sticky;top:0;z-index:1;background:#fbfdff}
-  .pill{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:#fff;font-size:12px}
-  .cap-grid{max-height:65vh;overflow:auto} .empty{padding:24px;text-align:center;color:#667085}
-  .tag{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid var(--line);font-size:12px}
-  .tag-move{background:#eef2ff;border-color:#d9e1ff} .tag-up{background:#fff6e6;border-color:#ffe1b3} .tag-stay{background:#e9fbf3;border-color:#cfeee1}
-  .statbar{display:grid;grid-auto-flow:column;gap:8px} .stat{background:#f5f8ff;border:1px solid var(--line);padding:6px 10px;border-radius:8px;font-size:12px}
-  @media (max-width: 1024px){ main{grid-template-columns:1fr} }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Position Bid — Seniority Cascade (No BPL)</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1 { font-size: 1.2em; }
+    #vacancy-controls { margin: 20px 0; padding: 10px; border: 1px solid #ccc; }
+    .vacancy-option { margin: 5px 0; }
+    #status.ok { color: green; }
+    #status.err { color: red; }
+  </style>
 </head>
 <body>
-  <header>
-    <div class="row">
-      <h1>Position Bid — Seniority Cascade (No BPL)</h1>
-      <span id="status" class="status">Booting…</span>
-    </div>
-    <div class="row">
-      <label class="row" style="font-size:12px">
-        Mode:
-        <select id="mode">
-          <option value="upgrades">CA Δ = Upgrades only (FO→CA)</option>
-          <option value="compete">CA Δ = CA/FO compete by seniority</option>
-        </select>
-      </label>
-      <button id="btnCSV" class="ghost" disabled>Export CSV</button>
-    </div>
-  </header>
+  <h1>Position Bid — Seniority Cascade (No BPL)</h1>
 
-  <main>
-    <aside class="card">
-      <div class="row" style="justify-content:space-between">
-        <h3 style="margin:0;font-size:14px">Vacancy Controls</h3>
-        <label class="muted" style="display:flex;align-items:center;gap:6px;font-size:12px">
-          <input id="autoRun" type="checkbox" checked> Auto-run after edits
-        </label>
-      </div>
-      <div class="muted" style="font-size:12px;margin:6px 0 10px">
-        Reads <code>data/capacities.json</code> (or <code>capacities.json.txt</code>), <code>data/roster.json</code>, <code>data/preferences.json</code>. No BPL checks.
-      </div>
-      <div class="row" style="margin-bottom:8px">
-        <select id="qBase"></select>
-        <select id="qSeat"><option>CA</option><option>FO</option></select>
-        <input id="qAmt" type="number" value="1" style="width:90px"/>
-        <button id="qApply" class="ghost">Apply Δ</button>
-      </div>
-      <div id="capGrid" class="cap-grid"></div>
-      <div class="row" style="justify-content:space-between;margin-top:10px">
-        <div class="row">
-          <span class="muted">Nudge all:</span>
-          <button class="ghost" data-nudge="+1">+1</button>
-          <button class="ghost" data-nudge="+5">+5</button>
-          <button class="ghost" data-nudge="+10">+10</button>
-          <button class="ghost" data-nudge="-1">−1</button>
-          <button class="ghost" data-nudge="-5">−5</button>
-          <button class="ghost" data-nudge="-10">−10</button>
-        </div>
-        <button id="btnReset" class="ghost">Reset Deltas</button>
-      </div>
-    </aside>
+  <div id="status">Booting...</div>
 
-    <section class="card">
-      <div class="row" style="justify-content:space-between">
-        <div class="row">
-          <strong>Awards</strong>
-          <input id="q" type="text" placeholder="Search name or seniority…" style="width:220px;margin-left:10px"/>
-          <select id="fltMove">
-            <option value="all">All awards</option>
-            <option value="movers">Movers only</option>
-            <option value="upgrades">Upgrades only</option>
-          </select>
-          <select id="fltBase"><option value="">Awarded Base: All</option></select>
-          <select id="fltSeat"><option value="">Awarded Seat: All</option><option>CA</option><option>FO</option></select>
-          <button id="btnClear" class="ghost">Clear</button>
-        </div>
-        <div class="statbar">
-          <div class="stat">Shown <b id="shown">0</b></div>
-          <div class="stat">Total <b id="total">0</b></div>
-          <div class="stat">Upgrades <b id="upCnt">0</b></div>
-          <div class="stat">Movers <b id="mvCnt">0</b></div>
-        </div>
-      </div>
-      <div id="results" style="max-height:68vh;overflow:auto;margin-top:8px">
-        <div class="empty">Loading data and running cascade…</div>
-      </div>
-    </section>
-  </main>
+  <h2>Vacancy Controls</h2>
+  <div id="vacancy-controls">Loading bases...</div>
+
+  <h2>Awards</h2>
+  <div id="awards-list">No awards yet.</div>
 
   <script src="app.js"></script>
 </body>
