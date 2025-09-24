@@ -1,36 +1,36 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Position Bid — Seniority Cascade</title>
-  <style>
-    :root{ --fg:#101828; --muted:#667085; --bg:#f7f9fc; --card:#fff; --line:#e6eaf0; --accent:#2f6df6; }
-    *{box-sizing:border-box} html,body{margin:0;color:var(--fg);background:#f7f9fc;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial}
-    header{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap}
-    h1{margin:0;font-size:18px}
-    .status{font-size:12px;padding:3px 10px;border:1px solid var(--line);border-radius:999px;background:#fff}
-    .status.ok{background:#eef7ff;border-color:#cfe4ff}
-    .status.err{background:#fff2f2;border-color:#ffd7dc;color:#a61e2a}
-    main{display:grid;grid-template-columns:360px 1fr;gap:16px;padding:16px;max-width:1400px;margin:0 auto}
-    section.card,aside.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:0 1px 2px rgba(16,24,40,.05)}
-    .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-    .muted{color:var(--muted)} input,select{border:1px solid var(--line);border-radius:10px;padding:8px;background:#fff}
-    button{border:1px solid var(--line);background:#111;color:#fff;border-radius:10px;padding:8px 12px;cursor:pointer} button.ghost{background:#fff;color:#111}
-    table{width:100%;border-collapse:collapse;font-size:13px} th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
-    thead th{position:sticky;top:0;z-index:1;background:#fbfdff}
-    .pill{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:#fff;font-size:12px}
-    .cap-grid{max-height:65vh;overflow:auto} .empty{padding:24px;text-align:center;color:var(--muted)}
-    .tag{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid var(--line);font-size:12px}
-    .tag-move{background:#eef2ff;border-color:#d9e1ff} .tag-up{background:#fff6e6;border-color:#ffe1b3} .tag-stay{background:#e9fbf3;border-color:#cfeee1}
-    .statbar{display:grid;grid-auto-flow:column;gap:8px} .stat{background:#f5f8ff;border:1px solid var(--line);padding:6px 10px;border-radius:8px;font-size:12px}
-    @media (max-width: 1024px){ main{grid-template-columns:1fr} }
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Position Bid — Seniority Cascade (No BPL)</title>
+<style>
+  :root{ --fg:#101828; --muted:#667085; --bg:#f7f9fc; --card:#fff; --line:#e6eaf0; --accent:#2f6df6; }
+  *{box-sizing:border-box} html,body{margin:0;color:var(--fg);background:#f7f9fc;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial}
+  header{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap}
+  h1{margin:0;font-size:18px}
+  .status{font-size:12px;padding:3px 10px;border:1px solid var(--line);border-radius:999px;background:#fff}
+  .status.ok{background:#eef7ff;border-color:#cfe4ff}
+  .status.err{background:#fff2f2;border-color:#ffd7dc;color:#a61e2a}
+  main{display:grid;grid-template-columns:360px 1fr;gap:16px;padding:16px;max-width:1400px;margin:0 auto}
+  section.card,aside.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:0 1px 2px rgba(16,24,40,.05)}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .muted{color:var(--muted)} input,select{border:1px solid var(--line);border-radius:10px;padding:8px;background:#fff}
+  button{border:1px solid var(--line);background:#111;color:#fff;border-radius:10px;padding:8px 12px;cursor:pointer} button.ghost{background:#fff;color:#111}
+  table{width:100%;border-collapse:collapse;font-size:13px} th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+  thead th{position:sticky;top:0;z-index:1;background:#fbfdff}
+  .pill{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:#fff;font-size:12px}
+  .cap-grid{max-height:65vh;overflow:auto} .empty{padding:24px;text-align:center;color:#667085}
+  .tag{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid var(--line);font-size:12px}
+  .tag-move{background:#eef2ff;border-color:#d9e1ff} .tag-up{background:#fff6e6;border-color:#ffe1b3} .tag-stay{background:#e9fbf3;border-color:#cfeee1}
+  .statbar{display:grid;grid-auto-flow:column;gap:8px} .stat{background:#f5f8ff;border:1px solid var(--line);padding:6px 10px;border-radius:8px;font-size:12px}
+  @media (max-width: 1024px){ main{grid-template-columns:1fr} }
+</style>
 </head>
 <body>
   <header>
     <div class="row">
-      <h1>Position Bid — Seniority Cascade</h1>
+      <h1>Position Bid — Seniority Cascade (No BPL)</h1>
       <span id="status" class="status">Booting…</span>
     </div>
     <div class="row">
@@ -54,7 +54,7 @@
         </label>
       </div>
       <div class="muted" style="font-size:12px;margin:6px 0 10px">
-        Reads <code>data/capacities.json</code>, <code>data/roster.json</code>, <code>data/preferences.json</code>. BPL applies only when filed (>0).
+        Reads <code>data/capacities.json</code>, <code>data/roster.json</code>, <code>data/preferences.json</code>. No BPL checks in this build.
       </div>
       <div class="row" style="margin-bottom:8px">
         <select id="qBase"></select>
@@ -104,64 +104,67 @@
     </section>
   </main>
 
-  <script>
-// Clean-sheet seniority cascade
+<script>
 const $ = id => document.getElementById(id);
 const asInt = v => (v==null||v==='')?0:(Number(v)||0);
-const seatKey3 = (equip, base, seat) => `${String(equip||'').toUpperCase()}|${String(base).toUpperCase()}|${String(seat).toUpperCase()}`;
 const keyBaseSeat = (base, seat) => `${String(base).toUpperCase()}|${String(seat).toUpperCase()}`;
+
+// fetch with fallback (capacities.json OR capacities.json.txt)
+async function fetchJSONWithFallback(paths){
+  for (const p of paths){
+    try{
+      const r = await fetch(p, {cache:'no-store'});
+      if (r.ok) return r.json();
+    }catch(e){}
+  }
+  throw new Error('Failed to load: '+paths.join(', '));
+}
 
 let CAP=[], ROST=[], PREF_DETAILS=new Map(), RESULTS=[];
 
-async function fetchJSON(url){ const r=await fetch(url,{cache:'no-store'}); if(!r.ok) throw new Error(url+' '+r.status); return r.json(); }
+function setStatus(t, ok){ const s=$('status'); s.textContent=t; s.classList.remove('err','ok'); s.classList.add(ok?'ok':'err'); }
 
 function normalizeCaps(raw){
-  // Accept object keys "equip|BASE|SEAT" or "BASE|SEAT" (equip ignored for gating)
-  if (Array.isArray(raw)) throw new Error('capacities.json must be an OBJECT (not array).');
-  const out = [];
-  for (const [k,obj] of Object.entries(raw||{})){
-    const parts = String(k).split('|').filter(Boolean);
-    const seat = (parts.length>=1? parts[parts.length-1]: '').toUpperCase();
-    const base = (parts.length>=2? parts[parts.length-2]: '').toUpperCase();
-    const equip= (parts.length>=3? parts[0]: '').toUpperCase();
-    const inc = asInt(obj?.incumbents ?? obj?.startCapacity ?? 0);
-    const targ = asInt(obj?.target ?? inc);
-    out.push({equip, base, seat, incumbents:inc, delta:targ-inc});
+  const out=[]; const entries = Array.isArray(raw) ? [] : Object.entries(raw||{});
+  for (const [k,obj] of entries){
+    const parts=String(k).split('|').filter(Boolean);
+    const seat=(parts.length>=1?parts[parts.length-1]:'').toUpperCase();
+    const base=(parts.length>=2?parts[parts.length-2]:'').toUpperCase();
+    const inc=asInt(obj?.incumbents ?? obj?.startCapacity ?? 0);
+    const targ=asInt(obj?.target ?? (obj?.delta!=null ? inc + asInt(obj.delta) : inc));
+    out.push({base, seat, incumbents:inc, delta:targ-inc});
   }
-  out.sort((a,b)=> a.base.localeCompare(b.base)||a.seat.localeCompare(b.seat)||a.equip.localeCompare(b.equip));
+  out.sort((a,b)=> a.base.localeCompare(b.base)||a.seat.localeCompare(b.seat));
   return out;
 }
-
 function normalizeRoster(raw){
-  if (!Array.isArray(raw)) throw new Error('roster.json must be an ARRAY.');
-  const out = raw.map(r=>{
-    const sen = asInt(r.sen ?? r.seniority ?? r.Sen);
-    const name = String(r.name||'');
-    const cur = r.current||{};
-    const base = String(cur.base||'').toUpperCase();
-    const seat = String(cur.seat||'').toUpperCase();
-    const equip= String(cur.equip||'').toUpperCase();
-    if (!sen || !base || !seat) throw new Error(`Roster row for "${name}" missing sen/base/seat`);
-    return {sen, name, current:{equip, base, seat}};
-  }).sort((a,b)=>a.sen-b.sen);
-  return out;
+  if (!Array.isArray(raw)) return [];
+  return raw.map(r=>({sen:asInt(r.sen ?? r.seniority ?? r.Sen), name:String(r.name||''), currentBase:String(r.current?.base||'').toUpperCase(), currentSeat:String(r.current?.seat||'').toUpperCase()}))
+            .filter(r=>r.sen>0 && r.currentBase && r.currentSeat)
+            .sort((a,b)=>a.sen-b.sen);
 }
-
+function parsePrefString(s){
+  const t=String(s||'').trim().toUpperCase();
+  if(!t) return null;
+  if(t==='0') return {stay:true};
+  const parts=t.replace(/\s*[-/]\s*/g,' ').split(/\s+/).filter(Boolean);
+  if(parts.length>=2){ return {base:parts[parts.length-2], seat:parts[parts.length-1]}; }
+  return null;
+}
 function normalizePrefs(raw){
-  if (Array.isArray(raw)) throw new Error('preferences.json must be an OBJECT keyed by any id.');
-  const map = new Map();
-  for (const obj of Object.values(raw||{})){
-    const sen = asInt(obj.sen ?? obj.seniority ?? obj.Sen);
-    const arr = Array.isArray(obj.preferences)? [...obj.preferences]: [];
+  const map=new Map();
+  const values = Array.isArray(raw) ? raw : Object.values(raw||{});
+  for (const obj of values){
+    const sen=asInt(obj.sen ?? obj.seniority ?? obj.Sen);
+    const arr = Array.isArray(obj.preferences)? [...obj.preferences] : (Array.isArray(obj.prefs)? [...obj.prefs] : []);
     arr.sort((a,b)=> (a.order??0)-(b.order??0));
-    const rows = arr.map(x=>({
-      order: asInt(x.order),
-      stay: !!x.stay,
-      equip: String(x.equip||'').toUpperCase(),
-      base: String(x.base||'').toUpperCase(),
-      seat: String(x.seat||'').toUpperCase(),
-      bpl_min: asInt(x.bpl_min || x.bpl || 0),
-    }));
+    const rows = arr.map(x=>{
+      if (typeof x === 'string' || typeof x === 'number'){ const p=parsePrefString(x); return p||null; }
+      if (x && (x.stay || x.base || x.seat)){
+        return { stay: !!x.stay, base:String(x.base||'').toUpperCase(), seat:String(x.seat||'').toUpperCase() };
+      }
+      return null;
+    }).filter(Boolean);
     map.set(sen, rows);
   }
   return map;
@@ -170,18 +173,12 @@ function normalizePrefs(raw){
 function buildSeatIndex(roster){
   const m=new Map();
   for (const r of roster){
-    const k=keyBaseSeat(r.current.base, r.current.seat);
+    const k=keyBaseSeat(r.currentBase, r.currentSeat);
     if(!m.has(k)) m.set(k, []);
     m.get(k).push(r.sen);
   }
   for (const arr of m.values()) arr.sort((a,b)=>a-b);
   return m;
-}
-function projectRank(seatIndex, base, seat, sen){
-  const k=keyBaseSeat(base, seat);
-  const arr=seatIndex.get(k)||[];
-  let i=0; while(i<arr.length && arr[i]<sen) i++;
-  return i+1;
 }
 
 function runCascade(mode){
@@ -198,45 +195,47 @@ function runCascade(mode){
 
   for (const r of pilots){
     const prefs = PREF_DETAILS.get(r.sen) || [];
-    const ordered=[]; const seen=new Set();
-    for (const row of prefs){
-      if (row.stay){ ordered.push({base:r.current.base, seat:r.current.seat, stay:true, bpl_min:0}); continue; }
-      if (!row.base || !row.seat) continue;
-      const bs=keyBaseSeat(row.base,row.seat);
+    // Build ordered list with dedupe; treat explicit stay as terminal
+    const seen=new Set(); const ordered=[];
+    for (const p of prefs){
+      if (p.stay){ ordered.push({base:r.currentBase, seat:r.currentSeat, stay:true}); continue; }
+      if (!p.base || !p.seat) continue;
+      const bs=keyBaseSeat(p.base,p.seat);
       if (seen.has(bs)) continue; seen.add(bs);
-      ordered.push({base:row.base, seat:row.seat, stay:false, bpl_min:row.bpl_min||0});
+      ordered.push({base:p.base, seat:p.seat, stay:false});
     }
-    let awarded={base:r.current.base, seat:r.current.seat, prefNum:0, moved:false, upgrade:false, note:'Stayed'};
+
+    let awardedBase=r.currentBase, awardedSeat=r.currentSeat, prefNum=0, moved=false, upgrade=false, note='Stayed';
 
     for (let i=0;i<ordered.length;i++){
       const p=ordered[i];
       const bk=keyBaseSeat(p.base,p.seat);
-      const fromK=keyBaseSeat(r.current.base, r.current.seat);
-      if (p.stay || (p.base===r.current.base && p.seat===r.current.seat)){ awarded={base:r.current.base, seat:r.current.seat, prefNum:i+1, moved:false, upgrade:false, note:'Stayed (listed)'}; break; }
+      const fromK=keyBaseSeat(r.currentBase, r.currentSeat);
+
+      if (p.stay || (p.base===r.currentBase && p.seat===r.currentSeat)){
+        prefNum=i+1; note='Stayed (listed)'; break;
+      }
       let bf=backfill.get(bk)||0, sd=seeded.get(bk)||0;
       if (bf<=0 && sd<=0) continue;
 
-      if (p.bpl_min>0){
-        const rank=projectRank(seatIndex, p.base, p.seat, r.sen);
-        if (rank>p.bpl_min) continue;
-      }
-      if (sd>0 && p.seat==='CA' && mode==='upgrades' && r.current.seat!=='FO'){
-        if (bf<=0) continue;
+      // Upgrades-only mode: seeded CA only FO->CA. Backfill may be used by anyone.
+      if (sd>0 && p.seat==='CA' && mode==='upgrades' && r.currentSeat!=='FO'){
+        if (bf<=0) continue; // no backfill either
       }
 
       if (bf>0) backfill.set(bk, bf-1); else seeded.set(bk, sd-1);
       backfill.set(fromK, (backfill.get(fromK)||0)+1);
 
-      // update live seat index
+      // Update live seat index
       const oArr=seatIndex.get(fromK)||[]; seatIndex.set(fromK, oArr.filter(sen=>sen!==r.sen));
       const dArr=seatIndex.get(bk)||[]; let j=0; while(j<dArr.length && dArr[j]<r.sen) j++; dArr.splice(j,0,r.sen); seatIndex.set(bk,dArr);
 
-      const isUp = (r.current.seat==='FO' && p.seat==='CA');
-      awarded={base:p.base, seat:p.seat, prefNum:i+1, moved:true, upgrade:isUp, note:isUp?'Upgrade':'Lateral'};
-      r.current.base=p.base; r.current.seat=p.seat;
+      awardedBase=p.base; awardedSeat=p.seat; prefNum=i+1; moved=true; upgrade=(r.currentSeat==='FO' && p.seat==='CA');
+      note = upgrade ? 'Upgrade' : 'Lateral';
+      r.currentBase=p.base; r.currentSeat=p.seat;
       break;
     }
-    awards.push({sen:r.sen, name:r.name, from:`${r.current.base} ${r.current.seat}`, to:`${awarded.base} ${awarded.seat}`, pref:awarded.prefNum, moved:awarded.moved, upgrade:awarded.upgrade, note:awarded.note});
+    awards.push({sen:r.sen, name:r.name, from:`${r.currentBase} ${r.currentSeat}`, to:`${awardedBase} ${awardedSeat}`, pref:prefNum, moved, upgrade, note});
   }
   return {awards, seeded, backfill};
 }
@@ -274,7 +273,7 @@ function buildUI(){
   });
 }
 
-function render(awards, seeded, backfill){
+function render(awards, backfill){
   // update backfill pills
   CAP.forEach(c=>{ const k=keyBaseSeat(c.base,c.seat); if (c._backfillPill) c._backfillPill.textContent=String(backfill.get(k)||0); });
 
@@ -307,9 +306,9 @@ function render(awards, seeded, backfill){
 function cascadeAndRender(){
   try{
     const mode=$('mode').value;
-    const {awards, seeded, backfill} = runCascade(mode);
+    const {awards, backfill} = runCascade(mode);
     RESULTS=awards;
-    render(awards, seeded, backfill);
+    render(awards, backfill);
     setStatus(`Loaded & cascaded • ${ROST.length} pilots`, true);
   }catch(e){
     setStatus('Cascade failed', false);
@@ -317,18 +316,19 @@ function cascadeAndRender(){
   }
 }
 
-function setStatus(t, ok){ const s=$('status'); s.textContent=t; s.classList.remove('err','ok'); s.classList.add(ok?'ok':'err'); }
-
 async function init(){
   try{
-    const base=new URL('data/', document.baseURI);
-    const [caps, rost, prefs] = await Promise.all([
-      fetchJSON(new URL('capacities.json', base)),
-      fetchJSON(new URL('roster.json', base)),
-      fetchJSON(new URL('preferences.json', base)),
-    ]);
-    CAP=normalizeCaps(caps); ROST=normalizeRoster(rost); PREF_DETAILS=normalizePrefs(prefs);
-    buildUI(); cascadeAndRender();
+    const base = new URL('data/', document.baseURI);
+    const caps = await fetchJSONWithFallback([new URL('capacities.json', base), new URL('capacities.json.txt', base)]);
+    const rost = await fetchJSONWithFallback([new URL('roster.json', base)]);
+    const prefs= await fetchJSONWithFallback([new URL('preferences.json', base)]);
+
+    CAP=normalizeCaps(caps);
+    ROST=normalizeRoster(rost);
+    PREF_DETAILS=normalizePrefs(prefs);
+
+    buildUI();
+    cascadeAndRender();
   }catch(e){
     setStatus('Load failed', false);
     $('results').innerHTML = `<div class="empty">Couldn’t auto-load /data/*.json. ${e.message||e}</div>`;
@@ -351,18 +351,17 @@ $('btnReset').addEventListener('click', ()=>{
   CAP.forEach(c=> c.delta=0);
   buildUI(); if ($('autoRun').checked) cascadeAndRender();
 });
-['q','fltMove','fltBase','fltSeat'].forEach(id=>{ $(id).addEventListener('input', ()=>render(RESULTS, new Map(), new Map())); $(id).addEventListener('change', ()=>render(RESULTS, new Map(), new Map())); });
-$('btnClear').addEventListener('click', ()=>{ $('q').value=''; $('fltMove').value='all'; $('fltBase').value=''; $('fltSeat').value=''; render(RESULTS,new Map(),new Map()); });
+['q','fltMove','fltBase','fltSeat'].forEach(id=>{ $(id).addEventListener('input', ()=>render(RESULTS, new Map())); $(id).addEventListener('change', ()=>render(RESULTS, new Map())); });
+$('btnClear').addEventListener('click', ()=>{ $('q').value=''; $('fltMove').value='all'; $('fltBase').value=''; $('fltSeat').value=''; render(RESULTS,new Map()); });
 
 $('btnCSV').addEventListener('click', ()=>{
   const headers=['Seniority','Pilot_Name','From','Awarded','Pref_Num','Moved','Upgrade','Note'];
   const esc=s=>`"${String(s??'').replace(/"/g,'""')}"`;
-  const csv=[headers.join(',')].concat(RESULTS.map(r=>[r.sen,r.name,r.from,r.to,r.pref,r.moved?'Y':'',r.upgrade?'Y':'',r.note||''].map(esc).join(','))).join('\\n');
+  const csv=[headers.join(',')].concat(RESULTS.map(r=>[r.sen,r.name,r.from,r.to,r.pref,r.moved?'Y':'',r.upgrade?'Y':'',r.note||''].map(esc).join(','))).join('\n');
   const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}), url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='awards.csv'; document.body.appendChild(a); a.click(); URL.revokeObjectURL(url); a.remove();
 });
 
 document.addEventListener('DOMContentLoaded', init);
-
 </script>
 </body>
 </html>
