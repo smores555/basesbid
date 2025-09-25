@@ -14,49 +14,49 @@
   {
     "base": "LAX",
     "seat": "CA",
-    "startCapacity": 286,
+    "startCapacity": 290,
     "delta": 0
   },
   {
     "base": "LAX",
     "seat": "FO",
-    "startCapacity": 266,
+    "startCapacity": 260,
     "delta": 0
   },
   {
     "base": "PDX",
     "seat": "CA",
-    "startCapacity": 244,
+    "startCapacity": 245,
     "delta": 0
   },
   {
   "base": "PDX",
     "seat": "FO",
-    "startCapacity": 216,
+    "startCapacity": 228,
     "delta": 0
   },
   {
     "base": "SEA",
     "seat": "CA",
-    "startCapacity": 822,
+    "startCapacity": 827,
     "delta": 0
   },
   {
     "base": "SEA",
     "seat": "FO",
-    "startCapacity": 750,
+    "startCapacity": 754,
     "delta": 0
   },
   {
     "base": "SFO",
     "seat": "CA",
-    "startCapacity": 245,
+    "startCapacity": 247,
     "delta": 0
   },
   {
     "base": "SFO",
     "seat": "FO",
-    "startCapacity": 221,
+    "startCapacity": 208,
     "delta": 0
   }
 ]
