@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Position Bid Simulator</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#0b1220; color:#eaf2ff; margin:0; padding:20px; }
+    h1 { color:#8ad2ff; }
+    table { border-collapse: collapse; margin-bottom:20px; }
+    th, td { border:1px solid #1f2a44; padding:6px 10px; }
+    th { background:#111a2b; }
+    input { width:60px; }
+    button { background:#2e4a78; border:none; color:white; padding:8px 14px; border-radius:6px; cursor:pointer; }
+    .card { background:#111a2b; padding:12px; border-radius:8px; margin-top:20px; }
+    .good { color:#2ecc71; }
+    .bad { color:#ff7675; }
+  </style>
+</head>
+<body>
+  <h1>Position Bid Simulator</h1>
+  <p>Edit base/seat capacities and run the bid simulation:</p>
+  <div id="capacityTable"></div>
+  <button onclick="runSimulation()">Run Simulation</button>
+
+  <div id="results" class="card"></div>
+
+  <script>
+    let capacities, roster, preferences;
+
+    async function loadData() {
+      capacities = await fetch('capacities.json').then(r => r.json());
+      roster = await fetch('roster.json').then(r => r.json());
+      preferences = await fetch('preferences.json').then(r => r.json());
+      renderCapacityTable();
+    }
+
+    function renderCapacityTable() {
+      let html = '<table><tr><th>Base</th><th>Seat</th><th>Capacity</th></tr>';
+      capacities.forEach((c,i) => {
+        html += `<tr><td>${c.base}</td><td>${c.seat}</td><td><input type="number" id="cap_${i}" value="${c.startCapacity + (c.delta||0)}"></td></tr>`;
+      });
+      html += '</table>';
+      document.getElementById('capacityTable').innerHTML = html;
+    }
+
+    function runSimulation() {
+      let caps = {};
+      capacities.forEach((c,i) => {
+        caps[c.base+"_"+c.seat] = parseInt(document.getElementById('cap_'+i).value);
+      });
+
+      let sorted = [...roster].sort((a,b)=>a.sen-b.sen);
+      let assignments = {};
+      sorted.forEach(pilot => {
+        let pref = preferences[pilot.id]?.preferences || [];
+        let choice = null;
+        for (let p of pref) {
+          if (p.stay) { choice = pilot.current; break; }
+          let key = p.base+"_"+p.seat;
+          if (caps[key] > 0) { choice = {base:p.base, seat:p.seat}; caps[key]--; break; }
+        }
+        if (!choice) {
+          let key = pilot.current.base+"_"+pilot.current.seat;
+          if (caps[key] > 0) { choice = pilot.current; caps[key]--; }
+        }
+        assignments[pilot.id] = choice;
+      });
+
+      let moves = [];
+      for (let p of sorted) {
+        let a = assignments[p.id];
+        let cur = p.current;
+        if (a.base !== cur.base || a.seat !== cur.seat) {
+          moves.push(`${p.sen} ${p.name} → ${a.base} ${a.seat}`);
+        }
+      }
+      let html = `<h2>Results</h2><p>${moves.length} pilots moved:</p><ul>`;
+      moves.forEach(m => html += `<li>${m}</li>`);
+      html += '</ul>';
+      document.getElementById('results').innerHTML = html;
+    }
+
+    loadData();
+  </script>
+</body>
+</html>
