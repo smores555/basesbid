@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Position Bid Simulator — Delta Mode</title>
+  <title>Position Bid Simulator — Robust Normalization + Δ Mode</title>
   <style>
-    :root { --bg:#0b1220; --card:#111a2b; --muted:#8aa4c1; --text:#eaf2ff; --accent:#8ad2ff; --border:#1f2a44; }
+    :root { --bg:#0b1220; --card:#111a2b; --muted:#8aa4c1; --text:#eaf2ff; --accent:#8ad2ff; --border:#1f2a44; --bad:#ff6b6b; }
     *{box-sizing:border-box}
     body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
     .wrap{max-width:1200px;margin:18px auto;padding:0 12px 42px}
@@ -18,37 +18,38 @@
     th{font-size:12px;color:var(--muted);text-align:left;padding:4px 8px}
     td{background:#0f182a;border:1px solid var(--border);padding:6px 8px;vertical-align:middle}
     .basehdr{background:#13213a;color:#cfe6ff;font-weight:700}
-    input[type=number]{width:70px;padding:6px;border-radius:8px;border:1px solid var(--border);background:#0b1426;color:var(--text);font-size:14px}
+    input[type=number]{width:90px;padding:6px;border-radius:8px;border:1px solid var(--border);background:#0b1426;color:#eaf2ff;font-size:14px}
     .buts>button{padding:4px 8px;border-radius:8px;margin-left:2px}
-    .grid{display:grid;gap:12px}
-    @media(min-width:900px){ .grid{grid-template-columns:1.2fr 1fr} }
-    details{margin:10px 0}
-    summary{cursor:pointer}
     .pill{display:inline-block;padding:2px 8px;border-radius:999px;background:#1a2a47;color:#c8ddff;font-size:12px;margin-right:6px}
+    .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+    .warn{color:#ffb84d}
+    .bad{color:var(--bad)}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>Position Bid Simulator — Delta Adjustments</h1>
+    <h1>Position Bid Simulator — Robust FO/CA Normalization (Δ Adjustments)</h1>
 
     <div class="card">
       <div class="toolbar">
         <button id="runBtn">Run Simulation</button>
         <button class="secondary" id="resetBtn">Reset All Δ</button>
+        <button class="secondary" id="validateBtn">Validate Data</button>
         <span id="status" style="margin-left:8px;color:var(--muted);"></span>
       </div>
       <div id="capTable"></div>
+      <h3>Diagnostics</h3>
+      <div id="diag" class="mono" style="white-space:pre-wrap;background:#0a1426;border:1px dashed var(--border);border-radius:10px;padding:10px;max-height:260px;overflow:auto">Loading…</div>
     </div>
 
-    <div class="grid">
-      <div class="card">
-        <h3>Summary</h3>
-        <div id="summary"></div>
-      </div>
-      <div class="card">
-        <h3>Moves</h3>
-        <div id="results"></div>
-      </div>
+    <div class="card">
+      <h3>Summary</h3>
+      <div id="summary"></div>
+    </div>
+
+    <div class="card">
+      <h3>Moves</h3>
+      <div id="results"></div>
     </div>
   </div>
 
@@ -56,178 +57,219 @@
     let capacitiesRaw = [];
     let roster = [];
     let prefs = {};
-    let capMap = new Map(); // key -> {base, seat, start, delta}
 
-    const keyOf = (b,s)=>`${b}_${s}`;
+    // ---------- Normalization helpers ----------
+    function normalizeBase(base){
+      // Uppercase A-Z, strip ALL non-alphanumerics (spaces, hyphens, dots, slashes, etc.)
+      return String(base||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+    }
+    function normalizeSeat(seat){
+      const s = String(seat||'').toUpperCase();
+      // Map many variants to FO/CA
+      if (/(^|[^A-Z])F\/?O([^A-Z]|$)/.test(s) || /FIRST[\s\-_]*OFFICER/.test(s) || /CO[\s\-_]*PILOT/.test(s)) return 'FO';
+      if (/(^|[^A-Z])CA([^A-Z]|$)/.test(s) || /CAPT(AIN)?/.test(s) || /\bCPT\b/.test(s)) return 'CA';
+      return null;
+    }
+    const keyOf = (b,s)=>`${normalizeBase(b)}__${normalizeSeat(s)}`;
+
+    const capMap = new Map();   // key -> { base, seat, start, delta }
+
+    const log = (m)=>{ const d=document.getElementById('diag'); d.textContent += (d.textContent?"\n":"") + m; d.scrollTop=d.scrollHeight; };
 
     async function loadAll(){
-      async function safeFetch(path){ try { const r = await fetch(path); if(!r.ok) throw 0; return r.json(); } catch{ return null; } }
+      async function safeFetch(path){ try { const r = await fetch(path, {cache:'no-cache'}); if(!r.ok) throw 0; return r.json(); } catch{ return null; } }
       capacitiesRaw = await safeFetch('capacities.json') || await safeFetch('data/capacities.json') || await safeFetch('capacities.json.txt') || await safeFetch('data/capacities.json.txt');
       roster        = await safeFetch('roster.json')      || await safeFetch('data/roster.json');
       prefs         = await safeFetch('preferences.json') || await safeFetch('data/preferences.json');
 
-      if(!capacitiesRaw || !roster || !prefs){
-        document.getElementById('status').textContent = 'Could not load one or more JSON files.';
-        return;
-      }
+      const ok = !!capacitiesRaw && !!roster && !!prefs;
+      document.getElementById('status').textContent = ok ? 'Loaded JSON.' : '❌ Missing JSON';
+      if(!ok){ log('STOP: one or more JSON files failed to load.'); return; }
 
-      capMap.clear();
-      for(const c of capacitiesRaw){
-        const start = (c.startCapacity||0) + (+c.delta||0);
-        const k = keyOf(c.base, c.seat);
-        capMap.set(k, { base:c.base, seat:c.seat, start:start, delta:0 });
-      }
+      rebuildCapMap();
       renderCapTable();
+      validateData();
+    }
+
+    function rebuildCapMap(){
+      const agg = new Map();
+      let skipped = 0;
+      for (const c of capacitiesRaw){
+        const nb = normalizeBase(c.base);
+        const ns = normalizeSeat(c.seat);
+        if (!nb || !ns){ skipped++; continue; }
+        const start = (c.startCapacity||0) + (+c.delta||0);
+        const k = `${nb}__${ns}`;
+        agg.set(k, (agg.get(k)||0) + start);
+      }
+      capMap.clear();
+      for (const [k, totalStart] of agg.entries()){
+        const [b,s] = k.split('__');
+        capMap.set(k, { base:b, seat:s, start: totalStart, delta: 0 });
+      }
+      if (skipped>0) log(`Note: skipped ${skipped} capacity rows with unknown seat.`);
     }
 
     function groupByBase(){
       const bases = {};
-      for(const {base, seat} of capMap.values()){
-        if(!bases[base]) bases[base] = new Set();
-        bases[base].add(seat);
+      for (const {base, seat} of capMap.values()){
+        if(!bases[base]) bases[base] = [];
+        bases[base].push(seat);
       }
       const orderSeat = (a,b)=> (a===b?0 : a==='CA'? -1 : b==='CA'? 1 : a.localeCompare(b));
-      return Object.keys(bases).sort().map(base=>({ base, seats: Array.from(bases[base]).sort(orderSeat) }));
+      return Object.keys(bases).sort().map(base=>({ base, seats: Array.from(new Set(bases[base])).sort(orderSeat) }));
     }
 
     function renderCapTable(){
       const groups = groupByBase();
       let html = '<table><thead><tr><th>Base</th><th>Seat</th><th>Start</th><th>Δ</th><th>Adjusted</th><th></th></tr></thead><tbody>';
-      for(const g of groups){
+      for (const g of groups){
         const rowSpan = g.seats.length;
         g.seats.forEach((seat, idx)=>{
-          const k = keyOf(g.base, seat);
-          const cap = capMap.get(k);
-          const inputId = `cap_${k}`;
-          const adjusted = cap.start + cap.delta;
+          const k = `${g.base}__${seat}`;
+          const cap = capMap.get(k) || {start:0, delta:0};
+          const adj = Math.max(0, cap.start + cap.delta);
           html += '<tr>';
           if(idx===0){ html += `<td class="basehdr" rowspan="${rowSpan}">${g.base}</td>`; }
           html += `<td>${seat}</td>`;
-          html += `<td>${cap.start}</td>`;
-          html += `<td><input type="number" id="${inputId}" value="${cap.delta}" oninput="onCapInput('${k}', this.value)"></td>`;
-          html += `<td>${adjusted}</td>`;
-          html += `<td class="buts">`+
-                  `<button onclick="bump('${k}',-10)">-10</button>`+
-                  `<button onclick="bump('${k}',-5)">-5</button>`+
-                  `<button onclick="bump('${k}',-1)">-1</button>`+
-                  `<button onclick="bump('${k}',+1)">+1</button>`+
-                  `<button onclick="bump('${k}',+5)">+5</button>`+
-                  `<button onclick="bump('${k}',+10)">+10</button>`+
-                  `</td>`;
+          html += `<td class="mono">${cap.start}</td>`;
+          html += `<td><input type="number" value="${cap.delta}" oninput="onDelta('${k}', this.value)"></td>`;
+          html += `<td class="mono">${adj}</td>`;
+          html += `<td class="buts">`
+               +  `<button onclick="bump('${k}',-10)">-10</button>`
+               +  `<button onclick="bump('${k}',-5)">-5</button>`
+               +  `<button onclick="bump('${k}',-1)">-1</button>`
+               +  `<button onclick="bump('${k}',+1)">+1</button>`
+               +  `<button onclick="bump('${k}',+5)">+5</button>`
+               +  `<button onclick="bump('${k}',+10)">+10</button>`
+               +  `</td>`;
           html += '</tr>';
         });
       }
       html += '</tbody></table>';
       document.getElementById('capTable').innerHTML = html;
-      document.getElementById('status').textContent = 'Δ values applied on top of Start capacities.';
+
+      let totalStart = 0, totalAdj = 0;
+      for (const cap of capMap.values()){ totalStart += cap.start; totalAdj += Math.max(0, cap.start + cap.delta); }
+      log(`Cap rows: ${capMap.size} | Total Start: ${totalStart} | Total Adjusted: ${totalAdj}`);
     }
 
-    function onCapInput(k, v){
-      const n = parseInt(v||'0',10);
-      const cap = capMap.get(k); cap.delta = n;
-      renderCapTable();
-    }
+    function onDelta(k, v){ const cap = capMap.get(k); if(!cap) return; const n = parseInt(v||'0',10); cap.delta = Number.isFinite(n)? n : 0; renderCapTable(); }
+    function bump(k, d){ const cap = capMap.get(k); if(!cap) return; cap.delta = (cap.delta|0) + d; renderCapTable(); }
 
-    function bump(k, d){
-      const cap = capMap.get(k);
-      cap.delta = (cap.delta|0) + d;
-      renderCapTable();
-    }
+    function validateData(){
+      const missing = new Set();
+      const unparseable = [];
 
-    function resetCaps(){
-      for(const cap of capMap.values()) cap.delta = 0;
-      renderCapTable();
+      // roster current buckets
+      for (const p of roster){
+        const nb = normalizeBase((p.current||{}).base);
+        const ns = normalizeSeat((p.current||{}).seat);
+        if(!nb || !ns){ unparseable.push({who:p.name||p.id, base:p.current?.base, seat:p.current?.seat}); continue; }
+        const kb = `${nb}__${ns}`;
+        if(!capMap.has(kb)) missing.add(kb);
+      }
+      // prefs target buckets
+      for (const [pid, pv] of Object.entries(prefs)){
+        const arr = (pv?.preferences)||[];
+        for (const w of arr){
+          if(w.stay || w.bpl_min === 0) continue;
+          const nb = normalizeBase(w.base);
+          const ns = normalizeSeat(w.seat);
+          if(!nb || !ns){ unparseable.push({who:pid, base:w.base, seat:w.seat}); continue; }
+          const kb = `${nb}__${ns}`;
+          if(!capMap.has(kb)) missing.add(kb);
+        }
+      }
+
+      if(unparseable.length){
+        log('Unparseable Base/Seat rows (could not read FO/CA or base letters):');
+        for (const u of unparseable.slice(0,20)){ log(`  - ${u.who}: base='${u.base}' seat='${u.seat}'`); }
+        if(unparseable.length>20) log(`  … and ${unparseable.length-20} more`);
+      } else {
+        log('All Base/Seat strings parsed successfully.');
+      }
+
+      if(missing.size){
+        log('Missing capacity buckets (referenced by roster/prefs but absent in capacities):');
+        for (const k of missing){ const [b,s]=k.split('__'); log(`  - ${b} ${s}`); }
+      } else {
+        log('No missing buckets detected.');
+      }
     }
 
     function run(){
       const remain = new Map();
-      for(const [k, cap] of capMap.entries()) remain.set(k, cap.start + cap.delta);
+      for (const [k, cap] of capMap.entries()) remain.set(k, Math.max(0, cap.start + cap.delta));
 
       const sorted = [...roster].sort((a,b)=>a.sen - b.sen);
       const assignments = new Map();
       const moves = [];
       const upgrades = [];
+      let unassigned = 0;
 
-      function assignIfCap(base, seat){
-        const k = keyOf(base, seat);
+      function tryAssign(base, seat){
+        const nb = normalizeBase(base); const ns = normalizeSeat(seat);
+        if(!nb || !ns) return false;
+        const k = `${nb}__${ns}`;
         if(!remain.has(k)) return false;
-        if(remain.get(k) <= 0) return false;
-        remain.set(k, remain.get(k) - 1);
+        const r = remain.get(k);
+        if(r <= 0) return false;
+        remain.set(k, r - 1);
         return true;
       }
 
-      for(const p of sorted){
+      for (const p of sorted){
+        const curB = (p.current||{}).base, curS = (p.current||{}).seat;
         const pref = (prefs[p.id]?.preferences)||[];
         let chosen = null;
+
         const stayPref = pref.find(x=>x.stay === true || x.bpl_min === 0);
-        if(stayPref){
-          if(assignIfCap(p.current.base, p.current.seat)){
-            chosen = { base:p.current.base, seat:p.current.seat };
-          }
-        }
+        if(stayPref && tryAssign(curB, curS)) chosen = { base:normalizeBase(curB), seat:normalizeSeat(curS) };
+
         if(!chosen){
-          const wanted = [...pref].filter(x=>!x.stay && x.bpl_min !== 0)
-                                  .sort((a,b)=>(a.order||0)-(b.order||0));
-          for(const w of wanted){
-            if(assignIfCap(w.base, w.seat)){
-              chosen = { base:w.base, seat:w.seat };
-              break;
-            }
-          }
+          const wanted = pref.filter(x=>!x.stay && x.bpl_min !== 0).sort((a,b)=>(a.order||0)-(b.order||0));
+          for (const w of wanted){ if(tryAssign(w.base, w.seat)){ chosen = { base:normalizeBase(w.base), seat:normalizeSeat(w.seat) }; break; } }
         }
-        if(!chosen){
-          if(assignIfCap(p.current.base, p.current.seat)){
-            chosen = { base:p.current.base, seat:p.current.seat };
-          } else {
-            for(const [k,_v] of remain.entries()){
-              if(remain.get(k)>0){
-                const [b,s]=k.split('_');
-                assignIfCap(b,s);
-                chosen = { base:b, seat:s };
-                break;
-              }
-            }
-          }
-        }
+
+        if(!chosen && tryAssign(curB, curS)) chosen = { base:normalizeBase(curB), seat:normalizeSeat(curS) };
+
+        if(!chosen){ unassigned++; continue; }
+
+        const fromB = normalizeBase(curB), fromS = normalizeSeat(curS);
         assignments.set(p.id, chosen);
-        if(chosen.base!==p.current.base || chosen.seat!==p.current.seat){
-          moves.push({sen:p.sen, name:p.name, from:`${p.current.base} ${p.current.seat}` , to:`${chosen.base} ${chosen.seat}`});
-        }
-        if(p.current.seat==='FO' && chosen.seat==='CA'){
-          upgrades.push({sen:p.sen, name:p.name, base:chosen.base});
-        }
+        if(chosen.base!==fromB || chosen.seat!==fromS){ moves.push({sen:p.sen, name:p.name, from:`${fromB} ${fromS}`, to:`${chosen.base} ${chosen.seat}`}); }
+        if(fromS==='FO' && chosen.seat==='CA') upgrades.push({sen:p.sen, name:p.name, base:chosen.base});
       }
 
-      const resEl = document.getElementById('results');
-      let html = `<div class="pill">Total moves: ${moves.length}</div>`;
-      html += `<div class="pill">Upgrades (FO→CA): ${upgrades.length}</div>`;
+      // Moves
+      let html = `<div class=\"pill\">Total moves: ${moves.length}</div>`;
+      html += `<div class=\"pill\">Upgrades (FO→CA): ${upgrades.length}</div>`;
+      if(unassigned>0) html += `<div class=\"pill\" style=\"background:#3a1e1e\">Unassigned: ${unassigned}</div>`;
       html += '<details open><summary>All Moves</summary><ol>';
-      for(const m of moves){
-        html += `<li>${m.sen} ${m.name}: ${m.from} → <b>${m.to}</b></li>`;
-      }
+      for(const m of moves){ html += `<li>${m.sen} ${m.name}: ${m.from} → <b>${m.to}</b></li>`; }
       html += '</ol></details>';
-      resEl.innerHTML = html;
+      document.getElementById('results').innerHTML = html;
 
-      const summaryEl = document.getElementById('summary');
+      // Summary
+      const fill = new Map(); for(const [pid, a] of assignments.entries()){ const k = `${a.base}__${a.seat}`; fill.set(k, (fill.get(k)||0)+1); }
       let shtml = '<table><thead><tr><th>Base</th><th>Seat</th><th>Start</th><th>Δ</th><th>Adjusted</th><th>Filled</th></tr></thead><tbody>';
-      const fill = new Map();
-      for(const [pid, a] of assignments.entries()){
-        const k = keyOf(a.base,a.seat);
-        fill.set(k, (fill.get(k)||0)+1);
-      }
       for(const [k, cap] of capMap.entries()){
-        const adjusted = cap.start + cap.delta;
         const f = fill.get(k)||0;
-        shtml += `<tr><td>${cap.base}</td><td>${cap.seat}</td><td>${cap.start}</td><td>${cap.delta}</td><td>${adjusted}</td><td>${f}</td></tr>`;
+        const adj = Math.max(0, cap.start + cap.delta);
+        const cls = adj<=0 ? ' bad' : '';
+        shtml += `<tr><td>${cap.base}</td><td>${cap.seat}</td><td class=\"mono\">${cap.start}</td><td class=\"mono\">${cap.delta}</td><td class=\"mono${cls}\">${adj}</td><td class=\"mono\">${f}</td></tr>`;
       }
       shtml += '</tbody></table>';
-      summaryEl.innerHTML = shtml;
+      document.getElementById('summary').innerHTML = shtml;
 
       document.getElementById('status').textContent = 'Simulation complete.';
+      log(`Run done. Moves=${moves.length}, Upgrades=${upgrades.length}, Unassigned=${unassigned}`);
     }
 
     document.getElementById('runBtn').addEventListener('click', run);
-    document.getElementById('resetBtn').addEventListener('click', resetCaps);
+    document.getElementById('resetBtn').addEventListener('click', ()=>{ for(const cap of capMap.values()) cap.delta=0; renderCapTable(); document.getElementById('status').textContent='Δ reset to 0.'; });
+    document.getElementById('validateBtn').addEventListener('click', validateData);
 
     loadAll();
   </script>
