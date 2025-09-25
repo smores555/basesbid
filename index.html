@@ -197,7 +197,6 @@
         log('No missing buckets detected.');
       }
     }
-
     function run(){
       const remain = new Map();
       for (const [k, cap] of capMap.entries()) remain.set(k, Math.max(0, cap.start + cap.delta));
@@ -222,18 +221,34 @@
       for (const p of sorted){
         const curB = (p.current||{}).base, curS = (p.current||{}).seat;
         const pref = (prefs[p.id]?.preferences)||[];
+
+        // Separate real bids vs "stay" markers
+        const bids = pref.filter(x=>!(x.stay===true) && x.bpl_min !== 0);
+        const hasAnyBids = bids.length > 0;
         let chosen = null;
 
-        const stayPref = pref.find(x=>x.stay === true || x.bpl_min === 0);
-        if(stayPref && tryAssign(curB, curS)) chosen = { base:normalizeBase(curB), seat:normalizeSeat(curS) };
-
-        if(!chosen){
-          const wanted = pref.filter(x=>!x.stay && x.bpl_min !== 0).sort((a,b)=>(a.order||0)-(b.order||0));
-          for (const w of wanted){ if(tryAssign(w.base, w.seat)){ chosen = { base:normalizeBase(w.base), seat:normalizeSeat(w.seat) }; break; } }
+        // If NO bids were submitted (bpl_min === 0 signals no bid), then and only then try to stay first
+        if(!hasAnyBids){
+          if(tryAssign(curB, curS)) chosen = { base:normalizeBase(curB), seat:normalizeSeat(curS) };
         }
 
-        if(!chosen && tryAssign(curB, curS)) chosen = { base:normalizeBase(curB), seat:normalizeSeat(curS) };
+        // Otherwise, attempt bids in order of 'order'
+        if(!chosen && hasAnyBids){
+          const wanted = bids.sort((a,b)=>(a.order||0)-(b.order||0));
+          for (const w of wanted){
+            if(tryAssign(w.base, w.seat)){
+              chosen = { base:normalizeBase(w.base), seat:normalizeSeat(w.seat) };
+              break;
+            }
+          }
+        }
 
+        // If bids failed (or there were none and stay failed), try to stay as fallback
+        if(!chosen && tryAssign(curB, curS)){
+          chosen = { base:normalizeBase(curB), seat:normalizeSeat(curS) };
+        }
+
+        // If still nothing, leave unassigned
         if(!chosen){ unassigned++; continue; }
 
         const fromB = normalizeBase(curB), fromS = normalizeSeat(curS);
@@ -243,9 +258,9 @@
       }
 
       // Moves
-      let html = `<div class=\"pill\">Total moves: ${moves.length}</div>`;
-      html += `<div class=\"pill\">Upgrades (FO→CA): ${upgrades.length}</div>`;
-      if(unassigned>0) html += `<div class=\"pill\" style=\"background:#3a1e1e\">Unassigned: ${unassigned}</div>`;
+      let html = `<div class="pill">Total moves: ${moves.length}</div>`;
+      html += `<div class="pill">Upgrades (FO→CA): ${upgrades.length}</div>`;
+      if(unassigned>0) html += `<div class="pill" style="background:#3a1e1e">Unassigned: ${unassigned}</div>`;
       html += '<details open><summary>All Moves</summary><ol>';
       for(const m of moves){ html += `<li>${m.sen} ${m.name}: ${m.from} → <b>${m.to}</b></li>`; }
       html += '</ol></details>';
@@ -258,7 +273,7 @@
         const f = fill.get(k)||0;
         const adj = Math.max(0, cap.start + cap.delta);
         const cls = adj<=0 ? ' bad' : '';
-        shtml += `<tr><td>${cap.base}</td><td>${cap.seat}</td><td class=\"mono\">${cap.start}</td><td class=\"mono\">${cap.delta}</td><td class=\"mono${cls}\">${adj}</td><td class=\"mono\">${f}</td></tr>`;
+        shtml += `<tr><td>${cap.base}</td><td>${cap.seat}</td><td class="mono">${cap.start}</td><td class="mono">${cap.delta}</td><td class="mono${cls}">${adj}</td><td class="mono">${f}</td></tr>`;
       }
       shtml += '</tbody></table>';
       document.getElementById('summary').innerHTML = shtml;
@@ -266,6 +281,7 @@
       document.getElementById('status').textContent = 'Simulation complete.';
       log(`Run done. Moves=${moves.length}, Upgrades=${upgrades.length}, Unassigned=${unassigned}`);
     }
+
 
     document.getElementById('runBtn').addEventListener('click', run);
     document.getElementById('resetBtn').addEventListener('click', ()=>{ for(const cap of capMap.values()) cap.delta=0; renderCapTable(); document.getElementById('status').textContent='Δ reset to 0.'; });
