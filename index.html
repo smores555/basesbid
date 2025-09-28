@@ -459,7 +459,34 @@
         html += '</div>';
         $results.innerHTML = html;
       }
+      
       renderLists();
+
+      // Seniority-sorted names list
+      function renderMovedBySeniority(){
+        const movedBySen = [...state.moves].sort((a,b)=> (a.sen||1e9) - (b.sen||1e9));
+        let html = '<ol>';
+        for (const m of movedBySen){
+          const tag = m.move_type==='upgrade' ? '<span class="tag up">[Upgrade]</span>' : '<span class="tag lat">[Lateral]</span>';
+          const bpl = m.bpl ? ' <span class="tag">[BPL]</span>' : '';
+          const name = m.name ? ' ' + m.name : '';
+          html += `<li>${m.sen}${name}: ${m.fromB} ${m.fromS} → <b>${m.toB} ${m.toS}</b> ${tag}${bpl}</li>`;
+        }
+        html += '</ol>';
+        document.getElementById('movedSenList').innerHTML = html;
+      }
+      renderMovedBySeniority();
+
+      // CSV export for moved-by-seniority
+      function toCsv(rows){
+        const esc = v => '"' + String(v==null?'':v).replaceAll('"','""') + '"';
+        const header = ['sen','id','name','from_base','from_seat','to_base','to_seat','move_type','bpl'];
+        const body = rows.map(r=>[r.sen,r.id||'',r.name||'',r.fromB,r.fromS,r.toB,r.toS,r.move_type, r.bpl?1:0].map(esc).join(','));
+        return [header.join(','), ...body].join('\n');
+      }
+      const movedBySenCsv = toCsv([...state.moves].sort((a,b)=> (a.sen||1e9) - (b.sen||1e9)));
+      const urlMovedSen = URL.createObjectURL(new Blob([movedBySenCsv], {type:'text/csv'}));
+      document.getElementById('exportMovedSenCsv').href = urlMovedSen;
 
       // CSV exports
       function toCsv(rows){
