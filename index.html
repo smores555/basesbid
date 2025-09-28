@@ -53,6 +53,7 @@
         <h3>Open Vacancies</h3>
         <div id="openVac"></div>
       </div>
+      
       <div class="card">
         <h3>Vacancy Ledger</h3>
         <div style="max-height:260px;overflow:auto">
@@ -64,33 +65,15 @@
             </thead>
             <tbody id="ledgerBody"></tbody>
           </table>
-        
-      <div class="card">
-        <h3>Eligibility</h3>
-        <div class="subtle" style="margin-bottom:6px">Mark pilots on medical leave (or otherwise ineligible) so they are not processed.</div>
-        <div style="display:flex; gap:10px; align-items:flex-start; flex-wrap:wrap">
-          <textarea id="ineligibleList" rows="6" style="width:360px; background:#0b1426; color:#eaf2ff; border:1px solid var(--border); border-radius:8px; padding:8px" placeholder="One per line: PSID or SEN"></textarea>
-          <div style="display:flex; flex-direction:column; gap:8px">
-            <button class="secondary" id="btnApplyIneligible">Apply</button>
-            <button class="secondary" id="btnClearIneligible">Clear</button>
-            <label class="subtle mono"><input type="checkbox" id="chkExcludeIncumbents"> Exclude from incumbents (advanced)</label>
-          </div>
         </div>
-        <div class="subtle mono" id="eligStatus" style="margin-top:6px"></div>
       </div>
-      
       <div class="card">
-        <h3>Moves</h3>
+        <h3>Names (Seniority)</h3>
+        <div id="namesBySen" style="max-height:260px;overflow:auto"></div>
+      </div>
+    </div>
+  </div>
 
-        <div id="movesHeader" style="margin-bottom:6px"></div>
-        <div id="results"></div>
-        <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:8px">
-          <label style="background:#0e1a2f;border:1px solid var(--border);border-radius:999px;padding:6px 10px;display:inline-flex;gap:8px;align-items:center">
-            <input type="checkbox" id="upgradesOnly"> Show upgrades only
-          </label>
-          <div style="display:flex;gap:10px;align-items:center"><a id="exportMoversCsv" class="link" href="#" download="movers.csv">Export movers CSV</a><a id="exportBaseCsv" class="link" href="#" download="base_changers.csv">Export base changers CSV</a></div>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -439,8 +422,8 @@
 
       
       // Render Moves & CSV
-      const upgrades = state.moves.filter(m=>m.move_type==='upgrade');
-      const laterals = state.moves.filter(m=>m.move_type==='lateral');
+      const upgrades = [...state.moves.filter(m=>m.move_type==='upgrade')].sort((a,b)=> (a.sen||1e9) - (b.sen||1e9));
+      const laterals = [...state.moves.filter(m=>m.move_type==='lateral')].sort((a,b)=> (a.sen||1e9) - (b.sen||1e9));
       $movesHdr.innerHTML = `<span class="pill">Passes: ${state.pass}</span><span class="pill">Moves: ${state.moves.length}</span><span class="pill">Upgrades: ${upgrades.length}</span><span class="pill">Laterals: ${laterals.length}</span>`;
 
       function rowLine(m){
@@ -461,6 +444,22 @@
       }
       
       renderLists();
+      // Render Names (Seniority) list inside the Vacancy Tracker card
+      function renderNamesBySeniority(){
+        const bySen = [...state.moves].sort((a,b)=> (a.sen||1e9) - (b.sen||1e9));
+        let html = '<ol>';
+        for (const m of bySen){
+          const name = m.name ? ' ' + m.name : '';
+          const tag = m.move_type==='upgrade' ? '<span class="tag up">[Upgrade]</span>' : '<span class="tag lat">[Lateral]</span>';
+          const bpl = m.bpl ? ' <span class="tag">[BPL]</span>' : '';
+          html += `<li>${m.sen}${name}: ${m.fromB} ${m.fromS} → <b>${m.toB} ${m.toS}</b> ${tag}${bpl}</li>`;
+        }
+        html += '</ol>';
+        const slot = document.getElementById('namesBySen');
+        if (slot) slot.innerHTML = html;
+      }
+      renderNamesBySeniority();
+
 
       // Seniority-sorted names list
       function renderMovedBySeniority(){
