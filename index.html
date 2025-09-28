@@ -3,39 +3,49 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BUILD‑V11.1 — Perf hardened: batched ledger + guarded cascade</title>
+  <title>BUILD‑V12 — Vacancy‑first then Seniority Cascade</title>
   <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <style>
-    :root { --bg:#0b1220; --card:#111a2b; --muted:#8aa4c1; --text:#eaf2ff; --accent:#8ad2ff; --border:#1f2a44; }
+    :root { --bg:#0b1220; --card:#111a2b; --muted:#8aa4c1; --text:#eaf2ff; --accent:#8ad2ff; --border:#1f2a44; --good:#34d399; }
+    *{box-sizing:border-box}
     body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
     .wrap{max-width:1240px;margin:18px auto;padding:0 12px 42px}
-    .banner{background:#123361;border-bottom:3px solid #8ad2ff;color:#fff;padding:10px 12px;font-weight:800;border-radius:0 0 12px 12px;letter-spacing:.3px}
+    .banner{background:#0e2a4c;border-bottom:3px solid #8ad2ff;color:#fff;padding:10px 12px;font-weight:800;border-radius:0 0 12px 12px;letter-spacing:.3px}
     .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px}
     .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
     button{background:#2e4a78;color:#fff;border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-weight:600;cursor:pointer}
     button.secondary{background:#203453}
+    input[type=number]{width:86px;padding:6px;border-radius:8px;border:1px solid var(--border);background:#0b1426;color:#eaf2ff;font-size:14px}
     table{width:100%;border-collapse:separate;border-spacing:0 6px}
     th{font-size:12px;color:var(--muted);text-align:left;padding:4px 8px}
     td{background:#0f182a;border:1px solid var(--border);padding:6px 8px;vertical-align:middle}
+    .basehdr{background:#13213a;color:#cfe6ff;font-weight:700}
+    .pill{display:inline-block;padding:2px 8px;border-radius:999px;background:#1a2a47;color:#c8ddff;font-size:12px;margin-right:6px}
+    .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
     .grid{display:grid;gap:12px;grid-template-columns: 1fr 1fr 1fr}
     .kv{display:flex;align-items:center;justify-content:space-between;background:#0f182a;border:1px solid var(--border);padding:6px 8px;border-radius:10px}
-    .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
     .subtle{color:#8aa4c1}
+    .tag{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:2px 8px;margin-left:6px;font-size:12px;background:#12203b;color:#cfe6ff}
+    .tag.up{background:#12361f}
+    .tag.lat{background:#1b2c3b}
+    a.link{color:#8ad2ff}
   </style>
 </head>
 <body>
-  <div class="banner">BUILD‑V11.1 — Perf hardened: batched ledger + guarded cascade</div>
+  <div class="banner">BUILD‑V12 — Vacancy‑first then Seniority Cascade • UI control of Start & Δ per Base/Seat</div>
   <div class="wrap">
     <div class="card">
       <div class="toolbar">
-        <button id="runBtn">Run Simulation</button>
-        <button class="secondary" id="resetBtn">Reset</button>
-        <label class="subtle mono"><input type="checkbox" id="muteLedger" /> Mute ledger (faster)</label>
-        <label class="subtle mono" style="margin-left:8px"><input type="checkbox" id="muteOpen" /> Mute open box (faster)</label>
+        <button id="runBtn">Run (Vacancy‑first → Cascade)</button>
+        <button class="secondary" id="resetDeltaBtn">Reset Δ</button>
+        <button class="secondary" id="reloadBtn">Reload JSON</button>
+        <label class="subtle mono"><input type="checkbox" id="muteLedger" /> Mute ledger</label>
+        <label class="subtle mono" style="margin-left:8px"><input type="checkbox" id="muteOpen" /> Mute open box</label>
+        <span id="status" class="subtle mono" style="margin-left:10px"></span>
       </div>
-      <div id="summary" class="subtle mono"></div>
+      <div id="capTable"></div>
     </div>
 
     <div class="grid">
@@ -58,47 +68,124 @@
       </div>
       <div class="card">
         <h3>Moves</h3>
+        <div id="movesHeader" style="margin-bottom:6px"></div>
         <div id="results"></div>
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:8px">
+          <label style="background:#0e1a2f;border:1px solid var(--border);border-radius:999px;padding:6px 10px;display:inline-flex;gap:8px;align-items:center">
+            <input type="checkbox" id="upgradesOnly"> Show upgrades only
+          </label>
+          <a id="exportCsv" class="link" href="#" download="base_changers.csv">Export base changers CSV</a>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    // Minimal mock to illustrate perf hardening; wire your real data
-    const BASES = ["SEA","ANC","PDX","SFO","LAX"];
+    // ===== Helpers and State =====
+    const BASES = ["SEA","ANC","PDX","SFO","LAX"]; // tweak as needed
     const SEATS = ["CA","FO"];
-    const Open = new Map(); // "BASE__SEAT" -> count
-    const bkey = (b,s)=>`${b}__${s}`;
+    const key = (b,s)=>`${b}__${s}`;
 
-    const state = {
-      running:false,
-      maxPass: 2000,        // hard stop
-      maxMoves: 20000,      // guard rail
-      pass: 0,
-      moves: []
-    };
+    const capMap = new Map(); // k -> {base, seat, start, delta}
+    let roster = [];          // [{id, sen, name, current:{base,seat}}]
+    let prefs  = {};          // { [id]: { preferences:[{order, base, seat, stay?}] } }
 
-    const $summary = document.getElementById('summary');
+    const $capTable   = document.getElementById('capTable');
     const $ledgerBody = document.getElementById('ledgerBody');
-    const $openVac = document.getElementById('openVac');
-    const muteLedger = ()=> document.getElementById('muteLedger').checked;
-    const muteOpen   = ()=> document.getElementById('muteOpen').checked;
+    const $openVac    = document.getElementById('openVac');
+    const $movesHdr   = document.getElementById('movesHeader');
+    const $results    = document.getElementById('results');
+    const $status     = document.getElementById('status');
 
-    function renderOpenBatched(batch){
-      if (muteOpen()) return;
-      // batch is a Map key->delta accumulated this pass
-      for (const [k, delta] of batch.entries()){
-        Open.set(k, (Open.get(k)||0) + delta);
+    const state = { running:false, pass:0, moves:[], maxPass:5000, maxMoves:100000 };
+
+    // ===== Load JSON (fallback to demo if missing) =====
+    async function loadJSON(){
+      function sf(p){ return fetch(p, {cache:'no-cache'}).then(r=>r.ok?r.json():null).catch(()=>null); }
+      const loaded = {
+        capacities: await (sf('capacities.json') || sf('data/capacities.json')),
+        roster:     await (sf('roster.json')     || sf('data/roster.json')),
+        prefs:      await (sf('preferences.json')|| sf('data/preferences.json'))
+      };
+      if(!loaded.capacities || !loaded.roster || !loaded.prefs){
+        // minimal demo (so UI works even without repo files)
+        loaded.capacities = BASES.flatMap(b=>SEATS.map(s=>({base:b, seat:s, startCapacity: (s==='CA'? 50:100), delta:0})));
+        loaded.roster = Array.from({length:3000}, (_,i)=>({ id:`P${i+1}`, sen:i+1, name:`Pilot ${i+1}`, current:{base: BASES[i%BASES.length], seat: (i%3===0?'CA':'FO')} }));
+        loaded.prefs = {};
+        for(const p of loaded.roster){
+          // simple prefs: try CA at own base, then CA at SEA, then FO SEA
+          loaded.prefs[p.id] = { preferences: [
+            {order:0, base:p.current.base, seat:'CA', stay:false},
+            {order:1, base:'SEA', seat:'CA', stay:false},
+            {order:2, base:'SEA', seat:'FO', stay:false},
+            {order:3, stay:true}
+          ]};
+        }
+        $status.textContent = "Demo data active (capacities.json/roster.json/preferences.json not found)";
+      } else {
+        $status.textContent = "Loaded JSON.";
       }
-      const entries = [...Open.entries()].filter(([,v])=>v!==0).sort((a,b)=>a[0].localeCompare(b[0]));
-      $openVac.innerHTML = entries.map(([k,v])=>{
+      // capacities -> capMap
+      capMap.clear();
+      for(const c of loaded.capacities){
+        const b = String(c.base||'').toUpperCase(), s = String(c.seat||'').toUpperCase();
+        const start = Number(c.startCapacity||c.start||0);
+        const delta = Number(c.delta||0);
+        capMap.set(key(b,s), { base:b, seat:s, start, delta });
+      }
+      roster = loaded.roster.map(x=>({ ...x, current:{ base:String(x.current.base||'').toUpperCase(), seat:String(x.current.seat||'').toUpperCase() } }));
+      prefs  = loaded.prefs;
+      renderCapTable();
+    }
+
+    // ===== Capacity Table with Start & Δ controls =====
+    function groupByBase(){
+      const bases = {};
+      for(const [k, v] of capMap.entries()){
+        (bases[v.base] ||= []).push(v.seat);
+      }
+      for(const b of Object.keys(bases)){ bases[b] = Array.from(new Set(bases[b])).sort((a,b)=>a===b?0 : a==='CA'?-1:b==='CA'?1:a.localeCompare(b)); }
+      return Object.keys(bases).sort().map(b=>({ base:b, seats:bases[b] }));
+    }
+
+    function renderCapTable(){
+      const groups = groupByBase();
+      let html = '<table><thead><tr><th>Base</th><th>Seat</th><th>Start</th><th>Δ</th><th>Adjusted</th></tr></thead><tbody>';
+      for(const g of groups){
+        const rowSpan = g.seats.length;
+        g.seats.forEach((seat, idx)=>{
+          const c = capMap.get(key(g.base, seat));
+          const adj = (c?.start||0) + (c?.delta||0);
+          html += '<tr>';
+          if(idx===0){ html += `<td class="basehdr" rowspan="${rowSpan}">${g.base}</td>`; }
+          html += `<td>${seat}</td>`;
+          html += `<td><input type="number" value="${c?.start||0}" oninput="onStart('${g.base}','${seat}', this.value)"></td>`;
+          html += `<td><input type="number" value="${c?.delta||0}" oninput="onDelta('${g.base}','${seat}', this.value)"></td>`;
+          html += `<td class="mono">${adj}</td>`;
+          html += '</tr>';
+        });
+      }
+      html += '</tbody></table>';
+      $capTable.innerHTML = html;
+    }
+
+    window.onStart = (b,s,v)=>{ const k=key(b,s); const c=capMap.get(k); if(!c) capMap.set(k,{base:b,seat:s,start:0,delta:0}); capMap.get(k).start = parseInt(v||'0',10)||0; renderCapTable(); };
+    window.onDelta = (b,s,v)=>{ const k=key(b,s); const c=capMap.get(k); if(!c) capMap.set(k,{base:b,seat:s,start:0,delta:0}); capMap.get(k).delta = parseInt(v||'0',10)||0; renderCapTable(); };
+
+    // ===== Vacancy Tracker (Open + Ledger) =====
+    const Open = new Map(); // k -> count
+    function renderOpenBatched(batch){
+      if (document.getElementById('muteOpen').checked) return;
+      for (const [k, d] of batch.entries()) Open.set(k, (Open.get(k)||0) + d);
+      const items = [...Open.entries()].filter(([,v])=>v!==0).sort((a,b)=>a[0].localeCompare(b[0]));
+      $openVac.innerHTML = items.map(([k,v])=>{
         const [b,s] = k.split('__'); const sign = v>0?'+':'';
         return `<div class="kv"><span>${b} ${s}</span><span class="mono">${sign}${v}</span></div>`;
       }).join('') || '<div class="subtle">No open vacancies</div>';
     }
 
     function renderLedgerBatched(rows){
-      if (muteLedger()) return;
+      if (document.getElementById('muteLedger').checked) return;
       if (!rows.length) return;
       const frag = document.createDocumentFragment();
       for (const r of rows){
@@ -109,72 +196,124 @@
       $ledgerBody.appendChild(frag);
     }
 
-    function summarize(){
-      $summary.textContent = `pass=${state.pass} moves=${state.moves.length} open=${[...Open.values()].reduce((a,b)=>a+b,0)}`;
-    }
+    // ===== Engine: Vacancy‑first CA sweep → Cascade to fixed point =====
+    function buildAdjusted(){ const m=new Map(); for(const [k,c] of capMap.entries()) m.set(k, (c.start|0)+(c.delta|0)); return m; }
+    function seedIncumbents(){ const m=new Map(); for(const p of roster){ const k=key(p.current.base,p.current.seat); m.set(k,(m.get(k)||0)+1); } return m; }
+    function rankPrefs(p){ const list=(prefs[p.id]?.preferences||[]).slice().filter(x=>x && x.stay!==true); list.sort((a,b)=>(a.order||0)-(b.order||0)); return list; }
 
-    // --- Demo engine (replace with the real one) ---
     function run(){
       if (state.running) return;
       state.running = true;
       state.pass = 0;
       state.moves = [];
-      Open.clear();
       $ledgerBody.innerHTML = '';
       $openVac.innerHTML = '';
 
-      // Seed: pretend +10 SEA CA, +4 ANC CA, +6 PDX CA
-      Open.set(bkey("SEA","CA"), 10);
-      Open.set(bkey("ANC","CA"), 4);
-      Open.set(bkey("PDX","CA"), 6);
-      summarize();
+      const adjusted = buildAdjusted();
+      const incumb   = seedIncumbents();
+      Open.clear();
 
-      // Simulate passes asynchronously to keep UI responsive
-      function onePass(){
-        if (state.pass >= state.maxPass) { state.running=false; summarize(); return; }
-        state.pass++;
+      // open = adjusted - incumbents (only positive matter)
+      for (const [k, adj] of adjusted.entries()){
+        const inc = incumb.get(k)||0;
+        const diff = adj - inc;
+        if (diff>0) Open.set(k, diff);
+      }
+      renderOpenBatched(new Map()); // initial render
 
-        const ledgerBatch = [];
-        const openBatch = new Map();
+      const sorted = roster.slice().sort((a,b)=>a.sen-b.sen);
+      const moved = new Set(); // allow one move per pilot in this v1
+      let totalMoves = 0;
 
-        // fake 50 moves per pass until vacancies dry up
-        let madeMove = false;
-        for (let i=0; i<50; i++){
-          // find any open to fill
-          const openList = [...Open.entries()].filter(([,v])=>v>0);
-          if (!openList.length) break;
-          const [k] = openList[Math.floor(Math.random()*openList.length)];
-          // fill that vacancy and create a FO hole randomly
-          const [b,s] = k.split('__');
-          openBatch.set(k, (openBatch.get(k)||0) - 1); // FILLED
-          const from = b + " " + (s==="CA"?"FO":"CA"); // demo
-          const srcKey = bkey(b, s==="CA"?"FO":"CA");
-          openBatch.set(srcKey, (openBatch.get(srcKey)||0) + 1); // CREATED
-          ledgerBatch.push({ pass: state.pass, action:"FILLED", pilot:`SEN ${100+Math.floor(Math.random()*900)}`, from:"", to:`${b} ${s}` });
-          ledgerBatch.push({ pass: state.pass, action:"CREATED", pilot:`SEN ${100+Math.floor(Math.random()*900)}`, from:from, to:"" });
-          state.moves.push(1);
-          madeMove = true;
-          if (state.moves.length >= state.maxMoves) break;
-        }
+      function tryAward(p, fromK, toK, batchOpen, batchLedger){
+        if (fromK===toK) return false;
+        if ((Open.get(toK)||0) <= 0) return false;
+        // fill target; create hole at source
+        batchOpen.set(toK, (batchOpen.get(toK)||0) - 1);
+        batchOpen.set(fromK, (batchOpen.get(fromK)||0) + 1);
+        const [tb,ts] = toK.split('__'); const [fb,fs] = fromK.split('__');
+        batchLedger.push({pass:state.pass, action:"FILLED", pilot:`SEN ${p.sen}`, from:"", to:`${tb} ${ts}`});
+        batchLedger.push({pass:state.pass, action:"CREATED", pilot:`SEN ${p.sen}`, from:`${fb} ${fs}`, to:""});
+        // update pilot
+        p.current = { base: tb, seat: ts };
+        moved.add(p.id||p.sen);
+        totalMoves++;
+        return true;
+      }
 
-        renderOpenBatched(openBatch);
-        renderLedgerBatched(ledgerBatch);
-        summarize();
-
-        if (madeMove && state.moves.length < state.maxMoves) {
-          // yield to UI then do another pass
-          setTimeout(onePass, 0);
-        } else {
-          state.running = false;
-          summarize();
+      // Pass 1: Vacancy‑first CA sweep (CA→CA or FO→CA) by seniority for each base with CA open
+      for (const base of BASES){
+        while ((Open.get(key(base,'CA'))||0) > 0){
+          state.pass++;
+          const batchOpen = new Map(), batchLedger = [];
+          let awarded = false;
+          for (const p of sorted){
+            if (moved.has(p.id||p.sen)) continue;
+            const fromK = key(p.current.base, p.current.seat);
+            // find the first CA pref at this base
+            const want = rankPrefs(p).find(w=>w.base===base && w.seat==='CA');
+            if (!want) continue;
+            const toK = key(base,'CA');
+            if ((Open.get(toK)||0) <= 0) continue;
+            if (tryAward(p, fromK, toK, batchOpen, batchLedger)){
+              awarded = true;
+              // restart to preserve strict seniority at each single award
+              break;
+            }
+          }
+          renderOpenBatched(batchOpen);
+          renderLedgerBatched(batchLedger);
+          if (!awarded) break;
+          if (state.pass >= state.maxPass || totalMoves >= state.maxMoves) break;
         }
       }
 
-      onePass();
+      // Cascade: preference passes until no changes
+      let changed = true;
+      while (changed && state.pass < state.maxPass && totalMoves < state.maxMoves){
+        state.pass++;
+        changed = false;
+        const batchOpen = new Map(), batchLedger = [];
+        for (const p of sorted){
+          if (moved.has(p.id||p.sen)) continue;
+          const fromK = key(p.current.base, p.current.seat);
+          const prefsRanked = rankPrefs(p);
+          for (const w of prefsRanked){
+            const toK = key(w.base, w.seat);
+            if ((Open.get(toK)||0) <= 0) continue;
+            if (tryAward(p, fromK, toK, batchOpen, batchLedger)){
+              changed = true;
+              break;
+            }
+          }
+          if (totalMoves >= state.maxMoves) break;
+        }
+        renderOpenBatched(batchOpen);
+        renderLedgerBatched(batchLedger);
+        if (!changed) break;
+      }
+
+      // Render Moves & CSV
+      const movesList = []; // build from ledger: FILLED rows imply moves
+      // For clarity, we won't reconstruct all; in your integration, track each award directly.
+      $movesHdr.innerHTML = `<span class="pill">Passes: ${state.pass}</span><span class="pill">Moves: ${totalMoves}</span>`;
+      $results.innerHTML = '<div class="subtle">Moves listing is minimized in this demo; integrate with your pilot list to render detailed lines here.</div>';
+
+      // Export CSV placeholder
+      const csv = 'sen,id,name,from_base,from_seat,to_base,to_seat,move_type\n';
+      const blob = new Blob([csv], {type:'text/csv'});
+      const url = URL.createObjectURL(blob);
+      const a = document.getElementById('exportCsv'); a.href = url;
+
+      state.running = false;
+      $status.textContent = "Simulation complete.";
     }
 
+    // ===== Wire Up =====
     document.getElementById('runBtn').addEventListener('click', run);
-    document.getElementById('resetBtn').addEventListener('click', ()=>{ Open.clear(); $openVac.innerHTML=''; $ledgerBody.innerHTML=''; state.moves=[]; state.pass=0; summarize(); });
+    document.getElementById('resetDeltaBtn').addEventListener('click', ()=>{ for(const c of capMap.values()){ c.delta=0; } renderCapTable(); });
+    document.getElementById('reloadBtn').addEventListener('click', loadJSON);
+    loadJSON();
   </script>
 </body>
 </html>
