@@ -99,6 +99,22 @@
 
     const state = { running:false, pass:0, moves:[], maxPass:5000, maxMoves:100000 };
 
+    const lockedStay = new Set(); // pilots who explicitly stay by first bid matching current
+
+    function sameChoice(aBase, aSeat, bBase, bSeat){
+      return String(aBase).toUpperCase()===String(bBase).toUpperCase() &&
+             String(aSeat).toUpperCase()===String(bSeat).toUpperCase();
+    }
+
+    function firstBidSaysStay(p){
+      const pref = (prefs[p.id]?.preferences||[]).find(x=>x && x.order===0);
+      if(!pref) return false;
+      if (pref.stay===true) return true;
+      if (pref.base && pref.seat && sameChoice(pref.base, pref.seat, p.current.base, p.current.seat)) return true;
+      return false;
+    }
+
+
     // ===== Load JSON (fallback to demo if missing) =====
     async function loadJSON(){
       function sf(p){ return fetch(p, {cache:'no-cache'}).then(r=>r.ok?r.json():null).catch(()=>null); }
@@ -204,6 +220,7 @@
       state.running = true;
       state.pass = 0;
       state.moves = [];
+      lockedStay.clear();
       $ledgerBody.innerHTML = '';
       $openVac.innerHTML = '';
 
@@ -219,6 +236,8 @@
       renderOpenBatched(new Map()); // initial render
 
       const sorted = roster.slice().sort((a,b)=>a.sen-b.sen);
+      // Lock anyone whose first bid equals their current base/seat or has stay:true as first
+      for(const p of sorted){ if(firstBidSaysStay(p)) lockedStay.add(p.id||p.sen); }
       const moved = new Set();
       let totalMoves = 0;
 
@@ -249,7 +268,7 @@
           const batchOpen = new Map(), batchLedger = [];
           let awarded = false;
           for (const p of sorted){
-            if (moved.has(p.id||p.sen)) continue;
+            if (moved.has(p.id||p.sen) || lockedStay.has(p.id||p.sen)) continue;
             const fromK = key(p.current.base, p.current.seat);
             const want = rankPrefs(p).find(w=>w.base===base && w.seat==='CA');
             if (!want) continue;
@@ -274,10 +293,12 @@
         changed = false;
         const batchOpen = new Map(), batchLedger = [];
         for (const p of sorted){
-          if (moved.has(p.id||p.sen)) continue;
+          if (moved.has(p.id||p.sen) || lockedStay.has(p.id||p.sen)) continue;
           const fromK = key(p.current.base, p.current.seat);
           const prefsRanked = rankPrefs(p);
           for (const w of prefsRanked){
+            // If a bid equals current, treat as satisfied stay and lock pilot
+            if (sameChoice(w.base, w.seat, p.current.base, p.current.seat)) { lockedStay.add(p.id||p.sen); break; }
             const toK = key(w.base, w.seat);
             const eff = (Open.get(toK)||0) + (batchOpen.get(toK)||0); if (eff <= 0) continue;
             if (tryAward(p, fromK, toK, batchOpen, batchLedger)){
