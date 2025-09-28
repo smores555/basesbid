@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BUILD‑V11 — Vacancy Ledger + Open Vacancies — vacancy-first cascade</title>
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <style>
+    :root { --bg:#0b1220; --card:#111a2b; --muted:#8aa4c1; --text:#eaf2ff; --accent:#8ad2ff; --border:#1f2a44; --bad:#ff6b6b; --good:#34d399; }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+    .wrap{max-width:1240px;margin:18px auto;padding:0 12px 42px}
+    h1{font-size:22px;margin:0 0 10px;color:#8ad2ff}
+    .banner{background:#42320e;border-bottom:3px solid #ffd166;color:#fff;padding:10px 12px;font-weight:800;border-radius:0 0 12px 12px;letter-spacing:.3px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px}
+    .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+    button{background:#2e4a78;color:#fff;border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-weight:600;cursor:pointer}
+    button.secondary{background:#203453}
+    table{width:100%;border-collapse:separate;border-spacing:0 6px}
+    th{font-size:12px;color:var(--muted);text-align:left;padding:4px 8px}
+    td{background:#0f182a;border:1px solid var(--border);padding:6px 8px;vertical-align:middle}
+    .basehdr{background:#13213a;color:#cfe6ff;font-weight:700}
+    input[type=number]{width:90px;padding:6px;border-radius:8px;border:1px solid var(--border);background:#0b1426;color:#eaf2ff;font-size:14px}
+    .buts>button{padding:4px 8px;border-radius:8px;margin-left:2px}
+    .pill{display:inline-block;padding:2px 8px;border-radius:999px;background:#1a2a47;color:#c8ddff;font-size:12px;margin-right:6px}
+    .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+    .tag{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:2px 8px;margin-left:6px;font-size:12px;background:#12203b;color:#cfe6ff}
+    .tag.up{background:#12361f}
+    .tag.down{background:#3b1212}
+    .tag.lat{background:#1b2c3b}
+    .grid{display:grid;gap:12px;grid-template-columns: 1fr 1fr}
+    .grid-3{display:grid;gap:12px;grid-template-columns: 1fr 1fr 1fr}
+    .kv{display:flex;align-items:center;justify-content:space-between;background:#0f182a;border:1px solid var(--border);padding:6px 8px;border-radius:10px}
+    .subtle{color:#8aa4c1}
+  </style>
+</head>
+<body>
+  <div class="banner">BUILD‑V11 — Vacancy Ledger + Open Vacancies — vacancy-first cascade</div>
+  <div class="wrap">
+    <h1>Position Bid Simulator</h1>
+
+    <div class="card">
+      <div class="toolbar">
+        <button id="runBtn">Run Simulation</button>
+        <button class="secondary" id="resetBtn">Reset All Δ</button>
+        <button class="secondary" id="validateBtn">Validate Data</button>
+        <span id="status" style="margin-left:8px;color:var(--muted);"></span>
+      </div>
+      <div id="capTable"></div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <h3>Summary</h3>
+        <div id="summary"></div>
+      </div>
+
+      <div class="card">
+        <h3>Vacancy Tracker</h3>
+        <div class="subtle" style="margin-bottom:8px">Live counts + who created/filled each vacancy.</div>
+        <div class="grid">
+          <div>
+            <h4 style="margin:0 0 6px">Open Vacancies</h4>
+            <div id="openVac" style="display:grid;gap:6px"></div>
+          </div>
+          <div>
+            <h4 style="margin:0 0 6px">Vacancy Ledger</h4>
+            <div style="max-height:210px;overflow:auto">
+              <table style="width:100%">
+                <thead>
+                  <tr class="subtle">
+                    <th style="text-align:left;padding:2px 6px">Pass</th>
+                    <th style="text-align:left;padding:2px 6px">Action</th>
+                    <th style="text-align:left;padding:2px 6px">Pilot</th>
+                    <th style="text-align:left;padding:2px 6px">From</th>
+                    <th style="text-align:left;padding:2px 6px">To</th>
+                  </tr>
+                </thead>
+                <tbody id="ledgerBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Moves</h3>
+        <div id="movesHeader" style="margin-bottom:6px"></div>
+        <div id="results"></div>
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:8px">
+          <div>
+            <label style="background:#0e1a2f;border:1px solid var(--border);border-radius:999px;padding:6px 10px;display:inline-flex;gap:8px;align-items:center">
+              <input type="checkbox" id="upgradesOnly"> Show upgrades only
+            </label>
+            <button class="secondary" id="showAllBtn">Show all moves</button>
+          </div>
+          <a id="exportCsv" class="button" href="#" download="base_changers.csv">Export base changers to CSV</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let capacitiesRaw = [];
+    let roster = [];
+    let prefs = {};
+
+    function normalizeBase(base){ return String(base||'').toUpperCase().replace(/[^A-Z0-9]/g,''); }
+    function normalizeSeat(seat){
+      const s = String(seat||'').toUpperCase();
+      if (/(^|[^A-Z])F\/?O([^A-Z]|$)/.test(s) || /FIRST[\s\-_]*OFFICER/.test(s) || /CO[\s\-_]*PILOT/.test(s)) return 'FO';
+      if (/(^|[^A-Z])CA([^A-Z]|$)/.test(s) || /CAPT(AIN)?/.test(s) || /\\bCPT\\b/.test(s)) return 'CA';
+      return null;
+    }
+    const keyOf = (b,s)=>`${normalizeBase(b)}__${normalizeSeat(s)}`;
+
+    const capMap = new Map();
+
+    async function loadAll(){
+      async function safeFetch(path){ try { const r = await fetch(path, {cache:'no-cache'}); if(!r.ok) throw 0; return r.json(); } catch{ return null; } }
+      capacitiesRaw = await safeFetch('capacities.json') || await safeFetch('capacities.json.txt') || await safeFetch('data/capacities.json') || await safeFetch('data/capacities.json.txt');
+      roster        = await safeFetch('roster.json')      || await safeFetch('data/roster.json');
+      prefs         = await safeFetch('preferences.json') || await safeFetch('data/preferences.json');
+      document.getElementById('status').textContent = (!!capacitiesRaw && !!roster && !!prefs) ? 'Loaded JSON.' : '❌ Missing JSON';
+      rebuildCapMap();
+      renderCapTable();
+      renderOpenBox(); // init
+    }
+
+    function rebuildCapMap(){
+      const agg = new Map();
+      for (const c of capacitiesRaw){
+        const nb = normalizeBase(c.base); const ns = normalizeSeat(c.seat);
+        if(!nb || !ns) continue;
+        const start = (c.startCapacity||0) + (+c.delta||0);
+        const k = `${nb}__${ns}`;
+        agg.set(k, (agg.get(k)||0) + start);
+      }
+      capMap.clear();
+      for (const [k, totalStart] of agg.entries()){
+        const [b,s] = k.split('__');
+        capMap.set(k, { base:b, seat:s, start: totalStart, delta: 0 });
+      }
+    }
+
+    function groupByBase(){
+      const bases = {};
+      for(const {base, seat} of capMap.values()){
+        if(!bases[base]) bases[base] = [];
+        bases[base].push(seat);
+      }
+      const orderSeat = (a,b)=> (a===b?0 : a==='CA'? -1 : b==='CA'? 1 : a.localeCompare(b));
+      return Object.keys(bases).sort().map(base=>({ base, seats: Array.from(new Set(bases[base])).sort(orderSeat) }));
+    }
+
+    function renderCapTable(){
+      const groups = groupByBase();
+      let html = '<table><thead><tr><th>Base</th><th>Seat</th><th>Start</th><th>Δ</th><th>Adjusted</th><th></th></tr></thead><tbody>';
+      for(const g of groups){
+        const rowSpan = g.seats.length;
+        g.seats.forEach((seat, idx)=>{
+          const k = `${g.base}__${seat}`;
+          const cap = capMap.get(k) || {start:0, delta:0};
+          const adj = Math.max(0, cap.start + cap.delta);
+          html += '<tr>';
+          if(idx===0){ html += `<td class="basehdr" rowspan="${rowSpan}">${g.base}</td>`; }
+          html += `<td>${seat}</td>`;
+          html += `<td class="mono">${cap.start}</td>`;
+          html += `<td><input type="number" value="${cap.delta}" oninput="onDelta('${k}', this.value)"></td>`;
+          html += `<td class="mono">${adj}</td>`;
+          html += `<td class="buts">`
+               +  `<button onclick="bump('${k}',-10)">-10</button>`
+               +  `<button onclick="bump('${k}',-5)">-5</button>`
+               +  `<button onclick="bump('${k}',-1)">-1</button>`
+               +  `<button onclick="bump('${k}',+1)">+1</button>`
+               +  `<button onclick="bump('${k}',+5)">+5</button>`
+               +  `<button onclick="bump('${k}',+10)">+10</button>`
+               +  `</td>`;
+          html += '</tr>';
+        });
+      }
+      html += '</tbody></table>';
+      document.getElementById('capTable').innerHTML = html;
+    }
+
+    function onDelta(k, v){ const cap = capMap.get(k); if(!cap) return; const n = parseInt(v||'0',10); cap.delta = Number.isFinite(n)? n : 0; renderCapTable(); }
+    function bump(k, d){ const cap = capMap.get(k); if(!cap) return; cap.delta = (cap.delta|0) + d; renderCapTable(); }
+
+    // ===== Vacancy Tracker =====
+    const Open = {
+      data: new Map(), // key "BASE__SEAT" -> count
+      set(k, n){ this.data.set(k, n); renderOpenBox(); },
+      add(k, d=1){ this.set(k, (this.data.get(k)||0) + d); },
+      get(k){ return this.data.get(k)||0; }
+    };
+    const ledgerRows = [];
+    function ledger(pass, action, pilot, fromB, fromS, toB, toS){
+      ledgerRows.push({pass, action, pilot, from:`${fromB||''} ${fromS||''}`.trim(), to:`${toB||''} ${toS||''}`.trim()});
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td class="mono" style="padding:2px 6px">${pass}</td>
+                      <td style="padding:2px 6px">${action}</td>
+                      <td style="padding:2px 6px">${pilot||''}</td>
+                      <td style="padding:2px 6px">${fromB?fromB+' '+fromS:''}</td>
+                      <td style="padding:2px 6px">${toB?toB+' '+toS:''}</td>`;
+      document.getElementById('ledgerBody').appendChild(tr);
+    }
+    function renderOpenBox(){
+      const box = document.getElementById('openVac');
+      const items = [...Open.data.entries()].filter(([,v])=>v!==0).sort((a,b)=>a[0].localeCompare(b[0]));
+      box.innerHTML = items.map(([k,v])=>{
+        const [b,s]=k.split('__');
+        const sign = v>0?'+':'';
+        return `<div class="kv"><span>${b} ${s}</span><span class="mono">${sign}${v}</span></div>`;
+      }).join('') || '<div class="subtle">No open vacancies</div>';
+    }
+
+    // ----------------- Simulation (Vacancy-first + Cascade) -----------------
+    function run(){
+      // Build end-state targets and starting incumbents
+      const adjusted = new Map();
+      const incumbents = new Map();
+      for(const [k, cap] of capMap.entries()) adjusted.set(k, Math.max(0, cap.start + cap.delta));
+      const bkey = (b,s)=>{ const nb=normalizeBase(b), ns=normalizeSeat(s); return (nb&&ns)? `${nb}__${ns}`:null; };
+      for(const p of roster){ const k=bkey((p.current||{}).base,(p.current||{}).seat); if(k) incumbents.set(k,(incumbents.get(k)||0)+1); }
+
+      // Open = adjusted - incumbents
+      Open.data = new Map();
+      for(const [k, adj] of adjusted.entries()){
+        const inc = incumbents.get(k)||0;
+        Open.set(k, Math.max(0, adj - inc)); // sets & renders
+      }
+      // Reset ledger
+      document.getElementById('ledgerBody').innerHTML='';
+      ledgerRows.length = 0;
+
+      const fill = new Map(incumbents);
+      const sorted = [...roster].sort((a,b)=>a.sen - b.sen);
+      const assignments = new Map();
+      const moves = [];
+      let unassigned = 0;
+      let pass = 0;
+
+      function recordFill(p, toK){
+        const [tb,ts] = toK.split('__');
+        Open.add(toK, -1);  // vacancy filled
+        ledger(pass, 'FILLED', `SEN ${p.sen}`, null, null, tb, ts);
+      }
+      function recordCreate(p, fromK){
+        const [fb,fs] = fromK.split('__');
+        Open.add(fromK, +1); // vacancy created at source
+        ledger(pass, 'CREATED', `SEN ${p.sen}`, fb, fs, null, null);
+      }
+
+      const rankPrefs = (p)=> (prefs[p.id]?.preferences||[]).filter(x=>x.stay!==true).sort((a,b)=>(a.order||0)-(b.order||0));
+
+      const canTake = (toK)=> (Open.get(toK) > 0);
+
+      function tryMove(p, fromK, toK){
+        if(fromK===toK) return {moved:false};
+        if(!canTake(toK)) return null;
+        // fill target
+        const curFill = fill.get(toK)||0; fill.set(toK, curFill+1);
+        // create hole at source
+        fill.set(fromK, Math.max(0,(fill.get(fromK)||0)-1));
+        recordFill(p, toK);
+        recordCreate(p, fromK);
+        const [tb,ts] = toK.split('__');
+        const [fb,fs] = fromK.split('__');
+        return { moved:true, fromB:fb, fromS:fs, toB:tb, toS:ts };
+      }
+
+      // === 1) Vacancy-first CA sweep (any bidder for exact CA line; CA->CA or FO->CA) ===
+      for (const base of [...new Set([...adjusted.keys()].map(k=>k.split('__')[0]))].sort()){
+        let more = true;
+        while (more){
+          more = false;
+          pass++;
+          for (const p of sorted){
+            const curK = bkey((p.current||{}).base,(p.current||{}).seat);
+            const bids = rankPrefs(p);
+            for (const w of bids){
+              const toK = bkey(w.base, w.seat);
+              if (!toK) continue;
+              // Focus this sweep on CA vacancies
+              if (toK.split('__')[0]!==base || toK.split('__')[1]!=='CA') continue;
+              if (Open.get(toK) <= 0) continue;
+              const res = tryMove(p, curK, toK);
+              if (res && res.moved){
+                moves.push({sen:p.sen,id:p.id,name:p.name||'',fromB:res.fromB,fromS:res.fromS,toB:res.toB,toS:res.toS,type:(res.fromS==='FO'&&res.toS==='CA')?'upgrade':'lateral',tagClass:(res.fromS==='FO'&&res.toS==='CA')?'up':'lat',tag:(res.fromS==='FO'&&res.toS==='CA')?'[Upgrade]':'[Lateral]'});
+                // update pilot state
+                p.current = { base: res.toB, seat: res.toS };
+                more = true;
+                break; // re-check from top (seniority honored repeatedly)
+              }
+            }
+          }
+        }
+      }
+
+      // === 2) Preference Cascade until fixed point ===
+      let changed = true;
+      while (changed){
+        changed = false;
+        pass++;
+        for (const p of sorted){
+          const curK = bkey((p.current||{}).base,(p.current||{}).seat);
+          const bids = rankPrefs(p);
+          for (const w of bids){
+            const toK = bkey(w.base, w.seat);
+            if (!toK || toK===curK) continue;
+            if (Open.get(toK) <= 0) continue;
+            const res = tryMove(p, curK, toK);
+            if (res && res.moved){
+              const type = (res.fromS==='FO'&&res.toS==='CA')?'upgrade' : (res.fromB!==res.toB?'lateral':'lateral');
+              const tagClass = type==='upgrade'?'up':'lat';
+              const tag = type==='upgrade'?'[Upgrade]':'[Lateral]';
+              moves.push({sen:p.sen,id:p.id,name:p.name||'',fromB:res.fromB,fromS:res.fromS,toB:res.toB,toS:res.toS,type,tagClass,tag});
+              p.current = { base: res.toB, seat: res.toS };
+              changed = true;
+              break;
+            }
+          }
+        }
+      }
+
+      // ===== Render summary & moves
+      const counts={upgrade:0,lateral:0,downgrade:0}; moves.forEach(m=>counts[m.type]++);
+      const header = `<div class="pill">Total moves: ${moves.length}</div>`+
+                     `<div class="pill">Upgrades: ${counts.upgrade}</div>`+
+                     `<div class="pill">Laterals: ${counts.lateral}</div>`+
+                     (Open.data.size?``:``);
+      document.getElementById('movesHeader').innerHTML = header;
+
+      function render(upgradesOnly){
+        let list = moves;
+        if(upgradesOnly) list = moves.filter(m=>m.type==='upgrade');
+        let html = '<ol>';
+        for(const m of list){ html += `<li>${m.sen} ${m.name}: ${m.fromB} ${m.fromS} → <b>${m.toB} ${m.toS}</b> <span class="tag ${m.tagClass}">${m.tag}</span></li>`; }
+        html += '</ol>';
+        document.getElementById('results').innerHTML = html;
+      }
+
+      const cb = document.getElementById('upgradesOnly');
+      const showAllBtn = document.getElementById('showAllBtn');
+      cb.onchange = ()=>render(cb.checked);
+      showAllBtn.onclick = ()=>{ cb.checked=false; render(false); };
+      render(false);
+
+      // CSV export: base changers only
+      function toCsv(rows){
+        const esc = v => '\"' + String(v).replaceAll('\"','\"\"') + '\"';
+        const header = ['sen','id','name','from_base','from_seat','to_base','to_seat','move_type'];
+        const body = rows.map(r=>[r.sen,r.id||'',r.name||'',r.fromB,r.fromS,r.toB,r.toS,r.type].map(esc).join(','));
+        return [header.join(','), ...body].join('\\n');
+      }
+      const baseChangers = moves.filter(m=>m.fromB!==m.toB);
+      const csvBlob = new Blob([toCsv(baseChangers)], {type:'text/csv'});
+      const url = URL.createObjectURL(csvBlob);
+      const a = document.getElementById('exportCsv');
+      a.href = url;
+      a.download = 'base_changers.csv';
+
+      document.getElementById('status').textContent = 'Simulation complete.';
+    }
+
+    document.getElementById('runBtn').addEventListener('click', run);
+    document.getElementById('resetBtn').addEventListener('click', ()=>{ for(const cap of capMap.values()) cap.delta=0; renderCapTable(); document.getElementById('status').textContent='Δ reset to 0.'; });
+    document.getElementById('validateBtn').addEventListener('click', ()=>{});
+    loadAll();
+  </script>
+</body>
+</html>
