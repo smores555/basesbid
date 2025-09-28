@@ -339,6 +339,7 @@
         if (diff>0) Open.set(k, diff);
       }
       renderOpenBatched(new Map()); // initial render
+      const slotInit = document.getElementById('namesBySen'); if (slotInit) slotInit.innerHTML = '<div class="subtle">No movers yet</div>';
 
       const sorted = roster.slice().filter(isEligiblePilot).sort((a,b)=>a.sen-b.sen);
       // Lock anyone whose first bid equals their current base/seat or has stay:true as first
@@ -387,6 +388,7 @@
           }
           renderOpenBatched(batchOpen);
           renderLedgerBatched(batchLedger);
+          renderNamesBySeniority();
           if (!awarded) break;
           if (state.pass >= state.maxPass || totalMoves >= state.maxMoves) break;
         }
@@ -417,6 +419,7 @@
         }
         renderOpenBatched(batchOpen);
         renderLedgerBatched(batchLedger);
+        renderNamesBySeniority();
         if (!changed) break;
       }
 
@@ -424,7 +427,7 @@
       // Render Moves & CSV
       const upgrades = [...state.moves.filter(m=>m.move_type==='upgrade')].sort((a,b)=> (a.sen||1e9) - (b.sen||1e9));
       const laterals = [...state.moves.filter(m=>m.move_type==='lateral')].sort((a,b)=> (a.sen||1e9) - (b.sen||1e9));
-      $movesHdr.innerHTML = `<span class=\"pill\">Passes: ${state.pass}</span><span class=\"pill\">Moves: ${state.moves.length}</span><span class=\"pill\">Upgrades: ${upgrades.length}</span><span class=\"pill\">Laterals: ${laterals.length}</span>`;
+      $movesHdr.innerHTML = `<span class="pill">Passes: ${state.pass}</span><span class="pill">Moves: ${state.moves.length}</span><span class="pill">Upgrades: ${upgrades.length}</span><span class="pill">Laterals: ${laterals.length}</span>`;
 
       function rowLine(m){
         const name = m.name ? ` ${m.name}` : '';
@@ -446,13 +449,14 @@
       renderLists();
       // Render Names (Seniority) list inside the Vacancy Tracker card
       function renderNamesBySeniority(){
+        // Render simple one-line per mover: Name — FROM → TO
         const bySen = [...state.moves].sort((a,b)=> (a.sen||1e9) - (b.sen||1e9));
-        let html = '<ol>';
+        let html = '<ol class="mono">';
         for (const m of bySen){
           const name = m.name ? ' ' + m.name : '';
           const tag = m.move_type==='upgrade' ? '<span class="tag up">[Upgrade]</span>' : '<span class="tag lat">[Lateral]</span>';
           const bpl = m.bpl ? ' <span class="tag">[BPL]</span>' : '';
-          html += `<li>${m.sen}${name}: ${m.fromB} ${m.fromS} → <b>${m.toB} ${m.toS}</b> ${tag}${bpl}</li>`;
+          html += `<li>${m.sen}${name} — ${m.fromB} ${m.fromS} → <b>${m.toB} ${m.toS}</b> ${tag}${bpl}</li>`;
         }
         html += '</ol>';
         const slot = document.getElementById('namesBySen');
@@ -464,12 +468,12 @@
       // Seniority-sorted names list
       function renderMovedBySeniority(){
         const movedBySen = [...state.moves].sort((a,b)=> (a.sen||1e9) - (b.sen||1e9));
-        let html = '<ol>';
+        let html = '<ol class="mono">';
         for (const m of movedBySen){
           const tag = m.move_type==='upgrade' ? '<span class="tag up">[Upgrade]</span>' : '<span class="tag lat">[Lateral]</span>';
           const bpl = m.bpl ? ' <span class="tag">[BPL]</span>' : '';
           const name = m.name ? ' ' + m.name : '';
-          html += `<li>${m.sen}${name}: ${m.fromB} ${m.fromS} → <b>${m.toB} ${m.toS}</b> ${tag}${bpl}</li>`;
+          html += `<li>${m.sen}${name} — ${m.fromB} ${m.fromS} → <b>${m.toB} ${m.toS}</b> ${tag}${bpl}</li>`;
         }
         html += '</ol>';
         document.getElementById('movedSenList').innerHTML = html;
