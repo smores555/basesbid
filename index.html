@@ -108,12 +108,11 @@
         prefs:      await (sf('preferences.json')|| sf('data/preferences.json'))
       };
       if(!loaded.capacities || !loaded.roster || !loaded.prefs){
-        // minimal demo (so UI works even without repo files)
+        // demo fallback
         loaded.capacities = BASES.flatMap(b=>SEATS.map(s=>({base:b, seat:s, startCapacity: (s==='CA'? 50:100), delta:0})));
-        loaded.roster = Array.from({length:3000}, (_,i)=>({ id:`P${i+1}`, sen:i+1, name:`Pilot ${i+1}`, current:{base: BASES[i%BASES.length], seat: (i%3===0?'CA':'FO')} }));
+        loaded.roster = Array.from({length:2000}, (_,i)=>({ id:`P${i+1}`, sen:i+1, name:`Pilot ${i+1}`, current:{base: BASES[i%BASES.length], seat: (i%3===0?'CA':'FO')} }));
         loaded.prefs = {};
         for(const p of loaded.roster){
-          // simple prefs: try CA at own base, then CA at SEA, then FO SEA
           loaded.prefs[p.id] = { preferences: [
             {order:0, base:p.current.base, seat:'CA', stay:false},
             {order:1, base:'SEA', seat:'CA', stay:false},
@@ -121,11 +120,10 @@
             {order:3, stay:true}
           ]};
         }
-        $status.textContent = "Demo data active (capacities.json/roster.json/preferences.json not found)";
+        $status.textContent = "Demo data active (capacities/roster/prefs not found)";
       } else {
         $status.textContent = "Loaded JSON.";
       }
-      // capacities -> capMap
       capMap.clear();
       for(const c of loaded.capacities){
         const b = String(c.base||'').toUpperCase(), s = String(c.seat||'').toUpperCase();
@@ -213,7 +211,6 @@
       const incumb   = seedIncumbents();
       Open.clear();
 
-      // open = adjusted - incumbents (only positive matter)
       for (const [k, adj] of adjusted.entries()){
         const inc = incumb.get(k)||0;
         const diff = adj - inc;
@@ -222,26 +219,27 @@
       renderOpenBatched(new Map()); // initial render
 
       const sorted = roster.slice().sort((a,b)=>a.sen-b.sen);
-      const moved = new Set(); // allow one move per pilot in this v1
+      const moved = new Set();
       let totalMoves = 0;
 
       function tryAward(p, fromK, toK, batchOpen, batchLedger){
+        // patched to use effective open
         if (fromK===toK) return false;
-        if ((Open.get(toK)||0) <= 0) return false;
-        // fill target; create hole at source
+        const effTo = (Open.get(toK)||0) + (batchOpen.get(toK)||0);
+        if (effTo <= 0) return false;
+        // fill target; create hole at source (batched)
         batchOpen.set(toK, (batchOpen.get(toK)||0) - 1);
         batchOpen.set(fromK, (batchOpen.get(fromK)||0) + 1);
         const [tb,ts] = toK.split('__'); const [fb,fs] = fromK.split('__');
         batchLedger.push({pass:state.pass, action:"FILLED", pilot:`SEN ${p.sen}`, from:"", to:`${tb} ${ts}`});
         batchLedger.push({pass:state.pass, action:"CREATED", pilot:`SEN ${p.sen}`, from:`${fb} ${fs}`, to:""});
-        // update pilot
         p.current = { base: tb, seat: ts };
         moved.add(p.id||p.sen);
         totalMoves++;
         return true;
       }
 
-      // Pass 1: Vacancy‑first CA sweep (CA→CA or FO→CA) by seniority for each base with CA open
+      // Vacancy‑first CA sweep
       for (const base of BASES){
         while ((Open.get(key(base,'CA'))||0) > 0){
           state.pass++;
@@ -250,14 +248,12 @@
           for (const p of sorted){
             if (moved.has(p.id||p.sen)) continue;
             const fromK = key(p.current.base, p.current.seat);
-            // find the first CA pref at this base
             const want = rankPrefs(p).find(w=>w.base===base && w.seat==='CA');
             if (!want) continue;
             const toK = key(base,'CA');
-            if ((Open.get(toK)||0) <= 0) continue;
+            const eff = (Open.get(toK)||0) + (batchOpen.get(toK)||0); if (eff <= 0) continue;
             if (tryAward(p, fromK, toK, batchOpen, batchLedger)){
               awarded = true;
-              // restart to preserve strict seniority at each single award
               break;
             }
           }
@@ -268,7 +264,7 @@
         }
       }
 
-      // Cascade: preference passes until no changes
+      // Cascade
       let changed = true;
       while (changed && state.pass < state.maxPass && totalMoves < state.maxMoves){
         state.pass++;
@@ -280,7 +276,7 @@
           const prefsRanked = rankPrefs(p);
           for (const w of prefsRanked){
             const toK = key(w.base, w.seat);
-            if ((Open.get(toK)||0) <= 0) continue;
+            const eff = (Open.get(toK)||0) + (batchOpen.get(toK)||0); if (eff <= 0) continue;
             if (tryAward(p, fromK, toK, batchOpen, batchLedger)){
               changed = true;
               break;
@@ -293,23 +289,18 @@
         if (!changed) break;
       }
 
-      // Render Moves & CSV
-      const movesList = []; // build from ledger: FILLED rows imply moves
-      // For clarity, we won't reconstruct all; in your integration, track each award directly.
       $movesHdr.innerHTML = `<span class="pill">Passes: ${state.pass}</span><span class="pill">Moves: ${totalMoves}</span>`;
-      $results.innerHTML = '<div class="subtle">Moves listing is minimized in this demo; integrate with your pilot list to render detailed lines here.</div>';
+      $results.innerHTML = '<div class="subtle">Moves list omitted in demo. Integrate with your roster to render per-pilot awards.</div>';
 
-      // Export CSV placeholder
       const csv = 'sen,id,name,from_base,from_seat,to_base,to_seat,move_type\n';
       const blob = new Blob([csv], {type:'text/csv'});
       const url = URL.createObjectURL(blob);
-      const a = document.getElementById('exportCsv'); a.href = url;
+      document.getElementById('exportCsv').href = url;
 
       state.running = false;
       $status.textContent = "Simulation complete.";
     }
 
-    // ===== Wire Up =====
     document.getElementById('runBtn').addEventListener('click', run);
     document.getElementById('resetDeltaBtn').addEventListener('click', ()=>{ for(const c of capMap.values()){ c.delta=0; } renderCapTable(); });
     document.getElementById('reloadBtn').addEventListener('click', loadJSON);
