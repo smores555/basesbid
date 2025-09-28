@@ -64,10 +64,24 @@
             </thead>
             <tbody id="ledgerBody"></tbody>
           </table>
+        
+      <div class="card">
+        <h3>Eligibility</h3>
+        <div class="subtle" style="margin-bottom:6px">Mark pilots on medical leave (or otherwise ineligible) so they are not processed.</div>
+        <div style="display:flex; gap:10px; align-items:flex-start; flex-wrap:wrap">
+          <textarea id="ineligibleList" rows="6" style="width:360px; background:#0b1426; color:#eaf2ff; border:1px solid var(--border); border-radius:8px; padding:8px" placeholder="One per line: PSID or SEN"></textarea>
+          <div style="display:flex; flex-direction:column; gap:8px">
+            <button class="secondary" id="btnApplyIneligible">Apply</button>
+            <button class="secondary" id="btnClearIneligible">Clear</button>
+            <label class="subtle mono"><input type="checkbox" id="chkExcludeIncumbents"> Exclude from incumbents (advanced)</label>
+          </div>
         </div>
+        <div class="subtle mono" id="eligStatus" style="margin-top:6px"></div>
       </div>
+      
       <div class="card">
         <h3>Moves</h3>
+
         <div id="movesHeader" style="margin-bottom:6px"></div>
         <div id="results"></div>
         <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:8px">
@@ -98,6 +112,47 @@
     const $status     = document.getElementById('status');
 
     const state = { running:false, pass:0, moves:[], maxPass:5000, maxMoves:100000 };
+
+    // ===== Eligibility (Medical / Ineligible) =====
+    const ineligible = new Set();
+    function normKey(v){ return String(v||'').trim().toUpperCase(); }
+    function isEligiblePilot(p){
+      const k1 = normKey(p.id);
+      const k2 = normKey(p.sen);
+      return !(ineligible.has(k1) || ineligible.has(k2));
+    }
+    function parseIneligible(text){
+      ineligible.clear();
+      String(text||'').split(/\r?\n/).map(s=>normKey(s)).filter(Boolean).forEach(k=>ineligible.add(k));
+    }
+    function showEligStatus(){
+      document.getElementById('eligStatus').textContent = `Ineligible set: ${ineligible.size} pilots` + (document.getElementById('chkExcludeIncumbents').checked ? ' (excluded from incumbents too)' : '');
+    }
+    function loadIneligibleFromStorage(){
+      const t = localStorage.getItem('ineligible_list_v1') || '';
+      document.getElementById('ineligibleList').value = t;
+      parseIneligible(t);
+      const ex = localStorage.getItem('ineligible_exclude_incumbents') === '1';
+      document.getElementById('chkExcludeIncumbents').checked = ex;
+      showEligStatus();
+    }
+    function saveIneligibleToStorage(){
+      const t = document.getElementById('ineligibleList').value || '';
+      localStorage.setItem('ineligible_list_v1', t);
+      localStorage.setItem('ineligible_exclude_incumbents', document.getElementById('chkExcludeIncumbents').checked ? '1' : '0');
+    }
+    window.addEventListener('DOMContentLoaded', ()=>{
+      const apply = document.getElementById('btnApplyIneligible');
+      const clear = document.getElementById('btnClearIneligible');
+      if (apply){
+        apply.addEventListener('click', ()=>{ parseIneligible(document.getElementById('ineligibleList').value); saveIneligibleToStorage(); showEligStatus(); });
+      }
+      if (clear){
+        clear.addEventListener('click', ()=>{ document.getElementById('ineligibleList').value=''; parseIneligible(''); saveIneligibleToStorage(); showEligStatus(); });
+      }
+      loadIneligibleFromStorage();
+    });
+
 
     
     const lockedStay = new Set(); // pilots who explicitly stay by first bid meaning
@@ -230,8 +285,57 @@
 
     // ===== Engine: Vacancy‑first CA sweep → Cascade to fixed point =====
     function buildAdjusted(){ const m=new Map(); for(const [k,c] of capMap.entries()) m.set(k, (c.start|0)+(c.delta|0)); return m; }
-    function seedIncumbents(){ const m=new Map(); for(const p of roster){ const k=key(p.current.base,p.current.seat); m.set(k,(m.get(k)||0)+1); } return m; }
+    function seedIncumbents(){ const m=new Map(); const excl = (document.getElementById('chkExcludeIncumbents')||{}).checked; for(const p of roster){ if(excl && !isEligiblePilot(p)) continue; const k=key(p.current.base,p.current.seat); m.set(k,(m.get(k)||0)+1); } return m; }
     function rankPrefs(p){ const list=(prefs[p.id]?.preferences||[]).slice().filter(x=>x && x.stay!==true); list.sort((a,b)=>(a.order||0)-(b.order||0)); return list; }
+
+    // ===== BPL (Base Position Limit) helpers =====
+    function toNumberOrNull(v){
+      const n = Number(v); return Number.isFinite(n) ? n : null;
+    }
+    function extractBPL(w){
+      // honor explicit numeric fields or parse note/comment text
+      const out = {};
+      const cand = [w.bpl_rank_lte, w.bpl_top_n, w.bpl_percentile_lte];
+      if (cand.some(v=>v!==undefined)){
+        if (w.bpl_rank_lte !== undefined) out.rank_lte = toNumberOrNull(w.bpl_rank_lte);
+        if (w.bpl_top_n !== undefined) out.top_n = toNumberOrNull(w.bpl_top_n);
+        if (w.bpl_percentile_lte !== undefined) out.pct_lte = toNumberOrNull(w.bpl_percentile_lte);
+      } else {
+        const txt = String(w.note || w.comment || w.label || '').toUpperCase();
+        const m1 = txt.match(/BPL[^0-9]*([0-9]{1,4})/);
+        const m2 = txt.match(/TOP[^0-9]*([0-9]{1,4})/);
+        if (m1) out.rank_lte = toNumberOrNull(m1[1]);
+        if (m2) out.top_n   = toNumberOrNull(m2[1]);
+      }
+      return out;
+    }
+    function pilotRankIfMoved(p, toK){
+      // Collect SEN for all pilots whose CURRENT equals toK, then add this pilot and rank ascending by seniority number
+      const [tb, ts] = toK.split('__');
+      const occ = [];
+      for (const q of roster){
+        if (q.current && q.current.base===tb && q.current.seat===ts){
+          occ.push(q.sen);
+        }
+      }
+      // add self
+      if (!occ.includes(p.sen)) occ.push(p.sen);
+      occ.sort((a,b)=>a-b); // lower SEN = more senior = better
+      const rank = occ.indexOf(p.sen) + 1;
+      const total = occ.length;
+      const percentile = (rank / total) * 100.0;
+      return { rank, total, percentile };
+    }
+    function bplSatisfied(p, w, toK){
+      const bpl = extractBPL(w);
+      if (!bpl || (bpl.rank_lte==null && bpl.top_n==null && bpl.pct_lte==null)) return { ok:true, reason:null };
+      const r = pilotRankIfMoved(p, toK);
+      if (bpl.rank_lte!=null && !(r.rank <= bpl.rank_lte)) return { ok:false, reason:`rank ${r.rank} > ${bpl.rank_lte}` };
+      if (bpl.top_n!=null   && !(r.rank <= bpl.top_n))     return { ok:false, reason:`rank ${r.rank} > top ${bpl.top_n}` };
+      if (bpl.pct_lte!=null && !((r.percentile) <= bpl.pct_lte)) return { ok:false, reason:`percentile ${r.percentile.toFixed(1)} > ${bpl.pct_lte}` };
+      return { ok:true, reason:null };
+    }
+
 
     function run(){
       if (state.running) return;
@@ -253,13 +357,13 @@
       }
       renderOpenBatched(new Map()); // initial render
 
-      const sorted = roster.slice().sort((a,b)=>a.sen-b.sen);
+      const sorted = roster.slice().filter(isEligiblePilot).sort((a,b)=>a.sen-b.sen);
       // Lock anyone whose first bid equals their current base/seat or has stay:true as first
       for(const p of sorted){ if(firstBidSaysStay(p)) lockedStay.add(p.id||p.sen); }
       const moved = new Set();
       let totalMoves = 0;
 
-      function tryAward(p, fromK, toK, batchOpen, batchLedger){
+      function tryAward(p, fromK, toK, batchOpen, batchLedger, markBPL){
         // patched to use effective open
         if (fromK===toK) return false;
         const effTo = (Open.get(toK)||0) + (batchOpen.get(toK)||0);
@@ -274,7 +378,7 @@
         p.current = { base: tb, seat: ts };
         moved.add(p.id||p.sen);
         const mtype = (was.seat==='FO' && ts==='CA') ? 'upgrade' : 'lateral';
-        state.moves.push({ sen: p.sen, id: p.id||'', name: p.name||'', fromB: was.base, fromS: was.seat, toB: tb, toS: ts, move_type: mtype });
+        state.moves.push({ sen: p.sen, id: p.id||'', name: p.name||'', fromB: was.base, fromS: was.seat, toB: tb, toS: ts, move_type: mtype, bpl: !!markBPL });
         totalMoves++;
         return true;
       }
@@ -292,7 +396,8 @@
             if (!want) continue;
             const toK = key(base,'CA');
             const eff = (Open.get(toK)||0) + (batchOpen.get(toK)||0); if (eff <= 0) continue;
-            if (tryAward(p, fromK, toK, batchOpen, batchLedger)){
+            const bplCheck = bplSatisfied(p, want, toK); if (!bplCheck.ok) continue;
+            if (tryAward(p, fromK, toK, batchOpen, batchLedger, /*bpl*/true)){
               awarded = true;
               break;
             }
@@ -319,7 +424,8 @@
             if (sameChoice(w.base, w.seat, p.current.base, p.current.seat)) { lockedStay.add(p.id||p.sen); break; }
             const toK = key(w.base, w.seat);
             const eff = (Open.get(toK)||0) + (batchOpen.get(toK)||0); if (eff <= 0) continue;
-            if (tryAward(p, fromK, toK, batchOpen, batchLedger)){
+            const bplCheck = bplSatisfied(p, w, toK); if (!bplCheck.ok) continue;
+            if (tryAward(p, fromK, toK, batchOpen, batchLedger, /*bpl*/true)){
               changed = true;
               break;
             }
@@ -345,10 +451,10 @@
       function renderLists(){
         let html = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">';
         html += '<div><div class="subtle" style="margin-bottom:6px">Upgrades</div><ol>';
-        for(const m of upgrades){ html += `<li>${rowLine(m)} <span class="tag up">[Upgrade]</span></li>`; }
+        for(const m of upgrades){ html += `<li>${rowLine(m)} <span class="tag up">[Upgrade]</span>${m.bpl? ' <span class="tag">[BPL]</span>':''}</li>`; }
         html += '</ol></div>';
         html += '<div><div class="subtle" style="margin-bottom:6px">Laterals</div><ol>';
-        for(const m of laterals){ html += `<li>${rowLine(m)} <span class="tag lat">[Lateral]</span></li>`; }
+        for(const m of laterals){ html += `<li>${rowLine(m)} <span class="tag lat">[Lateral]</span>${m.bpl? ' <span class="tag">[BPL]</span>':''}</li>`; }
         html += '</ol></div>';
         html += '</div>';
         $results.innerHTML = html;
@@ -372,7 +478,7 @@
       document.getElementById('exportBaseCsv').href   = urlBase;
 
       state.running = false;
-      $status.textContent = "Simulation complete.";
+      $status.textContent = `Simulation complete. Ineligible skipped: ${ineligible.size}`;
 
     }
 
