@@ -424,7 +424,7 @@
       // Render Moves & CSV
       const upgrades = [...state.moves.filter(m=>m.move_type==='upgrade')].sort((a,b)=> (a.sen||1e9) - (b.sen||1e9));
       const laterals = [...state.moves.filter(m=>m.move_type==='lateral')].sort((a,b)=> (a.sen||1e9) - (b.sen||1e9));
-      $movesHdr.innerHTML = `<span class="pill">Passes: ${state.pass}</span><span class="pill">Moves: ${state.moves.length}</span><span class="pill">Upgrades: ${upgrades.length}</span><span class="pill">Laterals: ${laterals.length}</span>`;
+      $movesHdr.innerHTML = `<span class=\"pill\">Passes: ${state.pass}</span><span class=\"pill\">Moves: ${state.moves.length}</span><span class=\"pill\">Upgrades: ${upgrades.length}</span><span class=\"pill\">Laterals: ${laterals.length}</span>`;
 
       function rowLine(m){
         const name = m.name ? ` ${m.name}` : '';
