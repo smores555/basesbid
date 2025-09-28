@@ -99,20 +99,38 @@
 
     const state = { running:false, pass:0, moves:[], maxPass:5000, maxMoves:100000 };
 
-    const lockedStay = new Set(); // pilots who explicitly stay by first bid matching current
+    
+    const lockedStay = new Set(); // pilots who explicitly stay by first bid meaning
 
-    function sameChoice(aBase, aSeat, bBase, bSeat){
-      return String(aBase).toUpperCase()===String(bBase).toUpperCase() &&
-             String(aSeat).toUpperCase()===String(bSeat).toUpperCase();
+    function nBase(x){ return String(x||'').trim().toUpperCase(); }
+    function nSeat(x){
+      const t = String(x||'').trim().toUpperCase();
+      if (!t) return null;
+      if (t==='FO' || /FIRST[\s\-_]*OFFICER/.test(t) || /F\/?O/.test(t) || /CO[\s\-_]*PILOT/.test(t)) return 'FO';
+      if (t==='CA' || t==='CPT' || /CAPT(AIN)?/.test(t)) return 'CA';
+      return t;
+    }
+
+    // desired may omit seat: base match + seat omitted == "stay in current base/seat"
+    function sameChoice(desiredBase, desiredSeat, curBase, curSeat){
+      const db = nBase(desiredBase), ds = nSeat(desiredSeat);
+      const cb = nBase(curBase),     cs = nSeat(curSeat);
+      if (!db || !cb) return false;
+      if (db !== cb) return false;
+      if (ds === null) return true; // base-only means "stay in whatever seat I'm in"
+      return ds === cs;
     }
 
     function firstBidSaysStay(p){
-      const pref = (prefs[p.id]?.preferences||[]).find(x=>x && x.order===0);
-      if(!pref) return false;
-      if (pref.stay===true) return true;
-      if (pref.base && pref.seat && sameChoice(pref.base, pref.seat, p.current.base, p.current.seat)) return true;
-      return false;
+      const all = (prefs[p.id]?.preferences || []).slice();
+      // sort by numeric order; treat missing as large
+      all.sort((a,b)=>((a?.order ?? 1e9) - (b?.order ?? 1e9)));
+      const first = all[0];
+      if (!first) return false;
+      if (first.stay === true) return true;
+      return sameChoice(first.base, first.seat, p.current.base, p.current.seat);
     }
+
 
 
     // ===== Load JSON (fallback to demo if missing) =====
