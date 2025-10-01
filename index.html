@@ -315,7 +315,7 @@ const bestRank = new Map();    // SEN -> best rank so far
 function award(p, fromK, toK, tag, rows){
   const [tb,ts] = toK.split('__'); const [fb,fs] = (fromK||'|').split('__');
   rows.push({pass:state.pass, action:"FILLED",  pilot:`SEN ${p.sen}`, from:"",           to:`${tb} ${ts}`});
-  rows.push({pass:state.pass, action:"CREATED", pilot:`SEN ${p.sen}`, from:`${fb} ${fs}`, to:""});
+  if (fromK){ rows.push({pass:state.pass, action:"CREATED", pilot:`SEN ${p.sen}`, from:`${fb} ${fs}`, to:""}); }
   moveOccupant(p, fromK, toK);
   p.current = { base: tb, seat: ts };
   const mtype = (fs==='FO' && ts==='CA') ? 'upgrade' : 'lateral';
@@ -367,6 +367,7 @@ function run(){
         const rows=[];
         award(p, fromK, toK, 'posted-add', rows);
         vacDec(toK,1);                // consume posted add
+        vacInc(fromK,1);              // create FO/CA vacancy where they left (enable cascade immediately)
         renderLedgerRows(rows); renderOpen(); renderNamesBySeniority();
         awarded = true;
         continue VacFirst;            // restart from Pilot #1
