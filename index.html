@@ -456,6 +456,9 @@ function run(){
       if (pinned.has(p.sen)) continue;
       const fromK = key(p.current.base, p.current.seat);
       const list = rankPrefs(p);
+          // --- Begin Ward Notes per pilot ---
+    let moved = false;
+    wardNotes.push(`${p.name} (#${p.sen}) — evaluating preferences`);
       for (const w of list) {
   // --- Modified stop-after-home with BPL awareness ---
   if (sameChoice(w.base, w.seat, p.current.base, p.current.seat)) {
@@ -472,6 +475,8 @@ function run(){
 
   if (have <= 0) {
     if (pilotMatchesTrace(p)) logTrace('  REJECT: no vacancy');
+      wardNotes.push(`${p.name} (#${p.sen}) — rejected ${fmtK(toK)} (no vacancy)`);
+  renderWardNotes();
     continue;
   }
 
@@ -483,12 +488,16 @@ const homeBpl = bplSatisfied(p, homeChoice, key(p.current.base, p.current.seat))
 if (rWish >= rNow && homeBpl.ok) {
   if (pilotMatchesTrace(p))
     logTrace(`  REJECT: not improvement (best=${rNow}, wish=${rWish})`);
+    wardNotes.push(`${p.name} (#${p.sen}) — rejected ${fmtK(toK)} (not improvement)`);
+  renderWardNotes();
   continue;
   }
 
   const bpl = bplSatisfied(p, w, toK);
   if (!bpl.ok) {
     if (pilotMatchesTrace(p)) logTrace('  REJECT: BPL');
+      wardNotes.push(`${p.name} (#${p.sen}) — rejected ${fmtK(toK)} (BPL not satisfied)`);
+  renderWardNotes();
     continue;
   }
 
@@ -496,6 +505,8 @@ if (rWish >= rNow && homeBpl.ok) {
   state.pass++;
   const rows = [];
   award(p, fromK, toK, 'cascade', rows);
+  moved = true;
+
 
   // Update vacancies and occupant maps
   if (!isPaper(p)) {
@@ -517,6 +528,10 @@ renderWardNotes();
   awarded = true;
   continue Cascade; // restart from #1 after each award
 }
+          if (!moved) {
+      wardNotes.push(`${p.name} (#${p.sen}) — remains in ${fmtK(fromK)} (no eligible move)`);
+      renderWardNotes();
+    }
     }
     if (!awarded) break;
   }
@@ -548,6 +563,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
 
 </body>
 </html>
+
 
 
 
