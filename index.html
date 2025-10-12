@@ -520,10 +520,7 @@ renderWardNotes();
     logTrace(`  PAPER BID: ${p.sen} move does not consume capacity`);
   }
   vacInc(fromK, 1);
-        // --- Ward Notes update ---
-wardNotes.push(`${toK} filled by ${p.name} (#${p.sen}) from ${fromK}`);
-renderWardNotes();
-
+      
 
   // Update UI
   renderLedgerRows(rows);
@@ -568,6 +565,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
 
 </body>
 </html>
+
 
 
 
