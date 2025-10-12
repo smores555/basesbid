@@ -110,13 +110,28 @@ const $openVac    = document.getElementById('openVac');
 const $status     = document.getElementById('status');
 
 const state = { running:false, pass:0, moves:[] };
-  // ===== Ward Notes =====
+// ===== Ward Notes (Color Edition) =====
 const wardNotes = [];
-function fmtK(k){
+function fmtK(k) {
   if (!k) return '(none)';
   const parts = String(k).split('__');
   if (parts.length === 2) return `${parts[0]} ${parts[1]}`;
   return String(k);
+}
+
+function renderWardNotes() {
+  const box = document.getElementById('wardNotes');
+  if (!box) return;
+  const lines = wardNotes.slice(-200);
+  box.innerHTML = lines.map(s => {
+    if (s.startsWith('→')) return `<div style="color:#4fff4f">${s}</div>`;       // move (green)
+    if (s.includes('rejected')) return `<div style="color:#ff5c5c">${s}</div>`;  // reject (red)
+    if (s.includes('evaluating')) return `<div style="color:#6cc0ff">${s}</div>`;// start (blue)
+    if (s.includes('remains')) return `<div style="color:#bbb">${s}</div>`;      // stay (gray)
+    return `<div>${s}</div>`;
+  }).join('');
+}
+
 }
 function renderWardNotes(){
   const box = document.getElementById('wardNotes');
@@ -565,6 +580,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
 
 </body>
 </html>
+
 
 
 
