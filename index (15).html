@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Base Trace — Vacancy · Restart · Improve-only · BPL · Paper</title>
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <style>
+    :root { --bg:#0b1220; --card:#111a2b; --muted:#8aa4c1; --text:#eaf2ff; --accent:#8ad2ff; --border:#1f2a44; --good:#34d399; }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+    .wrap{max-width:1240px;margin:18px auto;padding:0 12px 42px}
+    .banner{background:#0e2a4c;border-bottom:3px solid #8ad2ff;color:#fff;padding:10px 12px;font-weight:800;border-radius:0 0 12px 12px;letter-spacing:.3px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px}
+    .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+    button{background:#2e4a78;color:#fff;border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-weight:600;cursor:pointer}
+    button.secondary{background:#203453}
+    input[type=number]{width:90px;padding:6px;border-radius:8px;border:1px solid var(--border);background:#0b1426;color:#eaf2ff;font-size:14px}
+    table{width:100%;border-collapse:separate;border-spacing:0 6px}
+    th{font-size:12px;color:var(--muted);text-align:left;padding:4px 8px}
+    td{background:#0f182a;border:1px solid var(--border);padding:6px 8px;vertical-align:middle}
+    .basehdr{background:#13213a;color:#cfe6ff;font-weight:700}
+    .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace}
+    .grid{display:grid;gap:12px;grid-template-columns: 1fr 1fr 1fr}
+    .kv{display:flex;align-items:center;justify-content:space-between;background:#0f182a;border:1px solid var(--border);padding:6px 8px;border-radius:10px}
+    .subtle{color:var(--muted)}
+    .tag{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:2px 8px;margin-left:6px;font-size:12px;background:#12203b;color:#cfe6ff}
+    .tag.up{background:#12361f}
+    .tag.lat{background:#1b2c3b}
+  </style>
+</head>
+<body>
+  </script>
+
+  <div class="banner">Base Trace — Vacancy-ledger · Restart-every-award · Improve-only · BPL · Paper</div>
+
+  <div class="wrap">
+    <div class="card">
+      <div class="toolbar">
+        <button id="runBtn">Run (Vacancy-first → Cascade)</button>
+        <button class="secondary" id="resetDeltaBtn">Reset Δ</button>
+        <button class="secondary" id="reloadBtn">Reload JSON</button>
+        <label class="subtle mono"><input type="checkbox" id="muteLedger"> Mute ledger</label>
+        <label class="subtle mono"><input type="checkbox" id="muteOpen"> Mute open box</label>
+        <span id="status" class="subtle mono" style="margin-left:8px"></span>
+      </div>
+
+      <div id="capTable"></div>
+
+      <div class="card" style="margin-top:12px">
+        <h3>Pilot Trace</h3>
+        <div class="subtle" style="margin-bottom:6px">Type a pilot <b>Name</b> or <b>SEN</b>, tick enable, then Run.</div>
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+          <input id="traceQuery" placeholder="e.g., 1574 or SCHUELER, TIMO" style="width:260px;padding:8px;border-radius:8px;border:1px solid var(--border);background:#0b1426;color:#eaf2ff">
+          <label class="subtle mono"><input type="checkbox" id="traceEnabled"> Enable trace</label>
+          <button class="secondary" id="traceClear">Clear log</button>
+        </div>
+        <pre id="traceLog" class="mono" style="white-space:pre-wrap;background:#0f182a;border:1px solid var(--border);padding:8px;border-radius:8px;max-height:260px;overflow:auto;margin-top:8px"></pre>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Open Vacancies</h3>
+        <div id="openVac"></div>
+      </div>
+      <div class="card">
+        <h3>Vacancy Ledger</h3>
+        <div style="max-height:260px;overflow:auto">
+          <table>
+            <thead>
+              <tr class="subtle"><th>Pass</th><th>Action</th><th>Pilot</th><th>From</th><th>To</th></tr>
+            </thead>
+            <tbody id="ledgerBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Names (Seniority)</h3>
+        <div id="namesBySen" style="max-height:260px;overflow:auto"></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+// ===== Helpers and State =====
+const BASES = ["SEA","ANC","PDX","SFO","LAX"];
+const SEATS = ["CA","FO"];
+const key = (b,s)=>`${String(b).toUpperCase()}__${String(s).toUpperCase()}`;
+
+const capMap = new Map(); // k -> {base, seat, start, delta}
+let roster = [];          // [{sen, name, current:{base,seat}, paper?}]
+let prefs  = {};          // { "pil####" or "####": { preferences:[...] , paper? } }
+
+const $capTable   = document.getElementById('capTable');
+const $ledgerBody = document.getElementById('ledgerBody');
+const $openVac    = document.getElementById('openVac');
+const $status     = document.getElementById('status');
+
+const state = { running:false, pass:0, moves:[] };
+
+// ===== Vacancy counts =====
+const Vac = new Map(); // seatKey -> integer vacancies
+const vacAmt = k => Vac.get(k)||0;
+const vacInc = (k,n=1)=> Vac.set(k, (Vac.get(k)||0) + n);
+const vacDec = (k,n=1)=> Vac.set(k, Math.max(0,(Vac.get(k)||0) - n));
+
+function seedVacFromCap(){
+  Vac.clear();
+  // init seats
+  for(const [,c] of capMap.entries()){ Vac.set(key(c.base,c.seat), 0); }
+  // posted adds: CA deltas only
+  for(const [k,c] of capMap.entries()){
+    if (c.seat==='CA' && Number(c.delta||0)>0) vacInc(k, Number(c.delta||0));
+  }
+  renderOpen();
+}
+
+// ===== Dynamic Occupants (for BPL) — paper excluded =====
+const Occupants = new Map();
+function seedOccupants(){
+  Occupants.clear();
+  for (const p of roster){
+    if (isPaper(p)) continue;
+    const k = key(p.current.base, p.current.seat);
+    if (!Occupants.has(k)) Occupants.set(k, new Set());
+    Occupants.get(k).add(p.sen);
+  }
+}
+function moveOccupant(p, fromK, toK){
+  if (fromK){ const s = Occupants.get(fromK); if (s) s.delete(p.sen); }
+  if (isPaper(p)) return;
+  if (!Occupants.has(toK)) Occupants.set(toK, new Set());
+  Occupants.get(toK).add(p.sen);
+}
+
+// ===== Preference resolvers =====
+function prefEntryFor(p){
+  if (p && p.id && prefs[p.id]) return prefs[p.id];
+  const senStr = String(p?.sen ?? '');
+  if (senStr && prefs[senStr]) return prefs[senStr];
+  const pilKey = 'pil' + senStr;
+  if (prefs[pilKey]) return prefs[pilKey];
+  return null;
+}
+function isPaper(p){
+  const pe = prefEntryFor(p);
+  return Boolean(p.paper || pe?.paper);
+}
+function sameChoice(desiredBase, desiredSeat, curBase, curSeat){
+  const db = String(desiredBase||'').toUpperCase();
+  const ds = String(desiredSeat||'').toUpperCase();
+  const cb = String(curBase||'').toUpperCase();
+  const cs = String(curSeat||'').toUpperCase();
+  if (!db || !cb) return false;
+  if (db !== cb) return false;
+  if (!ds) return true;
+  return ds === cs;
+}
+function rankPrefs(p) {
+  const pe = prefEntryFor(p);
+  const list = (pe?.preferences || [])
+    .slice()
+    .filter(x => x && x.stay !== true)
+    .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+  // Don’t slice here — cascade handles stop-after-home + BPL logic dynamically
+  return list;
+}
+// ===== Trace helpers =====
+function qNorm(s){ return String(s||'').trim().toUpperCase(); }
+function pilotMatchesTrace(p){
+  const on = (document.getElementById('traceEnabled')||{}).checked;
+  if(!on) return false;
+  const q = qNorm((document.getElementById('traceQuery')||{}).value||'');
+  if(!q) return false;
+  if (q === String(p.sen).toUpperCase()) return true;
+  if (q === qNorm(p.name)) return true;
+  return false;
+}
+function logTrace(msg){
+  const box = document.getElementById('traceLog'); if(!box) return;
+  box.textContent += (box.textContent ? "\n" : "") + msg;
+  box.scrollTop = box.scrollHeight;
+  try{ console.log(msg); }catch(e){}
+}
+window.addEventListener('DOMContentLoaded', ()=>{
+  const btnTC = document.getElementById('traceClear');
+  if(btnTC){ btnTC.onclick = ()=>{ const box=document.getElementById('traceLog'); if(box) box.textContent=''; }; }
+});
+
+// ===== BPL enforcement (0 or missing => unrestricted) =====
+function bplSatisfied(p, w, toK) {
+  const pe = prefEntryFor(p);
+  const prefList = (pe && Array.isArray(pe.preferences)) ? pe.preferences : [];
+  const match = prefList.find(x =>
+    String(x.base).toUpperCase() === String(w.base).toUpperCase() &&
+    String(x.seat).toUpperCase() === String(w.seat).toUpperCase()
+  );
+  const limit = Number(match?.bpl_min ?? 0);
+  if (!(limit > 0)) return { ok: true, reason: null };
+
+  const occ = Occupants.get(toK) || new Set();
+  const projectedRank = [...occ].filter(sen => sen < p.sen).length + 1;
+
+  if (projectedRank > limit) return { ok:false, reason:`Projected rank ${projectedRank} exceeds BPL ${limit}` };
+  return { ok:true, reason:null };
+}
+
+// ===== UI: capacities table =====
+function groupByBase(){
+  const bases = {};
+  for(const [, v] of capMap.entries()){ (bases[v.base] ||= []).push(v.seat); }
+  for(const b of Object.keys(bases)){
+    bases[b] = Array.from(new Set(bases[b])).sort((a,b)=> a===b?0 : a==='CA'?-1:b==='CA'?1:a.localeCompare(b));
+  }
+  return Object.keys(bases).sort().map(b=>({ base:b, seats:bases[b] }));
+}
+function renderCapTable(){
+  const groups = groupByBase();
+  let html = '<table><thead><tr><th>Base</th><th>Seat</th><th>Start</th><th>Δ</th><th>Adjusted</th></tr></thead><tbody>';
+  for(const g of groups){
+    const rowSpan = g.seats.length;
+    g.seats.forEach((seat, idx)=>{
+      const c = capMap.get(key(g.base, seat));
+      const adj = (c?.start||0) + (c?.delta||0);
+      html += '<tr>';
+      if(idx===0){ html += `<td class="basehdr" rowspan="${rowSpan}">${g.base}</td>`; }
+      html += `<td>${seat}</td>`;
+      html += `<td><input type="number" value="${c?.start||0}" oninput="onStart('${g.base}','${seat}', this.value)"></td>`;
+      html += `<td><input type="number" value="${c?.delta||0}" oninput="onDelta('${g.base}','${seat}', this.value)"></td>`;
+      html += `<td class="mono">${adj}</td>`;
+      html += '</tr>';
+    });
+  }
+  html += '</tbody></table>';
+  $capTable.innerHTML = html;
+}
+window.onStart = (b,s,v)=>{ const k=key(b,s); const c=capMap.get(k)||{base:b,seat:s,start:0,delta:0}; c.start=+v||0; capMap.set(k,c); renderCapTable(); seedVacFromCap(); };
+window.onDelta = (b,s,v)=>{ const k=key(b,s); const c=capMap.get(k)||{base:b,seat:s,start:0,delta:0}; c.delta=+v||0; capMap.set(k,c); renderCapTable(); seedVacFromCap(); };
+
+// ===== Render Vacancy & Ledger =====
+function renderOpen(){
+  if (document.getElementById('muteOpen')?.checked) return;
+  const items = [...Vac.entries()].filter(([,v])=>v!==0).sort((a,b)=>a[0].localeCompare(b[0]));
+  $openVac.innerHTML = items.map(([k,v])=>{
+    const [b,s] = k.split('__'); const sign = v>0?'+':'';
+    return `<div class="kv"><span>${b} ${s}</span><span class="mono">${sign}${v}</span></div>`;
+  }).join('') || '<div class="subtle">No open vacancies</div>';
+}
+function renderLedgerRows(rows){
+  if (document.getElementById('muteLedger')?.checked) return;
+  if (!rows.length) return;
+  const frag = document.createDocumentFragment();
+  for (const r of rows){
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="mono">${r.pass}</td><td>${r.action}</td><td>${r.pilot}</td><td>${r.from}</td><td>${r.to}</td>`;
+    frag.appendChild(tr);
+  }
+  $ledgerBody.appendChild(frag);
+}
+function renderNamesBySeniority(){
+  const slot = document.getElementById('namesBySen'); if(!slot) return;
+  const bySen = [...state.moves].sort((a,b)=> (a.sen||1e9) - (b.sen||1e9));
+  let html = '<ol class="mono">';
+  for (const m of bySen){
+    const tag = m.move_type==='upgrade' ? '<span class="tag up">[Upgrade]</span>' : '<span class="tag lat">[Lateral]</span>';
+    html += `<li>${m.sen} ${m.name||''} — ${m.fromB} ${m.fromS} → <b>${m.toB} ${m.toS}</b> ${tag}</li>`;
+  }
+  html += '</ol>';
+  slot.innerHTML = html;
+}
+// ===== Load JSON (with fallback) =====
+async function loadJSON(){
+  function sf(p){
+    return fetch(p, {cache:'no-cache'})
+      .then(r => r.ok ? r.json() : null)
+      .catch(() => null);
+  }
+
+  const loaded = {
+    capacities: (await sf('capacities.json')) ?? (await sf('data/capacities.json')),
+    roster:     (await sf('roster.json'))     ?? (await sf('data/roster.json')),
+    prefs:      (await sf('preferences.json'))?? (await sf('data/preferences.json'))
+  };
+
+  if(!loaded.capacities || !loaded.roster || !loaded.prefs){
+    // demo fallback so page still works if files are missing
+    loaded.capacities = BASES.flatMap(b=>SEATS.map(s=>({
+      base:b, seat:s, startCapacity:(s==='CA'?50:100), delta:0
+    })));
+    loaded.roster = Array.from({length:50}, (_,i)=>({
+      sen:i+1,
+      name:`Pilot ${i+1}`,
+      current:{
+        base:BASES[i%BASES.length],
+        seat:(i%3===0?'CA':'FO')
+      }
+    }));
+    loaded.prefs = {};
+    for(const p of loaded.roster){
+      loaded.prefs[p.sen] = {
+        preferences:[
+          {order:1, base:p.current.base, seat:p.current.seat},
+          {order:2, base:'SEA', seat:'CA'}
+        ]
+      };
+    }
+    $status.textContent = "Demo data active (capacities/roster/prefs not found)";
+  } else {
+    $status.textContent = "Loaded JSON.";
+  }
+
+  capMap.clear();
+  for(const c of loaded.capacities){
+    const b = String(c.base||'').toUpperCase();
+    const s = String(c.seat||'').toUpperCase();
+    const start = Number(c.startCapacity||c.start||0);
+    const delta = Number(c.delta||0);
+    capMap.set(key(b,s), { base:b, seat:s, start, delta });
+  }
+
+  roster = loaded.roster.map(x=>({
+    ...x,
+    current:{
+      base:String(x.current.base||'').toUpperCase(),
+      seat:String(x.current.seat||'').toUpperCase()
+    },
+    paper:Boolean(x.paper)
+  }));
+
+  prefs = loaded.prefs;
+  renderCapTable();
+} 
+// ===== Rank helpers (Improve-only + Lock at #1) =====
+function prefRank(p, base, seat){
+  const list = rankPrefs(p);
+  for (let i=0; i<list.length; i++){
+    const w = list[i];
+    if (String(w.base).toUpperCase()===String(base).toUpperCase() &&
+        String(w.seat).toUpperCase()===String(seat).toUpperCase()){
+      return (w.order ?? (i+1));
+    }
+  }
+  return Infinity;
+}
+const pinned = new Set();   // SEN who hit #1
+const bestRank = new Map(); // SEN -> best rank so far
+
+// ===== Engine =====
+function award(p, fromK, toK, tag, rows){
+  const [tb,ts] = toK.split('__'); const [fb,fs] = (fromK||'|').split('__');
+  rows.push({pass:state.pass, action: isPaper(p) ? "FILLED (PAPER)" : "FILLED", pilot:`SEN ${p.sen}`, from:"", to:`${tb} ${ts}`});
+  if (fromK){ rows.push({pass:state.pass, action:"CREATED", pilot:`SEN ${p.sen}`, from:`${fb} ${fs}`, to:""}); }
+  moveOccupant(p, fromK, toK);
+  p.current = { base: tb, seat: ts };
+  const mtype = (fs==='FO' && ts==='CA') ? 'upgrade' : 'lateral';
+  state.moves.push({ sen:p.sen, name:p.name||'', fromB:fb, fromS:fs, toB:tb, toS:ts, move_type:mtype });
+
+  const rNew = prefRank(p, tb, ts);
+  bestRank.set(p.sen, Math.min(bestRank.get(p.sen) ?? Infinity, rNew));
+  if (rNew === 1) pinned.add(p.sen);
+}
+
+function run(){
+  if (state.running) return;
+  state.running = true;
+  state.pass = 0;
+  state.moves = [];
+  $ledgerBody.innerHTML = '';
+  $openVac.innerHTML = '';
+
+  seedOccupants();
+  seedVacFromCap();
+
+  const sorted = roster.slice().sort((a,b)=>a.sen-b.sen);
+  pinned.clear(); bestRank.clear();
+  for (const p of sorted){
+    const r0 = prefRank(p, p.current.base, p.current.seat);
+    bestRank.set(p.sen, r0);
+    if (r0 === 1) pinned.add(p.sen);
+  }
+
+  // ===== Vacancy-first (posted adds, CA only) =====
+  VacFirst:
+  while (true){
+    let awarded = false;
+    for (const p of sorted){
+      if (pinned.has(p.sen)) continue;
+      const fromK = key(p.current.base, p.current.seat);
+      const wants = rankPrefs(p).filter(w => String(w.seat||'').toUpperCase() === 'CA');
+      for (const w of wants){
+        const toK = key(w.base, 'CA');
+        const have = vacAmt(toK);
+        if (pilotMatchesTrace(p)) logTrace(`[PASS ${state.pass}] Considering ${p.sen} ${p.name} for ${w.base} CA (Vac=${have})`);
+        if (have<=0){ if (pilotMatchesTrace(p)) logTrace('  REJECT: no vacancy'); continue; }
+        const rNow = bestRank.get(p.sen) ?? Infinity;
+        const rWish = prefRank(p, w.base, 'CA');
+        if (rWish >= rNow){ if (pilotMatchesTrace(p)) logTrace(`  REJECT: not improvement (best=${rNow}, wish=${rWish})`); continue; }
+        const bpl = bplSatisfied(p,w,toK); if(!bpl.ok){ if (pilotMatchesTrace(p)) logTrace('  REJECT: BPL'); continue; }
+
+        // AWARD (Vacancy-first)
+        state.pass++;
+        const rows=[];
+        award(p, fromK, toK, 'posted-add', rows);
+
+        // Paper: only non-paper consumes destination seat
+        if (!isPaper(p)) { vacDec(toK,1); }
+        else { if (pilotMatchesTrace(p)) logTrace(`  PAPER BID: ${p.sen} move does not consume capacity`); }
+        vacInc(fromK,1);
+
+        renderLedgerRows(rows); renderOpen(); renderNamesBySeniority();
+        awarded = true;
+        continue VacFirst; // restart from #1
+      }
+    }
+    if (!awarded) break;
+  }
+
+  // ===== Cascade/backfill =====
+  Cascade:
+  while (true){
+    let awarded = false;
+    for (const p of sorted){
+      if (pinned.has(p.sen)) continue;
+      const fromK = key(p.current.base, p.current.seat);
+      const list = rankPrefs(p);
+      for (const w of list) {
+  // --- Modified stop-after-home with BPL awareness ---
+  if (sameChoice(w.base, w.seat, p.current.base, p.current.seat)) {
+    // Only stop if the pilot can actually hold home within their BPL
+    const homeBpl = bplSatisfied(p, w, key(w.base, w.seat));
+    if (homeBpl.ok) break;   // they can hold home → stop checking further
+    else continue;           // fails BPL → skip home and keep checking next prefs
+  }
+
+  const toK = key(w.base, w.seat);
+  const have = vacAmt(toK);
+  if (pilotMatchesTrace(p))
+    logTrace(`[PASS ${state.pass}] Pref ${w.base} ${w.seat} (Vac=${have}) for ${p.sen} ${p.name}`);
+
+  if (have <= 0) {
+    if (pilotMatchesTrace(p)) logTrace('  REJECT: no vacancy');
+    continue;
+  }
+
+  const rNow = bestRank.get(p.sen) ?? Infinity;
+  const rWish = prefRank(p, w.base, w.seat);
+  if (rWish >= rNow) {
+    if (pilotMatchesTrace(p))
+      logTrace(`  REJECT: not improvement (best=${rNow}, wish=${rWish})`);
+    continue;
+  }
+
+  const bpl = bplSatisfied(p, w, toK);
+  if (!bpl.ok) {
+    if (pilotMatchesTrace(p)) logTrace('  REJECT: BPL');
+    continue;
+  }
+
+  // --- AWARD (Cascade) ---
+  state.pass++;
+  const rows = [];
+  award(p, fromK, toK, 'cascade', rows);
+
+  // Update vacancies and occupant maps
+  if (!isPaper(p)) {
+    vacDec(toK, 1);
+  } else if (pilotMatchesTrace(p)) {
+    logTrace(`  PAPER BID: ${p.sen} move does not consume capacity`);
+  }
+  vacInc(fromK, 1);
+
+  // Update UI
+  renderLedgerRows(rows);
+  renderOpen();
+  renderNamesBySeniority();
+
+  awarded = true;
+  continue Cascade; // restart from #1 after each award
+}
+    }
+    if (!awarded) break;
+  }
+
+  state.running = false;
+  $status.textContent = `Simulation complete. Passes=${state.pass}, Moves=${state.moves.length}`;
+}
+
+// ===== Wire UI and load data =====
+document.getElementById('runBtn').addEventListener('click', run);
+document.getElementById('resetDeltaBtn').addEventListener('click', ()=>{ for(const c of capMap.values()){ c.delta=0; } renderCapTable(); seedVacFromCap(); });
+document.getElementById('reloadBtn').addEventListener('click', ()=>{ loadJSON().then(()=>{ seedVacFromCap(); }); });
+loadJSON().then(()=>{ seedVacFromCap(); });
+
+// Hidden eligibility placeholders (kept for compatibility)
+function normKey(v){ return String(v||'').trim().toUpperCase(); }
+const ineligible = new Set();
+function parseIneligible(text){
+  ineligible.clear();
+  String(text||'').split(/\r?\n/).map(s=>normKey(s)).filter(Boolean).forEach(k=>ineligible.add(k));
+}
+window.addEventListener('DOMContentLoaded', ()=>{
+  const apply = document.getElementById('btnApplyIneligible');
+  const clear = document.getElementById('btnClearIneligible');
+  if (apply){ apply.addEventListener('click', ()=>{ parseIneligible(document.getElementById('ineligibleList')?.value); }); }
+  if (clear){ clear.addEventListener('click', ()=>{ const t=document.getElementById('ineligibleList'); if(t) t.value=''; parseIneligible(''); }); }
+});
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
