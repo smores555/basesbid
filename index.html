@@ -83,6 +83,16 @@
       </div>
     </div>
   </div>
+<!-- Ward Notes (Vacancy Trace) -->
+<div class="card" style="margin-top:12px">
+  <h3>Ward Notes</h3>
+  <div id="wardNotes"
+       class="mono"
+       style="white-space:pre-wrap;background:#0f182a;border:1px solid var(--border);
+              padding:8px;border-radius:8px;max-height:260px;overflow:auto;">
+    <!-- Filled live -->
+  </div>
+</div>
 
 <script>
 // ===== Helpers and State =====
@@ -100,6 +110,22 @@ const $openVac    = document.getElementById('openVac');
 const $status     = document.getElementById('status');
 
 const state = { running:false, pass:0, moves:[] };
+  // ===== Ward Notes =====
+const wardNotes = [];
+function fmtK(k){
+  if (!k) return '(none)';
+  const parts = String(k).split('__');
+  if (parts.length === 2) return `${parts[0]} ${parts[1]}`;
+  return String(k);
+}
+function renderWardNotes(){
+  const box = document.getElementById('wardNotes');
+  if (!box) return;
+  // Keep last 150 lines for performance
+  const lines = wardNotes.slice(-150);
+  box.innerHTML = lines.map(s => s).join('\n');
+}
+
 
 // ===== Vacancy counts =====
 const Vac = new Map(); // seatKey -> integer vacancies
@@ -371,6 +397,9 @@ function run(){
   state.moves = [];
   $ledgerBody.innerHTML = '';
   $openVac.innerHTML = '';
+  wardNotes.length = 0;
+  renderWardNotes();
+
 
   seedOccupants();
   seedVacFromCap();
@@ -475,6 +504,10 @@ if (rWish >= rNow && homeBpl.ok) {
     logTrace(`  PAPER BID: ${p.sen} move does not consume capacity`);
   }
   vacInc(fromK, 1);
+        // --- Ward Notes update ---
+wardNotes.push(`${toK} filled by ${p.name} (#${p.sen}) from ${fromK}`);
+renderWardNotes();
+
 
   // Update UI
   renderLedgerRows(rows);
@@ -515,6 +548,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
 
 </body>
 </html>
+
 
 
 
