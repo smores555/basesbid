@@ -434,6 +434,10 @@ function run(){
         state.pass++;
         const rows=[];
         award(p, fromK, toK, 'posted-add', rows);
+        moved = true;
+wardNotes.push(`→ ${fmtK(toK)} filled by ${p.name} (#${p.sen}) from ${fmtK(fromK)} [Vacancy-first]`);
+renderWardNotes();
+
 
         // Paper: only non-paper consumes destination seat
         if (!isPaper(p)) { vacDec(toK,1); }
@@ -505,8 +509,9 @@ if (rWish >= rNow && homeBpl.ok) {
   state.pass++;
   const rows = [];
   award(p, fromK, toK, 'cascade', rows);
-  moved = true;
-
+        moved = true;
+wardNotes.push(`→ ${fmtK(toK)} filled by ${p.name} (#${p.sen}) from ${fmtK(fromK)} [Cascade]`);
+renderWardNotes();
 
   // Update vacancies and occupant maps
   if (!isPaper(p)) {
@@ -563,6 +568,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
 
 </body>
 </html>
+
 
 
 
