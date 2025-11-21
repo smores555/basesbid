@@ -3,99 +3,159 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Base Trace — Vacancy · Restart · Improve-only · BPL · Paper</title>
+  <title>Base Trace — Improved UI</title>
   <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
   <style>
-    :root { --bg:#0b1220; --card:#111a2b; --muted:#8aa4c1; --text:#eaf2ff; --accent:#8ad2ff; --border:#1f2a44; --good:#34d399; }
-    *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-    .wrap{max-width:1240px;margin:18px auto;padding:0 12px 42px}
-    .banner{background:#0e2a4c;border-bottom:3px solid #8ad2ff;color:#fff;padding:10px 12px;font-weight:800;border-radius:0 0 12px 12px;letter-spacing:.3px}
-    .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px}
-    .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
-    button{background:#2e4a78;color:#fff;border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-weight:600;cursor:pointer}
-    button.secondary{background:#203453}
-    input[type=number]{width:90px;padding:6px;border-radius:8px;border:1px solid var(--border);background:#0b1426;color:#eaf2ff;font-size:14px}
-    table{width:100%;border-collapse:separate;border-spacing:0 6px}
-    th{font-size:12px;color:var(--muted);text-align:left;padding:4px 8px}
-    td{background:#0f182a;border:1px solid var(--border);padding:6px 8px;vertical-align:middle}
-    .basehdr{background:#13213a;color:#cfe6ff;font-weight:700}
-    .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace}
-    .grid{display:grid;gap:12px;grid-template-columns: 1fr 1fr 1fr}
-    .kv{display:flex;align-items:center;justify-content:space-between;background:#0f182a;border:1px solid var(--border);padding:6px 8px;border-radius:10px}
-    .subtle{color:var(--muted)}
-    .tag{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:2px 8px;margin-left:6px;font-size:12px;background:#12203b;color:#cfe6ff}
-    .tag.up{background:#12361f}
-    .tag.lat{background:#1b2c3b}
-    /* CSS for Ledger Clarity */
-    .ledger-fill td{border-left: 3px solid var(--good); background:#112a18 !important;}
-    .ledger-create td{border-left: 3px solid var(--accent); background:#151e33 !important;}
+    /* --- THEME & VARIABLES --- */
+    :root { 
+      --bg: #0f172a; 
+      --card-bg: #1e293b; 
+      --border: #334155; 
+      --text-main: #f1f5f9; 
+      --text-muted: #94a3b8; 
+      --accent: #38bdf8; 
+      --success: #4ade80; 
+      --success-bg: rgba(74, 222, 128, 0.1);
+      --info-bg: rgba(56, 189, 248, 0.1);
+      --danger: #f87171;
+    }
+
+    /* --- BASE STYLES --- */
+    * { box-sizing: border-box; outline: none; }
+    body { margin: 0; background: var(--bg); color: var(--text-main); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; line-height: 1.5; }
+    
+    .wrap { max-width: 1400px; margin: 0 auto; padding: 20px; }
+    
+    /* --- TYPOGRAPHY --- */
+    h3 { margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: space-between;}
+    .mono { font-family: 'Roboto Mono', 'Consolas', monospace; }
+    .subtle { color: var(--text-muted); font-size: 0.9em; }
+
+    /* --- CARDS & CONTAINERS --- */
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3); }
+    
+    /* --- TOOLBAR --- */
+    .toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
+    
+    /* --- BUTTONS & INPUTS --- */
+    button { background: #2563eb; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    button:hover { background: #1d4ed8; }
+    button.secondary { background: #334155; color: #e2e8f0; }
+    button.secondary:hover { background: #475569; }
+    
+    input { background: #0f172a; border: 1px solid #475569; color: white; padding: 6px 10px; border-radius: 6px; }
+    input[type="checkbox"] { accent-color: var(--accent); transform: scale(1.2); margin-right: 6px; cursor: pointer; }
+
+    /* --- TABLES --- */
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { text-align: left; color: var(--text-muted); padding: 8px 12px; font-weight: 500; border-bottom: 1px solid var(--border); }
+    td { padding: 8px 12px; border-bottom: 1px solid #334155; }
+    tr:last-child td { border-bottom: none; }
+    
+    /* Capacity Table Specifics */
+    .base-cell { font-weight: bold; color: var(--accent); background: rgba(15, 23, 42, 0.5); border-right: 1px solid var(--border); vertical-align: middle; text-align: center; }
+    
+    /* --- LEDGER STYLES (IMPROVED) --- */
+    .ledger-container { max-height: 400px; overflow-y: auto; border: 1px solid var(--border); border-radius: 6px; background: #0f172a; }
+    .ledger-container table { width: 100%; }
+    .ledger-container th { position: sticky; top: 0; background: var(--card-bg); z-index: 10; box-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+    
+    /* Ledger Row Types */
+    tr.row-fill { background: var(--success-bg); }
+    tr.row-fill td { border-left: 3px solid var(--success); }
+    tr.row-create { background: var(--info-bg); }
+    tr.row-create td { border-left: 3px solid var(--accent); }
+    
+    /* Badges */
+    .badge { padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+    .badge-fill { background: #14532d; color: #86efac; }
+    .badge-create { background: #0c4a6e; color: #7dd3fc; }
+    .badge-up { background: #7c2d12; color: #fdba74; border: 1px solid #fdba74; margin-left: 8px; font-size: 10px;}
+    .badge-lat { background: #1e293b; color: #94a3b8; border: 1px solid #475569; margin-left: 8px; font-size: 10px;}
+
+    /* --- GRID LAYOUTS --- */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: 300px 1fr; gap: 16px; } /* Sidebar + Main */
+
+    /* --- VACANCY & NOTES BOXES --- */
+    .stat-box { background: #0f172a; padding: 8px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 4px; display: flex; justify-content: space-between; }
+    .log-box { width: 100%; height: 250px; background: #0f172a; color: #ccc; padding: 12px; border: 1px solid var(--border); border-radius: 6px; overflow-y: auto; font-size: 12px; white-space: pre-wrap; }
   </style>
 </head>
 <body>
 
-  <div class="banner">Base Trace — Vacancy-ledger · Restart-every-award · Improve-only · BPL · Paper</div>
-
   <div class="wrap">
     <div class="card">
       <div class="toolbar">
-        <button id="runBtn">Run (Vacancy-first → Cascade)</button>
+        <h2 style="margin:0 20px 0 0; color: white;">Base Trace</h2>
+        <button id="runBtn">▶ Run Simulation</button>
+        <div style="width: 1px; height: 24px; background: var(--border); margin: 0 8px;"></div>
         <button class="secondary" id="resetDeltaBtn">Reset Δ</button>
         <button class="secondary" id="reloadBtn">Reload JSON</button>
-        <label class="subtle mono"><input type="checkbox" id="muteLedger"> Mute ledger</label>
-        <label class="subtle mono"><input type="checkbox" id="muteOpen"> Mute open box</label>
-        <span id="status" class="subtle mono" style="margin-left:8px"></span>
+        
+        <div style="flex-grow:1"></div>
+        <label class="subtle mono"><input type="checkbox" id="muteLedger"> Mute Ledger</label>
+        <span id="status" class="subtle mono" style="margin-left:16px; color: var(--accent);">Ready</span>
       </div>
 
       <div id="capTable"></div>
+    </div>
 
-      <div class="card" style="margin-top:12px">
-        <h3>Pilot Trace</h3>
-        <div class="subtle" style="margin-bottom:6px">Type a pilot <b>Name</b> or <b>SEN</b>, tick enable, then Run.</div>
-        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
-          <input id="traceQuery" placeholder="e.g., 1574 or SCHUELER, TIMO" style="width:260px;padding:8px;border-radius:8px;border:1px solid var(--border);background:#0b1426;color:#eaf2ff">
-          <label class="subtle mono"><input type="checkbox" id="traceEnabled"> Enable trace</label>
-          <button class="secondary" id="traceClear">Clear log</button>
+    <div class="grid-2">
+      <div>
+        <div class="card">
+          <h3>Pilot Trace (Log Specific Pilot)</h3>
+          <div style="display:flex; gap:8px; margin-bottom:8px;">
+            <input id="traceQuery" placeholder="Name or SEN (e.g. 1574)" style="flex-grow:1">
+            <button class="secondary" id="traceClear">Clear</button>
+          </div>
+          <label class="subtle"><input type="checkbox" id="traceEnabled"> Enable Trace Log</label>
+          <pre id="traceLog" class="log-box" style="height: 120px; margin-top:8px;"></pre>
         </div>
-        <pre id="traceLog" class="mono" style="white-space:pre-wrap;background:#0f182a;border:1px solid var(--border);padding:8px;border-radius:8px;max-height:260px;overflow:auto;margin-top:8px"></pre>
+        
+        <div class="card">
+          <h3>Open Vacancies</h3>
+          <div id="openVac" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Award Summary (By Seniority)</h3>
+        <div id="namesBySen" style="height: 320px; overflow-y: auto; font-family: monospace;"></div>
       </div>
     </div>
 
-    <div class="grid">
-      <div class="card">
-        <h3>Open Vacancies</h3>
-        <div id="openVac"></div>
-      </div>
-      <div class="card">
-        <h3>Vacancy Ledger (Causality)</h3>
-        <div style="max-height:260px;overflow:auto">
-          <table>
-            <thead>
-              <tr class="subtle"><th>Pass</th><th>Action</th><th>Pilot</th><th>Old Base</th><th>New Base</th></tr>
-            </thead>
-            <tbody id="ledgerBody"></tbody>
-          </table>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Names (Seniority)</h3>
-        <div id="namesBySen" style="max-height:260px;overflow:auto"></div>
+    <div class="card">
+      <h3>Vacancy Ledger <span class="subtle" style="font-weight:400; text-transform:none;">(Detailed Causality Chain)</span></h3>
+      <div class="ledger-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:60px">Pass</th>
+              <th style="width:120px">Action</th>
+              <th>Pilot / Vacancy</th>
+              <th>From</th>
+              <th>To</th>
+            </tr>
+          </thead>
+          <tbody id="ledgerBody"></tbody>
+        </table>
       </div>
     </div>
+
+    <div class="card">
+      <h3>Award Notes</h3>
+      <div id="wardNotes" class="log-box"></div>
+    </div>
+
   </div>
-<div class="card" style="margin:12px auto; max-width:1240px;">
-  <h3>Ward Notes</h3>
-  <div id="wardNotes"
-       class="mono"
-       style="white-space:pre-wrap;background:#0f182a;border:1px solid var(--border);
-              padding:8px;border-radius:8px;max-height:260px;overflow:auto;">
-    </div>
-</div>
 
 <script>
-// ===== Helpers and State =====
+// ==================================================
+//  LOGIC ENGINE (Preserved & Fixed)
+// ==================================================
+
 const BASES = ["SEA","ANC","PDX","SFO","LAX"];
 const SEATS = ["CA","FO"];
 const key = (b,s)=>`${String(b).toUpperCase()}__${String(s).toUpperCase()}`;
@@ -110,9 +170,8 @@ const $openVac    = document.getElementById('openVac');
 const $status     = document.getElementById('status');
 
 const state = { running:false, pass:0, moves:[] };
-
-// ===== Ward Notes =====
 const wardNotes = [];
+
 function fmtK(k){
   if (!k) return '(none)';
   const parts = String(k).split('__');
@@ -123,8 +182,8 @@ function fmtK(k){
 function renderWardNotes(){
   const box = document.getElementById('wardNotes');
   if (!box) return;
-  // Keep last 150 lines for performance/display
-  const lines = wardNotes.slice(-150);
+  // Keep last 200 lines
+  const lines = wardNotes.slice(-200);
   box.innerHTML = lines.join('\n');
 }
 
@@ -136,16 +195,15 @@ const vacDec = (k,n=1)=> Vac.set(k, Math.max(0,(Vac.get(k)||0) - n));
 
 function seedVacFromCap(){
   Vac.clear();
-  // 1. Initialize seats
   for(const [,c] of capMap.entries()){ Vac.set(key(c.base,c.seat), 0); }
-  // 2. Apply Deltas (FIXED: Now accepts any positive delta, not just CA)
+  // FIXED: Accept all deltas
   for(const [k,c] of capMap.entries()){
     if (Number(c.delta||0)>0) vacInc(k, Number(c.delta||0));
   }
   renderOpen();
 }
 
-// ===== Dynamic Occupants (for BPL) — paper excluded =====
+// ===== Occupants =====
 const Occupants = new Map();
 function seedOccupants(){
   Occupants.clear();
@@ -163,7 +221,7 @@ function moveOccupant(p, fromK, toK){
   Occupants.get(toK).add(p.sen);
 }
 
-// ===== Preference resolvers =====
+// ===== Preferences =====
 function prefEntryFor(p){
   if (p && p.id && prefs[p.id]) return prefs[p.id];
   const senStr = String(p?.sen ?? '');
@@ -194,7 +252,7 @@ function rankPrefs(p) {
     .sort((a, b) => (a.order || 0) - (b.order || 0));
 }
 
-// ===== Trace helpers =====
+// ===== Trace =====
 function qNorm(s){ return String(s||'').trim().toUpperCase(); }
 function pilotMatchesTrace(p){
   const on = (document.getElementById('traceEnabled')||{}).checked;
@@ -216,7 +274,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
   if(btnTC){ btnTC.onclick = ()=>{ const box=document.getElementById('traceLog'); if(box) box.textContent=''; }; }
 });
 
-// ===== BPL enforcement =====
+// ===== BPL =====
 function bplSatisfied(p, w, toK) {
   const pe = prefEntryFor(p);
   const prefList = (pe && Array.isArray(pe.preferences)) ? pe.preferences : [];
@@ -234,7 +292,7 @@ function bplSatisfied(p, w, toK) {
   return { ok:true, reason:null };
 }
 
-// ===== UI: capacities table =====
+// ===== Rendering =====
 function groupByBase(){
   const bases = {};
   for(const [, v] of capMap.entries()){ (bases[v.base] ||= []).push(v.seat); }
@@ -245,17 +303,17 @@ function groupByBase(){
 }
 function renderCapTable(){
   const groups = groupByBase();
-  let html = '<table><thead><tr><th>Base</th><th>Seat</th><th>Start</th><th>Δ</th><th>Adjusted</th></tr></thead><tbody>';
+  let html = '<table><thead><tr><th>Base</th><th>Seat</th><th>Start</th><th>Δ (Delta)</th><th>Adjusted</th></tr></thead><tbody>';
   for(const g of groups){
     const rowSpan = g.seats.length;
     g.seats.forEach((seat, idx)=>{
       const c = capMap.get(key(g.base, seat));
       const adj = (c?.start||0) + (c?.delta||0);
       html += '<tr>';
-      if(idx===0){ html += `<td class="basehdr" rowspan="${rowSpan}">${g.base}</td>`; }
-      html += `<td>${seat}</td>`;
+      if(idx===0){ html += `<td class="base-cell" rowspan="${rowSpan}">${g.base}</td>`; }
+      html += `<td style="font-weight:bold">${seat}</td>`;
       html += `<td><input type="number" value="${c?.start||0}" oninput="onStart('${g.base}','${seat}', this.value)"></td>`;
-      html += `<td><input type="number" value="${c?.delta||0}" oninput="onDelta('${g.base}','${seat}', this.value)"></td>`;
+      html += `<td><input type="number" value="${c?.delta||0}" oninput="onDelta('${g.base}','${seat}', this.value)" style="color:var(--accent); font-weight:bold"></td>`;
       html += `<td class="mono">${adj}</td>`;
       html += '</tr>';
     });
@@ -266,40 +324,55 @@ function renderCapTable(){
 window.onStart = (b,s,v)=>{ const k=key(b,s); const c=capMap.get(k)||{base:b,seat:s,start:0,delta:0}; c.start=+v||0; capMap.set(k,c); renderCapTable(); seedVacFromCap(); };
 window.onDelta = (b,s,v)=>{ const k=key(b,s); const c=capMap.get(k)||{base:b,seat:s,start:0,delta:0}; c.delta=+v||0; capMap.set(k,c); renderCapTable(); seedVacFromCap(); };
 
-// ===== Render Vacancy & Ledger =====
 function renderOpen(){
-  if (document.getElementById('muteOpen')?.checked) return;
   const items = [...Vac.entries()].filter(([,v])=>v!==0).sort((a,b)=>a[0].localeCompare(b[0]));
   $openVac.innerHTML = items.map(([k,v])=>{
     const [b,s] = k.split('__'); const sign = v>0?'+':'';
-    return `<div class="kv"><span>${b} ${s}</span><span class="mono">${sign}${v}</span></div>`;
+    return `<div class="stat-box"><span>${b} ${s}</span><span class="mono" style="color:var(--success); font-weight:bold;">${sign}${v}</span></div>`;
   }).join('') || '<div class="subtle">No open vacancies</div>';
 }
+
 function renderLedgerRows(rows){
   if (document.getElementById('muteLedger')?.checked) return;
   if (!rows.length) return;
   const frag = document.createDocumentFragment();
   for (const r of rows){
     const tr = document.createElement('tr');
-    tr.className = r.action.includes('FILL') ? 'ledger-fill' : 'ledger-create';
-    tr.innerHTML = `<td class="mono">${r.pass}</td><td><b>${r.action}</b></td><td>${r.pilot}</td><td>${r.from}</td><td>${r.to}</td>`;
+    const isFill = r.action.includes('FILL');
+    tr.className = isFill ? 'row-fill' : 'row-create';
+    
+    const badgeClass = isFill ? 'badge-fill' : 'badge-create';
+    const badgeHTML = `<span class="badge ${badgeClass}">${r.action}</span>`;
+
+    tr.innerHTML = `<td class="mono">${r.pass}</td>
+                    <td>${badgeHTML}</td>
+                    <td class="mono" style="font-weight:500">${r.pilot}</td>
+                    <td class="mono subtle">${r.from}</td>
+                    <td class="mono" style="font-weight:bold">${r.to}</td>`;
     frag.appendChild(tr);
   }
   $ledgerBody.appendChild(frag);
 }
+
 function renderNamesBySeniority(){
   const slot = document.getElementById('namesBySen'); if(!slot) return;
   const bySen = [...state.moves].sort((a,b)=> (a.sen||1e9) - (b.sen||1e9));
-  let html = '<ol class="mono">';
+  let html = '<ul>';
   for (const m of bySen){
-    const tag = m.move_type==='upgrade' ? '<span class="tag up">[Upgrade]</span>' : '<span class="tag lat">[Lateral]</span>';
-    html += `<li>${m.sen} ${m.name||''} — ${m.fromB} ${m.fromS} → <b>${m.toB} ${m.toS}</b> ${tag}</li>`;
+    let tag = '';
+    if(m.move_type === 'upgrade') tag = '<span class="badge badge-up">UPG</span>';
+    else if(m.move_type === 'lateral') tag = '<span class="badge badge-lat">LAT</span>';
+    
+    html += `<li style="margin-bottom:4px; border-bottom:1px solid #333; padding-bottom:4px;">
+               <span style="color:var(--accent)">${m.sen}</span> ${m.name||''} <br>
+               <span class="subtle">${m.fromB} ${m.fromS}</span> → <b>${m.toB} ${m.toS}</b> ${tag}
+             </li>`;
   }
-  html += '</ol>';
+  html += '</ul>';
   slot.innerHTML = html;
 }
 
-// ===== Load JSON =====
+// ===== JSON Load =====
 async function loadJSON(){
   function sf(p){
     return fetch(p, {cache:'no-cache'})
@@ -313,7 +386,6 @@ async function loadJSON(){
   };
 
   if(!loaded.capacities || !loaded.roster || !loaded.prefs){
-    // Demo fallback if nothing loaded
     loaded.capacities = BASES.flatMap(b=>SEATS.map(s=>({
       base:b, seat:s, startCapacity:(s==='CA'?50:100), delta:0
     })));
@@ -331,9 +403,9 @@ async function loadJSON(){
         ]
       };
     }
-    $status.textContent = "Demo data active (capacities/roster/prefs not found)";
+    $status.textContent = "Using Demo Data (Click Reload if needed)";
   } else {
-    $status.textContent = "Loaded JSON.";
+    $status.textContent = "Data Loaded Successfully";
   }
 
   capMap.clear();
@@ -369,7 +441,7 @@ function prefRank(p, base, seat){
 const pinned = new Set();   
 const bestRank = new Map(); 
 
-// ===== Engine (UPDATED award function) =====
+// ===== MAIN ENGINE =====
 function award(p, fromK, toK, tag, rows){
   const [tb,ts] = toK.split('__');
   const [fb,fs] = (fromK||'|').split('__');
@@ -411,10 +483,10 @@ function run(){
   $ledgerBody.innerHTML = '';
   $openVac.innerHTML = '';
   wardNotes.length = 0;
-  renderWardNotes(); // clear UI
+  renderWardNotes(); 
 
   seedOccupants();
-  seedVacFromCap(); // Initialize vacancies including FOs now
+  seedVacFromCap(); 
 
   const sorted = roster.slice().sort((a,b)=>a.sen-b.sen);
   pinned.clear(); bestRank.clear();
@@ -424,20 +496,17 @@ function run(){
     if (r0 === 1) pinned.add(p.sen);
   }
 
-  // ===== Vacancy-first (FIXED: Now allows CA AND FO fills) =====
+  // ===== Vacancy-first =====
   VacFirst:
   while (true){
     let awarded = false;
     for (const p of sorted){
       if (pinned.has(p.sen)) continue;
       const fromK = key(p.current.base, p.current.seat);
-      
-      // FIXED: Look at all prefs, not just CA
-      const wants = rankPrefs(p);
+      const wants = rankPrefs(p); 
 
       for (const w of wants){
-         // Optimization: Don't bid for where you already are in Vacancy phase
-         if (sameChoice(w.base, w.seat, p.current.base, p.current.seat)) continue;
+        if (sameChoice(w.base, w.seat, p.current.base, p.current.seat)) continue;
 
         const toK = key(w.base, w.seat);
         const have = vacAmt(toK);
@@ -446,27 +515,23 @@ function run(){
 
         if (pilotMatchesTrace(p)) logTrace(`[PASS ${state.pass}] Considering ${p.sen} ${p.name} for ${w.base} ${w.seat} (Vac=${have})`);
 
-        // Must be improvement
         const rNow = bestRank.get(p.sen) ?? Infinity;
         const rWish = prefRank(p, w.base, w.seat);
         if (rWish >= rNow) continue;
 
-        // Must satisfy BPL
         const bpl = bplSatisfied(p,w,toK); 
         if(!bpl.ok) continue;
 
-        // AWARD (Vacancy-first)
         state.pass++;
         const rows=[];
         award(p, fromK, toK, 'posted-add', rows);
         
-        // Log to Ward Notes (in memory)
         wardNotes.push(`→ ${fmtK(toK)} filled by ${p.name} (#${p.sen}) from ${fmtK(fromK)} [Vacancy-first]`);
 
         if (!isPaper(p)) { vacDec(toK,1); }
         else { if (pilotMatchesTrace(p)) logTrace(`  PAPER BID: ${p.sen} move does not consume capacity`); }
         
-        vacInc(fromK,1); // Open backfill
+        vacInc(fromK,1);
 
         renderLedgerRows(rows); 
         renderOpen(); 
@@ -478,7 +543,7 @@ function run(){
     if (!awarded) break;
   }
 
-  // ===== Cascade/backfill =====
+  // ===== Cascade =====
   Cascade:
   while (true){
     let awarded = false;
@@ -486,7 +551,6 @@ function run(){
       if (pinned.has(p.sen)) continue;
       const fromK = key(p.current.base, p.current.seat);
       const list = rankPrefs(p);
-      
       let moved = false; 
       
       for (const w of list) {
@@ -501,7 +565,6 @@ function run(){
 
         if (have <= 0) {
           if (pilotMatchesTrace(p)) logTrace('  REJECT: no vacancy');
-          // wardNotes.push(...) omitted for speed inside cascade loops
           continue;
         }
 
@@ -522,18 +585,14 @@ function run(){
           continue;
         }
 
-        // --- AWARD (Cascade) ---
         state.pass++;
         const rows = [];
         award(p, fromK, toK, 'cascade', rows);
         moved = true;
         wardNotes.push(`→ ${fmtK(toK)} filled by ${p.name} (#${p.sen}) from ${fmtK(fromK)} [Cascade]`);
 
-        if (!isPaper(p)) {
-          vacDec(toK, 1);
-        } else if (pilotMatchesTrace(p)) {
-          logTrace(`  PAPER BID: ${p.sen} move does not consume capacity`);
-        }
+        if (!isPaper(p)) { vacDec(toK, 1); }
+        else { if (pilotMatchesTrace(p)) logTrace(`  PAPER BID: ${p.sen} move does not consume capacity`); }
         vacInc(fromK, 1);
 
         renderLedgerRows(rows);
@@ -548,8 +607,8 @@ function run(){
   }
 
   state.running = false;
-  renderWardNotes(); // Final render of notes
-  $status.textContent = `Simulation complete. Passes=${state.pass}, Moves=${state.moves.length}`;
+  renderWardNotes();
+  $status.textContent = `Complete. Passes=${state.pass}, Moves=${state.moves.length}`;
 }
 
 // ===== Wire UI =====
@@ -558,6 +617,5 @@ document.getElementById('resetDeltaBtn').addEventListener('click', ()=>{ for(con
 document.getElementById('reloadBtn').addEventListener('click', ()=>{ loadJSON().then(()=>{ seedVacFromCap(); }); });
 loadJSON().then(()=>{ seedVacFromCap(); });
 </script>
-
 </body>
 </html>
