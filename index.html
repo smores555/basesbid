@@ -29,6 +29,9 @@
     .tag{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:2px 8px;margin-left:6px;font-size:12px;background:#12203b;color:#cfe6ff}
     .tag.up{background:#12361f}
     .tag.lat{background:#1b2c3b}
+    /* NEW CSS for Ledger Clarity */
+    .ledger-fill td{border-left: 3px solid var(--good); background:#112a18 !important;}
+    .ledger-create td{border-left: 3px solid var(--accent); background:#151e33 !important;}
   </style>
 </head>
 <body>
@@ -67,11 +70,11 @@
         <div id="openVac"></div>
       </div>
       <div class="card">
-        <h3>Vacancy Ledger</h3>
+        <h3>Vacancy Ledger (Causality)</h3>
         <div style="max-height:260px;overflow:auto">
           <table>
             <thead>
-              <tr class="subtle"><th>Pass</th><th>Action</th><th>Pilot</th><th>From</th><th>To</th></tr>
+              <tr class="subtle"><th>Pass</th><th>Action</th><th>Pilot</th><th>Old Base</th><th>New Base</th></tr>
             </thead>
             <tbody id="ledgerBody"></tbody>
           </table>
@@ -83,15 +86,13 @@
       </div>
     </div>
   </div>
-<!-- Ward Notes (Vacancy Trace) -->
 <div class="card" style="margin-top:12px">
   <h3>Ward Notes</h3>
   <div id="wardNotes"
        class="mono"
        style="white-space:pre-wrap;background:#0f182a;border:1px solid var(--border);
               padding:8px;border-radius:8px;max-height:260px;overflow:auto;">
-    <!-- Filled live -->
-  </div>
+    </div>
 </div>
 
 <script>
@@ -267,7 +268,7 @@ function renderCapTable(){
 window.onStart = (b,s,v)=>{ const k=key(b,s); const c=capMap.get(k)||{base:b,seat:s,start:0,delta:0}; c.start=+v||0; capMap.set(k,c); renderCapTable(); seedVacFromCap(); };
 window.onDelta = (b,s,v)=>{ const k=key(b,s); const c=capMap.get(k)||{base:b,seat:s,start:0,delta:0}; c.delta=+v||0; capMap.set(k,c); renderCapTable(); seedVacFromCap(); };
 
-// ===== Render Vacancy & Ledger =====
+// ===== Render Vacancy & Ledger (UPDATED FUNCTION) =====
 function renderOpen(){
   if (document.getElementById('muteOpen')?.checked) return;
   const items = [...Vac.entries()].filter(([,v])=>v!==0).sort((a,b)=>a[0].localeCompare(b[0]));
@@ -282,7 +283,11 @@ function renderLedgerRows(rows){
   const frag = document.createDocumentFragment();
   for (const r of rows){
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td class="mono">${r.pass}</td><td>${r.action}</td><td>${r.pilot}</td><td>${r.from}</td><td>${r.to}</td>`;
+    tr.className = r.action.includes('FILL') ? 'ledger-fill' : 'ledger-create';
+    
+    // We update the table structure to reflect causality
+    tr.innerHTML = `<td class="mono">${r.pass}</td><td><b>${r.action}</b></td><td>${r.pilot}</td><td>${r.from}</td><td>${r.to}</td>`;
+    
     frag.appendChild(tr);
   }
   $ledgerBody.appendChild(frag);
@@ -375,11 +380,32 @@ function prefRank(p, base, seat){
 const pinned = new Set();   // SEN who hit #1
 const bestRank = new Map(); // SEN -> best rank so far
 
-// ===== Engine =====
+// ===== Engine (UPDATED award function) =====
 function award(p, fromK, toK, tag, rows){
-  const [tb,ts] = toK.split('__'); const [fb,fs] = (fromK||'|').split('__');
-  rows.push({pass:state.pass, action: isPaper(p) ? "FILLED (PAPER)" : "FILLED", pilot:`SEN ${p.sen}`, from:"", to:`${tb} ${ts}`});
-  if (fromK){ rows.push({pass:state.pass, action:"CREATED", pilot:`SEN ${p.sen}`, from:`${fb} ${fs}`, to:""}); }
+  const [tb,ts] = toK.split('__');
+  const [fb,fs] = (fromK||'|').split('__');
+  const pilotLabel = `SEN ${p.sen}${p.name ? ` (${p.name.split(',')[0].trim()})` : ''}`; // Use last name for brevity
+  
+  // 1. FILL Action: Pilot takes the vacancy at destination
+  rows.push({
+      pass: state.pass,
+      action: isPaper(p) ? "FILL (PAPER)" : "FILL",
+      pilot: pilotLabel,
+      from: `Vac @ ${fmtK(toK)}`, // Source of action is the vacancy
+      to: `${tb} ${ts}`
+  });
+  
+  // 2. CREATE Action: Pilot leaves a vacancy at the source
+  if (fromK){ 
+      rows.push({
+          pass: state.pass,
+          action: "CREATE",
+          pilot: `Vac @ ${fmtK(fromK)}`, // Source of action is the vacancy
+          from: `${fb} ${fs}`,
+          to: `New Vacancy`
+      }); 
+  }
+
   moveOccupant(p, fromK, toK);
   p.current = { base: tb, seat: ts };
   const mtype = (fs==='FO' && ts==='CA') ? 'upgrade' : 'lateral';
@@ -542,7 +568,8 @@ renderWardNotes();
   }
 
   state.running = false;
-  $status.textContent = `Simulation complete. Passes=${state.pass}, Moves=${state.moves.length}`;
+  $status.textContent = `Simulation complete. Passes=${state.pass}, Moves=${state.moves.length/2}`;
+  // Adjust Moves count since each move now generates two ledger entries
 }
 
 // ===== Wire UI and load data =====
@@ -568,14 +595,3 @@ window.addEventListener('DOMContentLoaded', ()=>{
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
