@@ -6,210 +6,202 @@
   <title>Base Trace — Vacancy Management</title>
   <style>
     :root { 
-      --bg: #0f172a; 
-      --card-bg: #1e293b; 
-      --text-main: #f1f5f9; 
-      --text-muted: #94a3b8; 
-      --border: #334155; 
-      --accent: #38bdf8; 
-      --success: #22c55e; 
-      --warning: #fbbf24;
-      --danger: #ef4444;
+      --bg: #0f172a; --card-bg: #1e293b; --text-main: #f1f5f9; 
+      --text-muted: #94a3b8; --border: #334155; 
+      --accent: #38bdf8; --success: #22c55e; 
     }
-    
-    body { margin: 0; background: var(--bg); color: var(--text-main); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { margin: 0; background: var(--bg); color: var(--text-main); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     * { box-sizing: border-box; }
 
-    /* --- LAYOUT --- */
-    .app-container { max-width: 1400px; margin: 0 auto; padding: 20px; display: grid; gap: 20px; }
-    .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 1px solid var(--border); margin-bottom: 10px; }
-    .brand { font-size: 1.5rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; }
-    .brand span { color: var(--accent); }
-
-    /* --- DASHBOARD STATS --- */
-    .stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px; }
-    .stat-card { background: var(--card-bg); border: 1px solid var(--border); padding: 15px; border-radius: 12px; text-align: center; }
-    .stat-label { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
-    .stat-value { font-size: 1.8rem; font-weight: 700; color: var(--text-main); }
-    .stat-value.ca { color: var(--accent); }
-    .stat-value.fo { color: var(--success); }
-
-    /* --- MAIN GRID --- */
-    .main-grid { display: grid; grid-template-columns: 350px 1fr; gap: 20px; align-items: start; }
-    @media (max-width: 1000px) { .main-grid { grid-template-columns: 1fr; } }
-
-    /* --- CARDS --- */
-    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 800px; }
-    .card-header { background: rgba(0,0,0,0.2); padding: 12px 16px; font-weight: 600; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-    .card-body { padding: 16px; overflow-y: auto; }
+    /* LAYOUT */
+    .app-container { max-width: 1600px; margin: 0 auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; height: 100vh; }
+    .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
+    .brand { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; } .brand span { color: var(--accent); }
     
-    /* --- CONTROLS --- */
-    .toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
-    button { background: var(--accent); color: #0f172a; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
-    button:hover { opacity: 0.9; }
-    button.secondary { background: var(--border); color: var(--text-main); }
+    /* STATS BAR */
+    .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+    .stat-card { background: var(--card-bg); border: 1px solid var(--border); padding: 15px; border-radius: 10px; text-align: center; }
+    .stat-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+    .stat-value { font-size: 1.8rem; font-weight: 700; margin-top: 5px; }
     
-    input[type=number] { background: #0f172a; border: 1px solid var(--border); color: white; padding: 4px 8px; border-radius: 4px; width: 70px; }
-    input[type=text] { background: #0f172a; border: 1px solid var(--border); color: white; padding: 8px; border-radius: 6px; width: 100%; }
+    /* MAIN GRID */
+    .main-area { display: grid; grid-template-columns: 380px 1fr; gap: 20px; flex: 1; min-height: 0; }
+    .col-left { display: flex; flex-direction: column; gap: 20px; overflow-y: auto; padding-right: 5px; }
+    .col-right { display: flex; flex-direction: column; gap: 20px; overflow: hidden; }
 
-    /* --- TABLES --- */
+    /* CARDS */
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; display: flex; flex-direction: column; overflow: hidden; }
+    .card-header { padding: 12px 15px; background: rgba(0,0,0,0.2); border-bottom: 1px solid var(--border); font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+    .card-body { padding: 0; overflow-y: auto; flex: 1; }
+    .padded { padding: 15px; }
+
+    /* TABLES */
     table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-    th { position: sticky; top: 0; background: var(--card-bg); color: var(--text-muted); text-align: left; padding: 8px 12px; font-weight: 600; border-bottom: 2px solid var(--border); z-index: 10; }
-    td { padding: 8px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    th { background: #0f172a; color: var(--text-muted); text-align: left; padding: 10px 15px; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--border); }
+    td { padding: 8px 15px; border-bottom: 1px solid var(--border); }
     tr:hover td { background: rgba(255,255,255,0.05); }
 
-    /* --- LEDGER SPECIFIC --- */
-    .ledger-fill td { border-left: 4px solid var(--success); background: rgba(34, 197, 94, 0.1); }
-    .ledger-create td { border-left: 4px solid var(--accent); }
-    .pill { padding: 2px 8px; border-radius: 99px; font-size: 0.75rem; font-weight: 600; }
+    /* CONTROLS */
+    button { background: var(--accent); color: #0f172a; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; }
+    button:hover { opacity: 0.9; }
+    button.secondary { background: var(--border); color: white; }
+    input { background: #0f172a; border: 1px solid var(--border); color: white; padding: 5px; border-radius: 4px; }
+
+    /* LEDGER STYLES */
+    .ledger-fill td { border-left: 3px solid var(--success); background: rgba(34, 197, 94, 0.05); }
+    .ledger-create td { border-left: 3px solid var(--accent); }
+    .pill { padding: 2px 8px; border-radius: 99px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
     .pill.fill { background: rgba(34, 197, 94, 0.2); color: var(--success); }
     .pill.create { background: rgba(56, 189, 248, 0.2); color: var(--accent); }
-
-    /* --- UTILS --- */
-    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    
+    /* UTILS */
+    .mono { font-family: monospace; }
     .subtle { color: var(--text-muted); font-size: 0.85rem; }
-    .row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid var(--border); }
   </style>
 </head>
 <body>
 
 <div class="app-container">
-  
   <div class="header">
     <div class="brand">Base<span>Trace</span></div>
-    <div class="toolbar">
+    <div style="display:flex; gap:10px;">
       <button id="runBtn">▶ Run Simulation</button>
       <button class="secondary" id="resetDeltaBtn">Reset Δ</button>
-      <button class="secondary" id="reloadBtn">Reload JSON</button>
+      <button class="secondary" id="reloadBtn">Reload Data</button>
     </div>
   </div>
 
   <div class="stats-bar">
     <div class="stat-card">
       <div class="stat-label">Total CA Vacancies</div>
-      <div class="stat-value ca" id="totalVacCA">0</div>
+      <div class="stat-value" style="color:var(--accent)" id="statCA">0</div>
     </div>
     <div class="stat-card">
       <div class="stat-label">Total FO Vacancies</div>
-      <div class="stat-value fo" id="totalVacFO">0</div>
+      <div class="stat-value" style="color:var(--success)" id="statFO">0</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Pilots Moving</div>
-      <div class="stat-value" id="totalMoves">0</div>
+      <div class="stat-label">Total Moves</div>
+      <div class="stat-value" id="statMoves">0</div>
     </div>
     <div class="stat-card">
       <div class="stat-label">Simulation Passes</div>
-      <div class="stat-value" id="totalPasses">0</div>
+      <div class="stat-value" id="statPasses">0</div>
     </div>
   </div>
 
-  <div class="main-grid">
+  <div class="main-area">
     
-    <div style="display:flex; flex-direction:column; gap:20px;">
-      
+    <div class="col-left">
       <div class="card">
-        <div class="card-header">
-          <span>Vacancy Inputs</span>
-          <span class="subtle" style="font-size:0.7rem">Adjust Start or Δ</span>
-        </div>
-        <div class="card-body" id="capTable" style="padding:0;"></div>
+        <div class="card-header">Vacancy Inputs</div>
+        <div class="card-body" id="capTable"></div>
       </div>
 
       <div class="card">
         <div class="card-header">Pilot Trace</div>
-        <div class="card-body">
-          <input id="traceQuery" type="text" placeholder="Search Name or SEN..." style="margin-bottom:10px;">
+        <div class="card-body padded">
+          <input id="traceQuery" placeholder="Enter Name or Seniority..." style="width:100%; margin-bottom:10px; padding:8px;">
           <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-            <label class="subtle"><input type="checkbox" id="traceEnabled"> Enable Log</label>
-            <button class="secondary" id="traceClear" style="padding:4px 8px; font-size:0.8rem">Clear</button>
+             <label class="subtle"><input type="checkbox" id="traceEnabled"> Enable Trace</label>
+             <button class="secondary" id="traceClear" style="padding:2px 8px; font-size:0.8rem">Clear</button>
           </div>
-          <pre id="traceLog" class="mono" style="font-size:0.8rem; color:var(--text-muted); max-height:200px; overflow-y:auto; white-space:pre-wrap;"></pre>
+          <pre id="traceLog" class="mono" style="font-size:0.8rem; max-height:150px; overflow-y:auto; color:var(--text-muted)"></pre>
         </div>
       </div>
-
+      
+      <div class="card" style="flex:1">
+        <div class="card-header">Activity Log</div>
+        <div class="card-body padded">
+          <pre id="wardNotes" class="mono" style="font-size:0.8rem; color:var(--text-muted); white-space:pre-wrap"></pre>
+        </div>
+      </div>
     </div>
 
-    <div style="display:flex; flex-direction:column; gap:20px;">
-      
-      <div class="card" style="max-height:300px;">
+    <div class="col-right">
+      <div class="card" style="max-height: 250px;">
         <div class="card-header">
           <span>Current Openings</span>
-          <span class="subtle" id="vacStatusTimestamp"></span>
+          <span class="subtle" style="font-weight:400">Live Count</span>
         </div>
-        <div class="card-body" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap:10px;" id="openVac">
+        <div class="card-body padded" id="openVac" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap:10px;">
           </div>
       </div>
 
-      <div class="card" style="flex:1; min-height:500px;">
+      <div class="card" style="flex:1;">
         <div class="card-header">
-          <span>Move Ledger (Who took what)</span>
-          <label class="subtle"><input type="checkbox" id="muteLedger"> Pause UI</label>
+          <span>Vacancy Ledger</span>
+          <label class="subtle"><input type="checkbox" id="muteLedger"> Mute UI</label>
         </div>
-        <div class="card-body" style="padding:0; flex:1; overflow:hidden; display:flex; flex-direction:column;">
-          <div style="overflow-y:auto; flex:1;">
-            <table>
-              <thead>
-                <tr>
-                  <th style="width:50px">#</th>
-                  <th style="width:100px">Action</th>
-                  <th>Pilot</th>
-                  <th>Moved From</th>
-                  <th>Moved To (Award)</th>
-                </tr>
-              </thead>
-              <tbody id="ledgerBody"></tbody>
-            </table>
-          </div>
+        <div class="card-body">
+          <table>
+            <thead>
+              <tr>
+                <th width="50">#</th>
+                <th width="100">Type</th>
+                <th>Pilot</th>
+                <th>From</th>
+                <th>To (Award)</th>
+              </tr>
+            </thead>
+            <tbody id="ledgerBody"></tbody>
+          </table>
         </div>
       </div>
-
     </div>
-  </div>
-  
-  <div class="card" style="margin-top:20px;">
-    <div class="card-header">Detailed Log</div>
-    <div class="card-body">
-      <pre id="wardNotes" class="mono" style="max-height:200px; overflow-y:auto; font-size:0.85rem; color:var(--text-muted);"></pre>
-    </div>
-  </div>
 
+  </div>
 </div>
 
 <script>
-// ===== HELPERS & STATE =====
+// ===== Helpers and State =====
 const BASES = ["SEA","ANC","PDX","SFO","LAX"];
 const SEATS = ["CA","FO"];
 const key = (b,s)=>`${String(b).toUpperCase()}__${String(s).toUpperCase()}`;
 
-const capMap = new Map(); 
-let roster = [];          
-let prefs  = {};          
+const capMap = new Map(); // k -> {base, seat, start, delta}
+let roster = [];          // [{sen, name, current:{base,seat}, paper?}]
+let prefs  = {};          // { "pil####" or "####": { preferences:[...] , paper? } }
 
+// UI References
 const $capTable   = document.getElementById('capTable');
 const $ledgerBody = document.getElementById('ledgerBody');
 const $openVac    = document.getElementById('openVac');
 const $wardNotes  = document.getElementById('wardNotes');
 
-// Stats Elements
-const $statCA = document.getElementById('totalVacCA');
-const $statFO = document.getElementById('totalVacFO');
-const $statMoves = document.getElementById('totalMoves');
-const $statPasses = document.getElementById('totalPasses');
+// Stats References
+const $statCA     = document.getElementById('statCA');
+const $statFO     = document.getElementById('statFO');
+const $statMoves  = document.getElementById('statMoves');
+const $statPasses = document.getElementById('statPasses');
 
 const state = { running:false, pass:0, moves:[] };
 const wardNotes = [];
-const Vac = new Map(); 
-const Occupants = new Map();
 
-// ===== FORMATTING =====
 function fmtK(k){
   if (!k) return '<span class="subtle">-</span>';
   const parts = String(k).split('__');
-  if (parts.length === 2) return `<b>${parts[0]}</b> <span class="subtle">${parts[1]}</span>`;
+  if (parts.length === 2) return `<b>${parts[0]}</b> ${parts[1]}`;
   return String(k);
 }
 
-// ===== VACANCY MANAGEMENT =====
+// ===== Update Stats Bar =====
+function updateStats() {
+  let ca = 0, fo = 0;
+  for(const [k,v] of Vac.entries()){
+    if(v > 0) {
+      if(k.includes('__CA')) ca += v;
+      if(k.includes('__FO')) fo += v;
+    }
+  }
+  $statCA.textContent = ca;
+  $statFO.textContent = fo;
+  $statMoves.textContent = state.moves.length;
+  $statPasses.textContent = state.pass;
+}
+
+// ===== Vacancy counts =====
+const Vac = new Map(); 
 function vacAmt(k){ return Vac.get(k)||0; }
 function vacInc(k,n=1){ Vac.set(k, (Vac.get(k)||0) + n); updateStats(); }
 function vacDec(k,n=1){ Vac.set(k, Math.max(0,(Vac.get(k)||0) - n)); updateStats(); }
@@ -218,92 +210,14 @@ function seedVacFromCap(){
   Vac.clear();
   for(const [,c] of capMap.entries()){ Vac.set(key(c.base,c.seat), 0); }
   for(const [k,c] of capMap.entries()){
-    // Only add Positive Deltas for CA to Start
     if (c.seat==='CA' && Number(c.delta||0)>0) vacInc(k, Number(c.delta||0));
   }
   renderOpen();
   updateStats();
 }
 
-// ===== NEW: UPDATE DASHBOARD STATS =====
-function updateStats() {
-  let caTotal = 0;
-  let foTotal = 0;
-
-  // Sum up current open vacancies
-  for (const [k, v] of Vac.entries()) {
-    if (k.includes('__CA')) caTotal += v;
-    if (k.includes('__FO')) foTotal += v;
-  }
-
-  $statCA.textContent = caTotal;
-  $statFO.textContent = foTotal;
-  $statMoves.textContent = state.moves.length;
-  $statPasses.textContent = state.pass;
-}
-
-// ===== RENDER OPEN VACANCIES =====
-function renderOpen(){
-  if (document.getElementById('muteLedger')?.checked) return;
-  const items = [...Vac.entries()].filter(([,v])=>v!==0).sort((a,b)=>a[0].localeCompare(b[0]));
-  
-  if (items.length === 0) {
-    $openVac.innerHTML = '<div class="subtle" style="grid-column:1/-1; text-align:center; padding:20px;">No vacancies remaining.</div>';
-    return;
-  }
-
-  $openVac.innerHTML = items.map(([k,v])=>{
-    const [b,s] = k.split('__'); 
-    const colorClass = s === 'CA' ? 'color:var(--accent)' : 'color:var(--success)';
-    return `
-      <div style="background:#111827; border:1px solid var(--border); padding:10px; border-radius:8px; text-align:center;">
-        <div style="font-weight:bold; font-size:1.1rem;">${b} <span style="font-size:0.8rem; color:var(--text-muted)">${s}</span></div>
-        <div style="font-size:1.4rem; font-weight:800; ${colorClass}">${v}</div>
-      </div>`;
-  }).join('');
-}
-
-// ===== RENDER LEDGER =====
-function renderLedgerRows(rows){
-  if (document.getElementById('muteLedger')?.checked) return;
-  if (!rows.length) return;
-  
-  const frag = document.createDocumentFragment();
-  for (const r of rows){
-    const tr = document.createElement('tr');
-    
-    // Color coding logic
-    const isFill = r.action.includes('FILL');
-    tr.className = isFill ? 'ledger-fill' : 'ledger-create';
-    
-    const badge = isFill 
-      ? `<span class="pill fill">AWARD</span>` 
-      : `<span class="pill create">OPENED</span>`;
-
-    tr.innerHTML = `
-      <td class="mono subtle">${r.pass}</td>
-      <td>${badge}</td>
-      <td style="font-weight:600">${r.pilot}</td>
-      <td class="subtle">${r.from}</td>
-      <td style="color:#fff; font-weight:bold;">${r.to}</td>
-    `;
-    frag.appendChild(tr);
-  }
-  $ledgerBody.appendChild(frag);
-  
-  // Auto scroll ledger to bottom
-  const container = $ledgerBody.closest('div');
-  if(container) container.scrollTop = container.scrollHeight;
-}
-
-// ===== WARD NOTES =====
-function renderWardNotes(){
-  const lines = wardNotes.slice(-100); // Keep last 100
-  $wardNotes.textContent = lines.join('\n');
-  $wardNotes.scrollTop = $wardNotes.scrollHeight;
-}
-
-// ===== LOGIC: OCCUPANTS & BPL =====
+// ===== Dynamic Occupants (for BPL) =====
+const Occupants = new Map();
 function seedOccupants(){
   Occupants.clear();
   for (const p of roster){
@@ -318,16 +232,21 @@ function moveOccupant(p, fromK, toK){
   Occupants.get(toK).add(p.sen);
 }
 
+// ===== Preference resolvers =====
 function prefEntryFor(p){
   if (p && p.id && prefs[p.id]) return prefs[p.id];
   const senStr = String(p?.sen ?? '');
+  // Try matching pil#### or just ####
   if (prefs['pil' + senStr]) return prefs['pil' + senStr];
+  if (prefs[senStr]) return prefs[senStr];
   return null;
 }
 
 function rankPrefs(p) {
   const pe = prefEntryFor(p);
-  return (pe?.preferences || []).filter(x => x && x.stay !== true).sort((a, b) => (a.order || 0) - (b.order || 0));
+  return (pe?.preferences || [])
+    .filter(x => x && x.stay !== true)
+    .sort((a, b) => (a.order || 0) - (b.order || 0));
 }
 
 function prefRank(p, base, seat){
@@ -342,6 +261,23 @@ function prefRank(p, base, seat){
   return Infinity;
 }
 
+// ===== Trace helpers =====
+function qNorm(s){ return String(s||'').trim().toUpperCase(); }
+function pilotMatchesTrace(p){
+  const on = document.getElementById('traceEnabled')?.checked;
+  if(!on) return false;
+  const q = qNorm(document.getElementById('traceQuery')?.value);
+  if(!q) return false;
+  if (q === String(p.sen).toUpperCase()) return true;
+  if (p.name && qNorm(p.name).includes(q)) return true;
+  return false;
+}
+function logTrace(msg){
+  const box = document.getElementById('traceLog'); if(!box) return;
+  box.textContent = msg + "\n" + box.textContent;
+}
+
+// ===== BPL Logic =====
 function bplSatisfied(p, w, toK) {
   const pe = prefEntryFor(p);
   const prefList = (pe && Array.isArray(pe.preferences)) ? pe.preferences : [];
@@ -351,23 +287,19 @@ function bplSatisfied(p, w, toK) {
   );
   const limit = Number(match?.bpl_min ?? 0);
   if (!(limit > 0)) return { ok: true };
-
   const occ = Occupants.get(toK) || new Set();
   const projectedRank = [...occ].filter(sen => sen < p.sen).length + 1;
-
-  if (projectedRank > limit) return { ok:false, reason:`Rank ${projectedRank} > BPL ${limit}` };
+  if (projectedRank > limit) return { ok:false };
   return { ok:true };
 }
 
-// ===== CAPACITY TABLE UI =====
+// ===== UI Rendering =====
 function renderCapTable(){
-  // Group logic...
   const bases = {};
   for(const [, v] of capMap.entries()){ (bases[v.base] ||= []).push(v.seat); }
   const sortedBases = Object.keys(bases).sort();
-
-  let html = '<table><thead><tr><th>Base</th><th>Seat</th><th>Start</th><th>Δ</th><th>Total</th></tr></thead><tbody>';
   
+  let html = '<table><thead><tr><th>Base</th><th>Seat</th><th>Start</th><th>Δ</th><th>Total</th></tr></thead><tbody>';
   for(const b of sortedBases){
     bases[b].sort().forEach((seat)=>{
       const k = key(b,seat);
@@ -388,43 +320,94 @@ function renderCapTable(){
 window.onStart = (b,s,v)=>{ const k=key(b,s); const c=capMap.get(k)||{base:b,seat:s,start:0,delta:0}; c.start=+v||0; capMap.set(k,c); renderCapTable(); seedVacFromCap(); };
 window.onDelta = (b,s,v)=>{ const k=key(b,s); const c=capMap.get(k)||{base:b,seat:s,start:0,delta:0}; c.delta=+v||0; capMap.set(k,c); renderCapTable(); seedVacFromCap(); };
 
-// ===== LOADING DATA =====
+function renderOpen(){
+  if (document.getElementById('muteLedger')?.checked) return;
+  const items = [...Vac.entries()].filter(([,v])=>v!==0).sort((a,b)=>a[0].localeCompare(b[0]));
+  
+  if(items.length === 0) {
+    $openVac.innerHTML = '<div class="subtle" style="grid-column:1/-1; text-align:center;">No vacancies.</div>';
+    return;
+  }
+
+  $openVac.innerHTML = items.map(([k,v])=>{
+    const [b,s] = k.split('__'); 
+    const color = s==='CA'?'var(--accent)':'var(--success)';
+    return `
+      <div style="background:#111827; border:1px solid var(--border); border-radius:6px; padding:8px; text-align:center;">
+        <div style="font-weight:700; font-size:0.9rem;">${b} ${s}</div>
+        <div style="font-size:1.5rem; font-weight:800; color:${color}">${v}</div>
+      </div>`;
+  }).join('');
+}
+
+function renderLedgerRows(rows){
+  if (document.getElementById('muteLedger')?.checked) return;
+  const frag = document.createDocumentFragment();
+  for (const r of rows){
+    const tr = document.createElement('tr');
+    const isFill = r.action.includes('FILL');
+    tr.className = isFill ? 'ledger-fill' : 'ledger-create';
+    const badge = isFill ? '<span class="pill fill">Award</span>' : '<span class="pill create">Open</span>';
+    
+    tr.innerHTML = `
+      <td class="mono subtle">${r.pass}</td>
+      <td>${badge}</td>
+      <td style="font-weight:600">${r.pilot}</td>
+      <td class="subtle">${r.from}</td>
+      <td style="color:white; font-weight:600;">${r.to}</td>
+    `;
+    frag.appendChild(tr);
+  }
+  $ledgerBody.appendChild(frag);
+  // Scroll to bottom
+  $ledgerBody.closest('.card-body').scrollTop = $ledgerBody.closest('.card-body').scrollHeight;
+}
+
+function renderWardNotes(){
+  $wardNotes.textContent = wardNotes.slice(-100).join('\n');
+  $wardNotes.parentElement.scrollTop = $wardNotes.parentElement.scrollHeight;
+}
+
+// ===== LOAD DATA =====
 async function loadJSON(){
   function sf(p){ return fetch(p, {cache:'no-cache'}).then(r=>r.ok?r.json():null).catch(()=>null); }
   
-  // Attempt to load master pilot data
-  const masterData = await sf('preferences.json'); // The file from your Google Script
-  
-  // Standard fallbacks
-  const capacities = (await sf('capacities.json')) ?? (await sf('data/capacities.json'));
-  
-  if (masterData) {
-    roster = Object.values(masterData); // Convert Map to Array
-    prefs = masterData; // Keep Map for lookups
-  } else {
-    // Demo Mode if file missing
-    roster = []; prefs = {};
-    wardNotes.push("⚠️ preferences.json not found. Please run script and upload.");
-    renderWardNotes();
-  }
+  // 1. Load Data Files Separately (Old Way)
+  const loaded = {
+    capacities: (await sf('capacities.json')) ?? (await sf('data/capacities.json')),
+    roster:     (await sf('roster.json'))     ?? (await sf('data/roster.json')),
+    prefs:      (await sf('preferences.json'))?? (await sf('data/preferences.json'))
+  };
 
+  // 2. Handle Capacities
   capMap.clear();
-  if(capacities){
-    for(const c of capacities){
+  if(loaded.capacities){
+    for(const c of loaded.capacities){
       const k = key(c.base, c.seat);
-      capMap.set(k, { base:c.base, seat:c.seat, start:Number(c.start||0), delta:Number(c.delta||0) });
+      capMap.set(k, { base:c.base, seat:c.seat, start:Number(c.start||c.startCapacity||0), delta:Number(c.delta||0) });
     }
   } else {
-    // Default capacities if missing
-    BASES.forEach(b => SEATS.forEach(s => {
-      capMap.set(key(b,s), { base:b, seat:s, start:0, delta:0 });
-    }));
+    // Default fallback
+    BASES.forEach(b => SEATS.forEach(s => capMap.set(key(b,s), {base:b,seat:s,start:0,delta:0})));
   }
 
+  // 3. Handle Roster & Prefs
+  if(loaded.roster) roster = loaded.roster;
+  if(loaded.prefs) prefs = loaded.prefs;
+  
+  if(!loaded.roster || !loaded.prefs){
+    wardNotes.push("⚠️ Warning: roster.json or preferences.json not found.");
+    renderWardNotes();
+  } else {
+    wardNotes.push("✅ Data Loaded Successfully.");
+    renderWardNotes();
+  }
+  
   renderCapTable();
+  seedVacFromCap();
 }
 
-// ===== THE SIMULATION ENGINE =====
+// ===== SIMULATION LOGIC =====
 function sameChoice(db, ds, cb, cs){
   return (String(db).toUpperCase() === String(cb).toUpperCase() && 
           String(ds).toUpperCase() === String(cs).toUpperCase());
@@ -439,7 +422,7 @@ function award(p, fromK, toK, tag, rows){
       pass: state.pass,
       action: "FILL",
       pilot: pilotLabel,
-      from: fromK ? fmtK(fromK) : '(New Hire)',
+      from: fromK ? fmtK(fromK) : 'New Hire',
       to: fmtK(toK)
   });
   
@@ -449,7 +432,7 @@ function award(p, fromK, toK, tag, rows){
           action: "CREATE",
           pilot: '<span class="subtle">Vacated</span>',
           from: fmtK(fromK),
-          to: '<span style="color:var(--accent)">New Vacancy</span>'
+          to: 'New Vacancy'
       }); 
   }
 
@@ -474,14 +457,13 @@ function run(){
   const pinned = new Set(); 
   const bestRank = new Map();
 
-  // Initialize Ranks
   for (const p of sorted){
     const r0 = prefRank(p, p.current.base, p.current.seat);
     bestRank.set(p.sen, r0);
     if (r0 === 1) pinned.add(p.sen);
   }
 
-  // --- PHASE 1: VACANCY FIRST (CA only, usually) ---
+  // Phase 1: Vacancy First (CA only)
   VacFirst:
   while (true){
     let awarded = false;
@@ -504,11 +486,10 @@ function run(){
         const bpl = bplSatisfied(p,w,toK); 
         if(!bpl.ok) continue;
 
-        // AWARD
         state.pass++;
         const rows=[];
         award(p, fromK, toK, 'vac-fill', rows);
-        wardNotes.push(`Pass ${state.pass}: ${p.name} takes ${toK}`);
+        wardNotes.push(`Pass ${state.pass}: ${p.name} awarded ${toK} (Initial Fill)`);
         
         vacDec(toK,1);
         vacInc(fromK,1);
@@ -525,7 +506,7 @@ function run(){
     if (!awarded) break;
   }
 
-  // --- PHASE 2: CASCADE ---
+  // Phase 2: Cascade
   Cascade:
   while (true){
     let awarded = false;
@@ -551,16 +532,15 @@ function run(){
         const homeChoice = { base: p.current.base, seat: p.current.seat };
         const homeBpl = bplSatisfied(p, homeChoice, key(p.current.base, p.current.seat));
         
-        if (rWish >= rNow && homeBpl.ok) continue; // Not an improvement
+        if (rWish >= rNow && homeBpl.ok) continue; 
 
         const bpl = bplSatisfied(p, w, toK);
         if (!bpl.ok) continue;
 
-        // AWARD
         state.pass++;
         const rows = [];
         award(p, fromK, toK, 'cascade', rows);
-        wardNotes.push(`Pass ${state.pass}: ${p.name} takes ${toK} (Cascade)`);
+        wardNotes.push(`Pass ${state.pass}: ${p.name} awarded ${toK} (Cascade)`);
 
         vacDec(toK, 1);
         vacInc(fromK, 1);
@@ -582,14 +562,13 @@ function run(){
   renderWardNotes();
 }
 
-// ===== LISTENERS =====
+// Listeners
 document.getElementById('runBtn').addEventListener('click', run);
 document.getElementById('resetDeltaBtn').addEventListener('click', ()=>{ for(const c of capMap.values()){ c.delta=0; } renderCapTable(); seedVacFromCap(); });
 document.getElementById('reloadBtn').addEventListener('click', ()=>{ loadJSON().then(()=>{ seedVacFromCap(); }); });
 
-// Init
+// Start
 loadJSON().then(()=>{ seedVacFromCap(); });
-
 </script>
 </body>
 </html>
