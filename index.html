@@ -29,13 +29,12 @@
     .tag{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:2px 8px;margin-left:6px;font-size:12px;background:#12203b;color:#cfe6ff}
     .tag.up{background:#12361f}
     .tag.lat{background:#1b2c3b}
-    /* NEW CSS for Ledger Clarity */
+    /* CSS for Ledger Clarity */
     .ledger-fill td{border-left: 3px solid var(--good); background:#112a18 !important;}
     .ledger-create td{border-left: 3px solid var(--accent); background:#151e33 !important;}
   </style>
 </head>
 <body>
-  </script>
 
   <div class="banner">Base Trace — Vacancy-ledger · Restart-every-award · Improve-only · BPL · Paper</div>
 
@@ -86,7 +85,7 @@
       </div>
     </div>
   </div>
-<div class="card" style="margin-top:12px">
+<div class="card" style="margin:12px auto; max-width:1240px;">
   <h3>Ward Notes</h3>
   <div id="wardNotes"
        class="mono"
@@ -101,9 +100,9 @@ const BASES = ["SEA","ANC","PDX","SFO","LAX"];
 const SEATS = ["CA","FO"];
 const key = (b,s)=>`${String(b).toUpperCase()}__${String(s).toUpperCase()}`;
 
-const capMap = new Map(); // k -> {base, seat, start, delta}
-let roster = [];          // [{sen, name, current:{base,seat}, paper?}]
-let prefs  = {};          // { "pil####" or "####": { preferences:[...] , paper? } }
+const capMap = new Map(); 
+let roster = [];          
+let prefs  = {};          
 
 const $capTable   = document.getElementById('capTable');
 const $ledgerBody = document.getElementById('ledgerBody');
@@ -111,7 +110,8 @@ const $openVac    = document.getElementById('openVac');
 const $status     = document.getElementById('status');
 
 const state = { running:false, pass:0, moves:[] };
-  // ===== Ward Notes =====
+
+// ===== Ward Notes =====
 const wardNotes = [];
 function fmtK(k){
   if (!k) return '(none)';
@@ -119,28 +119,28 @@ function fmtK(k){
   if (parts.length === 2) return `${parts[0]} ${parts[1]}`;
   return String(k);
 }
+
 function renderWardNotes(){
   const box = document.getElementById('wardNotes');
   if (!box) return;
-  // Keep last 150 lines for performance
+  // Keep last 150 lines for performance/display
   const lines = wardNotes.slice(-150);
-  box.innerHTML = lines.map(s => s).join('\n');
+  box.innerHTML = lines.join('\n');
 }
 
-
 // ===== Vacancy counts =====
-const Vac = new Map(); // seatKey -> integer vacancies
+const Vac = new Map(); 
 const vacAmt = k => Vac.get(k)||0;
 const vacInc = (k,n=1)=> Vac.set(k, (Vac.get(k)||0) + n);
 const vacDec = (k,n=1)=> Vac.set(k, Math.max(0,(Vac.get(k)||0) - n));
 
 function seedVacFromCap(){
   Vac.clear();
-  // init seats
+  // 1. Initialize seats
   for(const [,c] of capMap.entries()){ Vac.set(key(c.base,c.seat), 0); }
-  // posted adds: CA deltas only
+  // 2. Apply Deltas (FIXED: Now accepts any positive delta, not just CA)
   for(const [k,c] of capMap.entries()){
-    if (c.seat==='CA' && Number(c.delta||0)>0) vacInc(k, Number(c.delta||0));
+    if (Number(c.delta||0)>0) vacInc(k, Number(c.delta||0));
   }
   renderOpen();
 }
@@ -188,14 +188,12 @@ function sameChoice(desiredBase, desiredSeat, curBase, curSeat){
 }
 function rankPrefs(p) {
   const pe = prefEntryFor(p);
-  const list = (pe?.preferences || [])
+  return (pe?.preferences || [])
     .slice()
     .filter(x => x && x.stay !== true)
     .sort((a, b) => (a.order || 0) - (b.order || 0));
-
-  // Don’t slice here — cascade handles stop-after-home + BPL logic dynamically
-  return list;
 }
+
 // ===== Trace helpers =====
 function qNorm(s){ return String(s||'').trim().toUpperCase(); }
 function pilotMatchesTrace(p){
@@ -218,7 +216,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
   if(btnTC){ btnTC.onclick = ()=>{ const box=document.getElementById('traceLog'); if(box) box.textContent=''; }; }
 });
 
-// ===== BPL enforcement (0 or missing => unrestricted) =====
+// ===== BPL enforcement =====
 function bplSatisfied(p, w, toK) {
   const pe = prefEntryFor(p);
   const prefList = (pe && Array.isArray(pe.preferences)) ? pe.preferences : [];
@@ -268,7 +266,7 @@ function renderCapTable(){
 window.onStart = (b,s,v)=>{ const k=key(b,s); const c=capMap.get(k)||{base:b,seat:s,start:0,delta:0}; c.start=+v||0; capMap.set(k,c); renderCapTable(); seedVacFromCap(); };
 window.onDelta = (b,s,v)=>{ const k=key(b,s); const c=capMap.get(k)||{base:b,seat:s,start:0,delta:0}; c.delta=+v||0; capMap.set(k,c); renderCapTable(); seedVacFromCap(); };
 
-// ===== Render Vacancy & Ledger (UPDATED FUNCTION) =====
+// ===== Render Vacancy & Ledger =====
 function renderOpen(){
   if (document.getElementById('muteOpen')?.checked) return;
   const items = [...Vac.entries()].filter(([,v])=>v!==0).sort((a,b)=>a[0].localeCompare(b[0]));
@@ -284,10 +282,7 @@ function renderLedgerRows(rows){
   for (const r of rows){
     const tr = document.createElement('tr');
     tr.className = r.action.includes('FILL') ? 'ledger-fill' : 'ledger-create';
-    
-    // We update the table structure to reflect causality
     tr.innerHTML = `<td class="mono">${r.pass}</td><td><b>${r.action}</b></td><td>${r.pilot}</td><td>${r.from}</td><td>${r.to}</td>`;
-    
     frag.appendChild(tr);
   }
   $ledgerBody.appendChild(frag);
@@ -303,14 +298,14 @@ function renderNamesBySeniority(){
   html += '</ol>';
   slot.innerHTML = html;
 }
-// ===== Load JSON (with fallback) =====
+
+// ===== Load JSON =====
 async function loadJSON(){
   function sf(p){
     return fetch(p, {cache:'no-cache'})
       .then(r => r.ok ? r.json() : null)
       .catch(() => null);
   }
-
   const loaded = {
     capacities: (await sf('capacities.json')) ?? (await sf('data/capacities.json')),
     roster:     (await sf('roster.json'))     ?? (await sf('data/roster.json')),
@@ -318,17 +313,14 @@ async function loadJSON(){
   };
 
   if(!loaded.capacities || !loaded.roster || !loaded.prefs){
-    // demo fallback so page still works if files are missing
+    // Demo fallback if nothing loaded
     loaded.capacities = BASES.flatMap(b=>SEATS.map(s=>({
       base:b, seat:s, startCapacity:(s==='CA'?50:100), delta:0
     })));
     loaded.roster = Array.from({length:50}, (_,i)=>({
       sen:i+1,
       name:`Pilot ${i+1}`,
-      current:{
-        base:BASES[i%BASES.length],
-        seat:(i%3===0?'CA':'FO')
-      }
+      current:{ base:BASES[i%BASES.length], seat:(i%3===0?'CA':'FO') }
     }));
     loaded.prefs = {};
     for(const p of loaded.roster){
@@ -348,11 +340,8 @@ async function loadJSON(){
   for(const c of loaded.capacities){
     const b = String(c.base||'').toUpperCase();
     const s = String(c.seat||'').toUpperCase();
-    const start = Number(c.startCapacity||c.start||0);
-    const delta = Number(c.delta||0);
-    capMap.set(key(b,s), { base:b, seat:s, start, delta });
+    capMap.set(key(b,s), { base:b, seat:s, start:Number(c.startCapacity||c.start||0), delta:Number(c.delta||0) });
   }
-
   roster = loaded.roster.map(x=>({
     ...x,
     current:{
@@ -361,11 +350,11 @@ async function loadJSON(){
     },
     paper:Boolean(x.paper)
   }));
-
   prefs = loaded.prefs;
   renderCapTable();
 } 
-// ===== Rank helpers (Improve-only + Lock at #1) =====
+
+// ===== Rank helpers =====
 function prefRank(p, base, seat){
   const list = rankPrefs(p);
   for (let i=0; i<list.length; i++){
@@ -377,30 +366,28 @@ function prefRank(p, base, seat){
   }
   return Infinity;
 }
-const pinned = new Set();   // SEN who hit #1
-const bestRank = new Map(); // SEN -> best rank so far
+const pinned = new Set();   
+const bestRank = new Map(); 
 
 // ===== Engine (UPDATED award function) =====
 function award(p, fromK, toK, tag, rows){
   const [tb,ts] = toK.split('__');
   const [fb,fs] = (fromK||'|').split('__');
-  const pilotLabel = `SEN ${p.sen}${p.name ? ` (${p.name.split(',')[0].trim()})` : ''}`; // Use last name for brevity
+  const pilotLabel = `SEN ${p.sen}${p.name ? ` (${p.name.split(',')[0].trim()})` : ''}`;
   
-  // 1. FILL Action: Pilot takes the vacancy at destination
   rows.push({
       pass: state.pass,
       action: isPaper(p) ? "FILL (PAPER)" : "FILL",
       pilot: pilotLabel,
-      from: `Vac @ ${fmtK(toK)}`, // Source of action is the vacancy
+      from: `Vac @ ${fmtK(toK)}`,
       to: `${tb} ${ts}`
   });
   
-  // 2. CREATE Action: Pilot leaves a vacancy at the source
   if (fromK){ 
       rows.push({
           pass: state.pass,
           action: "CREATE",
-          pilot: `Vac @ ${fmtK(fromK)}`, // Source of action is the vacancy
+          pilot: `Vac @ ${fmtK(fromK)}`,
           from: `${fb} ${fs}`,
           to: `New Vacancy`
       }); 
@@ -424,11 +411,10 @@ function run(){
   $ledgerBody.innerHTML = '';
   $openVac.innerHTML = '';
   wardNotes.length = 0;
-  renderWardNotes();
-
+  renderWardNotes(); // clear UI
 
   seedOccupants();
-  seedVacFromCap();
+  seedVacFromCap(); // Initialize vacancies including FOs now
 
   const sorted = roster.slice().sort((a,b)=>a.sen-b.sen);
   pinned.clear(); bestRank.clear();
@@ -438,41 +424,55 @@ function run(){
     if (r0 === 1) pinned.add(p.sen);
   }
 
-  // ===== Vacancy-first (posted adds, CA only) =====
+  // ===== Vacancy-first (FIXED: Now allows CA AND FO fills) =====
   VacFirst:
   while (true){
     let awarded = false;
     for (const p of sorted){
       if (pinned.has(p.sen)) continue;
       const fromK = key(p.current.base, p.current.seat);
-      const wants = rankPrefs(p).filter(w => String(w.seat||'').toUpperCase() === 'CA');
+      
+      // FIXED: Look at all prefs, not just CA
+      const wants = rankPrefs(p);
+
       for (const w of wants){
-        const toK = key(w.base, 'CA');
+         // Optimization: Don't bid for where you already are in Vacancy phase
+         if (sameChoice(w.base, w.seat, p.current.base, p.current.seat)) continue;
+
+        const toK = key(w.base, w.seat);
         const have = vacAmt(toK);
-        if (pilotMatchesTrace(p)) logTrace(`[PASS ${state.pass}] Considering ${p.sen} ${p.name} for ${w.base} CA (Vac=${have})`);
-        if (have<=0){ if (pilotMatchesTrace(p)) logTrace('  REJECT: no vacancy'); continue; }
+        
+        if (have<=0) continue;
+
+        if (pilotMatchesTrace(p)) logTrace(`[PASS ${state.pass}] Considering ${p.sen} ${p.name} for ${w.base} ${w.seat} (Vac=${have})`);
+
+        // Must be improvement
         const rNow = bestRank.get(p.sen) ?? Infinity;
-        const rWish = prefRank(p, w.base, 'CA');
-        if (rWish >= rNow){ if (pilotMatchesTrace(p)) logTrace(`  REJECT: not improvement (best=${rNow}, wish=${rWish})`); continue; }
-        const bpl = bplSatisfied(p,w,toK); if(!bpl.ok){ if (pilotMatchesTrace(p)) logTrace('  REJECT: BPL'); continue; }
+        const rWish = prefRank(p, w.base, w.seat);
+        if (rWish >= rNow) continue;
+
+        // Must satisfy BPL
+        const bpl = bplSatisfied(p,w,toK); 
+        if(!bpl.ok) continue;
 
         // AWARD (Vacancy-first)
         state.pass++;
         const rows=[];
         award(p, fromK, toK, 'posted-add', rows);
-        moved = true;
-wardNotes.push(`→ ${fmtK(toK)} filled by ${p.name} (#${p.sen}) from ${fmtK(fromK)} [Vacancy-first]`);
-renderWardNotes();
+        
+        // Log to Ward Notes (in memory)
+        wardNotes.push(`→ ${fmtK(toK)} filled by ${p.name} (#${p.sen}) from ${fmtK(fromK)} [Vacancy-first]`);
 
-
-        // Paper: only non-paper consumes destination seat
         if (!isPaper(p)) { vacDec(toK,1); }
         else { if (pilotMatchesTrace(p)) logTrace(`  PAPER BID: ${p.sen} move does not consume capacity`); }
-        vacInc(fromK,1);
+        
+        vacInc(fromK,1); // Open backfill
 
-        renderLedgerRows(rows); renderOpen(); renderNamesBySeniority();
+        renderLedgerRows(rows); 
+        renderOpen(); 
+        renderNamesBySeniority();
         awarded = true;
-        continue VacFirst; // restart from #1
+        continue VacFirst; 
       }
     }
     if (!awarded) break;
@@ -486,111 +486,77 @@ renderWardNotes();
       if (pinned.has(p.sen)) continue;
       const fromK = key(p.current.base, p.current.seat);
       const list = rankPrefs(p);
-          // --- Begin Ward Notes per pilot ---
-    let moved = false;
-    wardNotes.push(`${p.name} (#${p.sen}) — evaluating preferences`);
+      
+      let moved = false; 
+      
       for (const w of list) {
-  // --- Modified stop-after-home with BPL awareness ---
-  if (sameChoice(w.base, w.seat, p.current.base, p.current.seat)) {
-    // Only stop if the pilot can actually hold home within their BPL
-    const homeBpl = bplSatisfied(p, w, key(w.base, w.seat));
-    if (homeBpl.ok) break;   // they can hold home → stop checking further
-    else continue;           // fails BPL → skip home and keep checking next prefs
-  }
+        if (sameChoice(w.base, w.seat, p.current.base, p.current.seat)) {
+          const homeBpl = bplSatisfied(p, w, key(w.base, w.seat));
+          if (homeBpl.ok) break;    
+          else continue;            
+        }
 
-  const toK = key(w.base, w.seat);
-  const have = vacAmt(toK);
-  if (pilotMatchesTrace(p))
-    logTrace(`[PASS ${state.pass}] Pref ${w.base} ${w.seat} (Vac=${have}) for ${p.sen} ${p.name}`);
+        const toK = key(w.base, w.seat);
+        const have = vacAmt(toK);
 
-  if (have <= 0) {
-    if (pilotMatchesTrace(p)) logTrace('  REJECT: no vacancy');
-      wardNotes.push(`${p.name} (#${p.sen}) — rejected ${fmtK(toK)} (no vacancy)`);
-  renderWardNotes();
-    continue;
-  }
+        if (have <= 0) {
+          if (pilotMatchesTrace(p)) logTrace('  REJECT: no vacancy');
+          // wardNotes.push(...) omitted for speed inside cascade loops
+          continue;
+        }
 
-  const rNow = bestRank.get(p.sen) ?? Infinity;
-  const rWish = prefRank(p, w.base, w.seat);
- // Allow "non-improvement" if pilot fails BPL at home (forced move)
-const homeChoice = { base: p.current.base, seat: p.current.seat };
-const homeBpl = bplSatisfied(p, homeChoice, key(p.current.base, p.current.seat));
-if (rWish >= rNow && homeBpl.ok) {
-  if (pilotMatchesTrace(p))
-    logTrace(`  REJECT: not improvement (best=${rNow}, wish=${rWish})`);
-    wardNotes.push(`${p.name} (#${p.sen}) — rejected ${fmtK(toK)} (not improvement)`);
-  renderWardNotes();
-  continue;
-  }
+        const rNow = bestRank.get(p.sen) ?? Infinity;
+        const rWish = prefRank(p, w.base, w.seat);
+        
+        const homeChoice = { base: p.current.base, seat: p.current.seat };
+        const homeBpl = bplSatisfied(p, homeChoice, key(p.current.base, p.current.seat));
+        
+        if (rWish >= rNow && homeBpl.ok) {
+          if (pilotMatchesTrace(p)) logTrace(`  REJECT: not improvement`);
+          continue;
+        }
 
-  const bpl = bplSatisfied(p, w, toK);
-  if (!bpl.ok) {
-    if (pilotMatchesTrace(p)) logTrace('  REJECT: BPL');
-      wardNotes.push(`${p.name} (#${p.sen}) — rejected ${fmtK(toK)} (BPL not satisfied)`);
-  renderWardNotes();
-    continue;
-  }
+        const bpl = bplSatisfied(p, w, toK);
+        if (!bpl.ok) {
+          if (pilotMatchesTrace(p)) logTrace('  REJECT: BPL');
+          continue;
+        }
 
-  // --- AWARD (Cascade) ---
-  state.pass++;
-  const rows = [];
-  award(p, fromK, toK, 'cascade', rows);
+        // --- AWARD (Cascade) ---
+        state.pass++;
+        const rows = [];
+        award(p, fromK, toK, 'cascade', rows);
         moved = true;
-wardNotes.push(`→ ${fmtK(toK)} filled by ${p.name} (#${p.sen}) from ${fmtK(fromK)} [Cascade]`);
-renderWardNotes();
+        wardNotes.push(`→ ${fmtK(toK)} filled by ${p.name} (#${p.sen}) from ${fmtK(fromK)} [Cascade]`);
 
-  // Update vacancies and occupant maps
-  if (!isPaper(p)) {
-    vacDec(toK, 1);
-  } else if (pilotMatchesTrace(p)) {
-    logTrace(`  PAPER BID: ${p.sen} move does not consume capacity`);
-  }
-  vacInc(fromK, 1);
-        // --- Ward Notes update ---
-wardNotes.push(`${toK} filled by ${p.name} (#${p.sen}) from ${fromK}`);
-renderWardNotes();
+        if (!isPaper(p)) {
+          vacDec(toK, 1);
+        } else if (pilotMatchesTrace(p)) {
+          logTrace(`  PAPER BID: ${p.sen} move does not consume capacity`);
+        }
+        vacInc(fromK, 1);
 
+        renderLedgerRows(rows);
+        renderOpen();
+        renderNamesBySeniority();
 
-  // Update UI
-  renderLedgerRows(rows);
-  renderOpen();
-  renderNamesBySeniority();
-
-  awarded = true;
-  continue Cascade; // restart from #1 after each award
-}
-          if (!moved) {
-      wardNotes.push(`${p.name} (#${p.sen}) — remains in ${fmtK(fromK)} (no eligible move)`);
-      renderWardNotes();
-    }
+        awarded = true;
+        continue Cascade; 
+      }
     }
     if (!awarded) break;
   }
 
   state.running = false;
-  $status.textContent = `Simulation complete. Passes=${state.pass}, Moves=${state.moves.length/2}`;
-  // Adjust Moves count since each move now generates two ledger entries
+  renderWardNotes(); // Final render of notes
+  $status.textContent = `Simulation complete. Passes=${state.pass}, Moves=${state.moves.length}`;
 }
 
-// ===== Wire UI and load data =====
+// ===== Wire UI =====
 document.getElementById('runBtn').addEventListener('click', run);
 document.getElementById('resetDeltaBtn').addEventListener('click', ()=>{ for(const c of capMap.values()){ c.delta=0; } renderCapTable(); seedVacFromCap(); });
 document.getElementById('reloadBtn').addEventListener('click', ()=>{ loadJSON().then(()=>{ seedVacFromCap(); }); });
 loadJSON().then(()=>{ seedVacFromCap(); });
-
-// Hidden eligibility placeholders (kept for compatibility)
-function normKey(v){ return String(v||'').trim().toUpperCase(); }
-const ineligible = new Set();
-function parseIneligible(text){
-  ineligible.clear();
-  String(text||'').split(/\r?\n/).map(s=>normKey(s)).filter(Boolean).forEach(k=>ineligible.add(k));
-}
-window.addEventListener('DOMContentLoaded', ()=>{
-  const apply = document.getElementById('btnApplyIneligible');
-  const clear = document.getElementById('btnClearIneligible');
-  if (apply){ apply.addEventListener('click', ()=>{ parseIneligible(document.getElementById('ineligibleList')?.value); }); }
-  if (clear){ clear.addEventListener('click', ()=>{ const t=document.getElementById('ineligibleList'); if(t) t.value=''; parseIneligible(''); }); }
-});
 </script>
 
 </body>
