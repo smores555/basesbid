@@ -55,14 +55,13 @@
     .stat-val { font-size: 20px; font-weight: 700; font-family: var(--font-code); color: var(--success); }
     .stat-lbl { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-top: 4px; }
 
-    /* --- LEDGER (THE BIG CHANGE) --- */
+    /* --- LEDGER --- */
     .ledger-wrap { flex-grow: 1; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
     .ledger-table { width: 100%; border-collapse: collapse; font-family: var(--font-code); font-size: 12px; }
     .ledger-table th { text-align: left; background: var(--bg-panel); color: var(--text-muted); padding: 12px; font-weight: 600; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; }
     .ledger-table td { padding: 10px 12px; border-bottom: 1px solid #1e293b; color: #e2e8f0; vertical-align: top; }
     .ledger-table tr:hover { background: rgba(255,255,255,0.02); }
 
-    /* Ledger Narrative Styles */
     .narrative-fill { color: var(--success); }
     .narrative-create { color: var(--accent); }
     .pilot-ref { color: white; font-weight: 600; }
@@ -87,7 +86,7 @@
 <div class="app-grid">
   
   <div class="sidebar">
-    <div class="brand">ProTrace <span style="color:var(--accent)">//Active</span></div>
+    <div class="brand">ProTrace <span style="color:var(--accent)">//Fixed</span></div>
     
     <div class="panel">
       <div class="panel-head">Engine Controls</div>
@@ -161,7 +160,7 @@
 
     <div style="display:flex; justify-content:space-between; align-items:center; color:var(--text-muted); font-size:11px;">
       <div id="status">System Ready</div>
-      <div>Trace Logic v2.4</div>
+      <div>Engine v3.0 (Stable)</div>
     </div>
 
   </div>
@@ -179,7 +178,7 @@ function setTab(id) {
 }
 
 // ======================================================
-//  ENGINE (With Narrative Ledger Logic)
+//  ENGINE (Restored to "Fixed" Version + Narrative)
 // ======================================================
 
 const BASES = ["SEA","ANC","PDX","SFO","LAX"];
@@ -196,12 +195,13 @@ const $openVac    = document.getElementById('openVac');
 const $status     = document.getElementById('status');
 
 const state = { running:false, pass:0, moves:[] };
-const wardNotes = [];
+const wardNotes = []; // kept for compatibility but not primary view
 
 function fmtK(k){
   if (!k) return 'Unknown';
   const parts = String(k).split('__');
-  return `${parts[0]} ${parts[1]}`; // e.g. "PDX FO"
+  if (parts.length === 2) return `${parts[0]} ${parts[1]}`;
+  return String(k);
 }
 
 // ===== Vacancy Counting =====
@@ -213,13 +213,14 @@ const vacDec = (k,n=1)=> Vac.set(k, Math.max(0,(Vac.get(k)||0) - n));
 function seedVacFromCap(){
   Vac.clear();
   for(const [,c] of capMap.entries()){ Vac.set(key(c.base,c.seat), 0); }
+  // FIX: Accept ALL deltas (FO and CA)
   for(const [k,c] of capMap.entries()){
     if (Number(c.delta||0)>0) vacInc(k, Number(c.delta||0));
   }
   renderOpen();
 }
 
-// ===== Occupants & Paper =====
+// ===== Occupants =====
 const Occupants = new Map();
 function seedOccupants(){
   Occupants.clear();
@@ -237,6 +238,7 @@ function moveOccupant(p, fromK, toK){
   Occupants.get(toK).add(p.sen);
 }
 
+// ===== Preferences =====
 function prefEntryFor(p){
   if (p && p.id && prefs[p.id]) return prefs[p.id];
   const senStr = String(p?.sen ?? '');
@@ -249,21 +251,22 @@ function isPaper(p){
   const pe = prefEntryFor(p);
   return Boolean(p.paper || pe?.paper);
 }
-
-// ===== Preference Ranking & BPL =====
+function sameChoice(desiredBase, desiredSeat, curBase, curSeat){
+  const db = String(desiredBase||'').toUpperCase();
+  const ds = String(desiredSeat||'').toUpperCase();
+  const cb = String(curBase||'').toUpperCase();
+  const cs = String(curSeat||'').toUpperCase();
+  if (!db || !cb) return false;
+  if (db !== cb) return false;
+  if (!ds) return true;
+  return ds === cs;
+}
 function rankPrefs(p) {
   const pe = prefEntryFor(p);
   return (pe?.preferences || [])
     .slice()
     .filter(x => x && x.stay !== true)
     .sort((a, b) => (a.order || 0) - (b.order || 0));
-}
-function sameChoice(desiredBase, desiredSeat, curBase, curSeat){
-  const db = String(desiredBase||'').toUpperCase();
-  const ds = String(desiredSeat||'').toUpperCase();
-  const cb = String(curBase||'').toUpperCase();
-  const cs = String(curSeat||'').toUpperCase();
-  return db === cb && (!ds || ds === cs);
 }
 function prefRank(p, base, seat){
   const list = rankPrefs(p);
@@ -276,6 +279,8 @@ function prefRank(p, base, seat){
   }
   return Infinity;
 }
+
+// ===== BPL =====
 function bplSatisfied(p, w, toK) {
   const pe = prefEntryFor(p);
   const prefList = (pe && Array.isArray(pe.preferences)) ? pe.preferences : [];
@@ -285,13 +290,15 @@ function bplSatisfied(p, w, toK) {
   );
   const limit = Number(match?.bpl_min ?? 0);
   if (!(limit > 0)) return { ok: true, reason: null };
+
   const occ = Occupants.get(toK) || new Set();
   const projectedRank = [...occ].filter(sen => sen < p.sen).length + 1;
-  if (projectedRank > limit) return { ok:false, reason:`BPL limit` };
+
+  if (projectedRank > limit) return { ok:false, reason:`Projected rank ${projectedRank} exceeds BPL ${limit}` };
   return { ok:true, reason:null };
 }
 
-// ===== DATA LOADER =====
+// ===== DATA LOADER (Robust) =====
 async function loadJSON(){
   function sf(p){ return fetch(p,{cache:'no-cache'}).then(r=>r.ok?r.json():null).catch(()=>null); }
   const loaded = {
@@ -299,22 +306,37 @@ async function loadJSON(){
     roster: (await sf('roster.json')) ?? (await sf('data/roster.json')),
     prefs: (await sf('preferences.json')) ?? (await sf('data/preferences.json'))
   };
-  if(!loaded.capacities || !loaded.roster){
-     // Demo Data
-     loaded.capacities = BASES.flatMap(b=>SEATS.map(s=>({base:b, seat:s, startCapacity:100, delta:0})));
-     loaded.roster = Array.from({length:20},(_,i)=>({sen:i+1,name:`Pilot ${i+1}`,current:{base:'SEA',seat:'FO'}}));
-     loaded.prefs = {};
-     $status.textContent = "Demo Data Loaded";
+
+  // Fallback Logic
+  if(!loaded.capacities || !loaded.roster || !loaded.prefs){
+    loaded.capacities = BASES.flatMap(b=>SEATS.map(s=>({base:b, seat:s, startCapacity:100, delta:0})));
+    loaded.roster = Array.from({length:20},(_,i)=>({sen:i+1,name:`Pilot ${i+1}`,current:{base:'SEA',seat:'FO'}}));
+    loaded.prefs = {};
+    for(const p of loaded.roster){
+      loaded.prefs[p.sen] = { preferences:[ {order:1, base:p.current.base, seat:p.current.seat}, {order:2, base:'SEA', seat:'CA'} ] };
+    }
+    $status.textContent = "Demo Data Loaded";
   } else {
-     $status.textContent = "Live Data Loaded";
+    $status.textContent = "Live Data Loaded";
   }
+
   capMap.clear();
   for(const c of loaded.capacities){
-    const b = String(c.base).toUpperCase(); const s = String(c.seat).toUpperCase();
+    const b = String(c.base||'').toUpperCase(); const s = String(c.seat||'').toUpperCase();
     capMap.set(key(b,s), {base:b, seat:s, start:Number(c.startCapacity||c.start||0), delta:Number(c.delta||0)});
   }
-  roster = loaded.roster.map(x=>({ ...x, current:{base:String(x.current.base).toUpperCase(), seat:String(x.current.seat).toUpperCase()}, paper:Boolean(x.paper) }));
-  prefs = loaded.prefs || {};
+  
+  // Robust Roster Map
+  roster = loaded.roster.map(x=>({
+    ...x,
+    current:{
+      base:String(x.current?.base||'').toUpperCase(),
+      seat:String(x.current?.seat||'').toUpperCase()
+    },
+    paper:Boolean(x.paper)
+  }));
+  
+  prefs = loaded.prefs;
   renderCapTable();
 }
 
@@ -349,12 +371,10 @@ function renderOpen(){
   }).join('');
 }
 
-// ===== THE LEDGER GENERATOR (UPDATED) =====
 function renderLedgerRows(rows){
   const frag = document.createDocumentFragment();
   for (const r of rows){
     const tr = document.createElement('tr');
-    // We just want one big narrative cell
     const actionColor = r.action.includes('FILL') ? 'var(--success)' : 'var(--accent)';
     tr.innerHTML = `
       <td style="color:var(--text-muted)">${r.pass}</td>
@@ -376,23 +396,21 @@ function renderAwards(){
   ).join('');
 }
 
-// ===== CORE AWARD LOGIC =====
+// ===== CORE AWARD LOGIC (With Narrative) =====
 function award(p, fromK, toK, tag, rows){
-  const [tb,ts] = toK.split('__'); // Destination Base/Seat
-  const [fb,fs] = (fromK||'|').split('__'); // Origin Base/Seat
+  const [tb,ts] = toK.split('__');
+  const [fb,fs] = (fromK||'|').split('__');
   const pilotLabel = `${p.sen} - ${p.name}`;
-  
-  // --- 1. FILL LOGIC (Destination) ---
-  // Capture Current count BEFORE fill
-  const vacBeforeFill = vacAmt(toK);
-  // Calculate AFTER fill (Paper doesn't reduce count)
   const paper = isPaper(p);
+
+  // --- 1. FILL (Destination) ---
+  // Snapshot Values
+  const vacBeforeFill = vacAmt(toK);
   const vacAfterFill = paper ? vacBeforeFill : (vacBeforeFill - 1);
   
-  // Generate Narrative
   let narrFill = `Reduce vacancy in <b style="color:white">${tb} ${ts}</b> from <span class="count-change">${vacBeforeFill}</span> to <span class="count-change">${vacAfterFill}</span>. `;
   narrFill += `Proffered from <span class="pilot-ref">${pilotLabel}</span>.`;
-  if(paper) narrFill += ` <span style="color:yellow">[PAPER BID - No Vacancy Consumed]</span>`;
+  if(paper) narrFill += ` <span style="color:yellow">[PAPER]</span>`;
 
   rows.push({
     pass: state.pass,
@@ -400,17 +418,11 @@ function award(p, fromK, toK, tag, rows){
     narrative: narrFill
   });
 
-  // --- EXECUTE STATE CHANGE ---
-  moveOccupant(p, fromK, toK);
-  p.current = {base:tb, seat:ts};
-  state.moves.push({ sen:p.sen, name:p.name, fromB:fb, fromS:fs, toB:tb, toS:ts });
-
-  // --- 2. CREATE LOGIC (Origin/Backfill) ---
+  // --- 2. CREATE (Origin) ---
   if(fromK){
-     // Capture count BEFORE release
      const vacBeforeBackfill = vacAmt(fromK);
      const vacAfterBackfill = vacBeforeBackfill + 1;
-
+     
      let narrCreate = `Increase vacancy in <b style="color:white">${fb} ${fs}</b> from <span class="count-change">${vacBeforeBackfill}</span> to <span class="count-change">${vacAfterBackfill}</span>. `;
      narrCreate += `Vacated by <span class="pilot-ref">${pilotLabel}</span>.`;
 
@@ -420,117 +432,128 @@ function award(p, fromK, toK, tag, rows){
        narrative: narrCreate
      });
   }
+
+  moveOccupant(p, fromK, toK);
+  p.current = { base: tb, seat: ts };
+  const mtype = (fs==='FO' && ts==='CA') ? 'upgrade' : 'lateral';
+  state.moves.push({ sen:p.sen, name:p.name||'', fromB:fb, fromS:fs, toB:tb, toS:ts, move_type:mtype });
+  
+  // Log to raw notes too (legacy)
+  wardNotes.push(`${pilotLabel} -> ${toK} (${tag})`);
 }
 
-// ===== MAIN RUN LOOP =====
+// ===== MAIN RUN LOOP (RESTORED TO STABLE VERSION) =====
 function run(){
-  if(state.running) return;
-  state.running = true; 
-  state.pass=0; state.moves=[];
-  $ledgerBody.innerHTML=''; $openVac.innerHTML=''; wardNotes.length=0;
+  if (state.running) return;
+  state.running = true;
+  state.pass = 0;
+  state.moves = [];
+  $ledgerBody.innerHTML = '';
+  $openVac.innerHTML = '';
+  wardNotes.length = 0;
   
   seedOccupants();
-  seedVacFromCap();
+  seedVacFromCap(); 
 
-  const pinned = new Set(); const bestRank = new Map();
   const sorted = roster.slice().sort((a,b)=>a.sen-b.sen);
+  const pinned = new Set(); 
+  const bestRank = new Map(); 
   
-  // Init best ranks
-  for(const p of sorted){
-    const r = prefRank(p, p.current.base, p.current.seat);
-    bestRank.set(p.sen, r);
-    if(r===1) pinned.add(p.sen);
+  for (const p of sorted){
+    const r0 = prefRank(p, p.current.base, p.current.seat);
+    bestRank.set(p.sen, r0);
+    if (r0 === 1) pinned.add(p.sen);
   }
 
-  // --- VACANCY FIRST ---
-  VacLoop: while(true){
+  // ===== Vacancy-first =====
+  VacFirst:
+  while (true){
     let awarded = false;
-    for(const p of sorted){
-      if(pinned.has(p.sen)) continue;
+    for (const p of sorted){
+      if (pinned.has(p.sen)) continue;
       const fromK = key(p.current.base, p.current.seat);
-      const wants = rankPrefs(p);
-      
-      for(const w of wants){
-        if(sameChoice(w.base, w.seat, p.current.base, p.current.seat)) continue;
-        const toK = key(w.base, w.seat);
-        if(vacAmt(toK) <= 0) continue; // No vacancy
+      const wants = rankPrefs(p); // Correctly checks all prefs (FO and CA)
 
-        const rNow = bestRank.get(p.sen)||Infinity;
+      for (const w of wants){
+        if (sameChoice(w.base, w.seat, p.current.base, p.current.seat)) continue;
+        const toK = key(w.base, w.seat);
+        if (vacAmt(toK)<=0) continue;
+
+        const rNow = bestRank.get(p.sen) ?? Infinity;
         const rWish = prefRank(p, w.base, w.seat);
-        if(rWish >= rNow) continue; // Not improvement
-        if(!bplSatisfied(p,w,toK).ok) continue; // BPL
+        if (rWish >= rNow) continue;
+        if(!bplSatisfied(p,w,toK).ok) continue;
 
         // AWARD
         state.pass++;
-        const rows = [];
-        award(p, fromK, toK, 'posted', rows);
-        
-        // Apply Counts
-        if(!isPaper(p)) vacDec(toK,1);
+        const rows=[];
+        award(p, fromK, toK, 'posted-add', rows);
+
+        // UPDATE VACANCIES (Strict Ordering)
+        if (!isPaper(p)) { vacDec(toK,1); }
         vacInc(fromK,1);
 
-        renderLedgerRows(rows);
-        renderOpen();
+        renderLedgerRows(rows); 
+        renderOpen(); 
         awarded = true;
-        continue VacLoop;
+        continue VacFirst; 
       }
     }
-    if(!awarded) break;
+    if (!awarded) break;
   }
 
-  // --- CASCADE ---
-  CascadeLoop: while(true){
+  // ===== Cascade =====
+  Cascade:
+  while (true){
     let awarded = false;
-    for(const p of sorted){
-      if(pinned.has(p.sen)) continue;
+    for (const p of sorted){
+      if (pinned.has(p.sen)) continue;
       const fromK = key(p.current.base, p.current.seat);
-      const wants = rankPrefs(p);
+      const list = rankPrefs(p);
       
-      for(const w of wants){
-        if(sameChoice(w.base, w.seat, p.current.base, p.current.seat)){
-           // Stop at home if BPL allows
-           if(bplSatisfied(p,w,key(w.base,w.seat)).ok) break; 
-           else continue; 
+      for (const w of list) {
+        if (sameChoice(w.base, w.seat, p.current.base, p.current.seat)) {
+          const homeBpl = bplSatisfied(p, w, key(w.base, w.seat));
+          if (homeBpl.ok) break;    
+          else continue;            
         }
 
         const toK = key(w.base, w.seat);
-        if(vacAmt(toK) <= 0) continue;
+        if (vacAmt(toK) <= 0) continue;
 
-        const rNow = bestRank.get(p.sen)||Infinity;
+        const rNow = bestRank.get(p.sen) ?? Infinity;
         const rWish = prefRank(p, w.base, w.seat);
+        const homeBpl = bplSatisfied(p, { base: p.current.base, seat: p.current.seat }, key(p.current.base, p.current.seat));
         
-        const homeBpl = bplSatisfied(p, {base:p.current.base, seat:p.current.seat}, fromK);
-        if(rWish >= rNow && homeBpl.ok) continue;
-
-        if(!bplSatisfied(p,w,toK).ok) continue;
+        if (rWish >= rNow && homeBpl.ok) continue;
+        if (!bplSatisfied(p, w, toK).ok) continue;
 
         // AWARD
         state.pass++;
         const rows = [];
         award(p, fromK, toK, 'cascade', rows);
 
-        if(!isPaper(p)) vacDec(toK,1);
-        vacInc(fromK,1);
+        if (!isPaper(p)) { vacDec(toK, 1); }
+        vacInc(fromK, 1);
 
         renderLedgerRows(rows);
         renderOpen();
         awarded = true;
-        continue CascadeLoop;
+        continue Cascade; 
       }
     }
-    if(!awarded) break;
+    if (!awarded) break;
   }
 
   state.running = false;
   renderAwards();
-  $status.textContent = "Simulation Complete";
+  $status.textContent = `Simulation Complete. Moves: ${state.moves.length}`;
 }
 
-// ===== INIT =====
 document.getElementById('runBtn').addEventListener('click', run);
-document.getElementById('resetDeltaBtn').addEventListener('click', ()=>{ for(const v of capMap.values())v.delta=0; renderCapTable(); seedVacFromCap(); });
-document.getElementById('reloadBtn').addEventListener('click', ()=>{ loadJSON().then(seedVacFromCap); });
-loadJSON();
+document.getElementById('resetDeltaBtn').addEventListener('click', ()=>{ for(const c of capMap.values()){ c.delta=0; } renderCapTable(); seedVacFromCap(); });
+document.getElementById('reloadBtn').addEventListener('click', ()=>{ loadJSON().then(()=>{ seedVacFromCap(); }); });
+loadJSON().then(()=>{ seedVacFromCap(); });
 
 </script>
 </body>
