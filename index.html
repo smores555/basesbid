@@ -295,23 +295,31 @@ function prefRank(p, base, seat){
 }
 function sameChoice(db, ds, cb, cs){ return String(db).toUpperCase() === String(cb).toUpperCase() && String(ds).toUpperCase() === String(cs).toUpperCase(); }
 
-// --- FIXED DYNAMIC BPL LOGIC ---
+// --- DYNAMIC BPL LOGIC ---
 function bplSatisfied(p, w, toK) {
   const limit = Number(w.bpl_min ?? 0); 
-  
-  // If user didn't set a BPL limit, logic is always true
-  if (limit <= 0) return { ok: true };
+  if (limit <= 0) return { ok: true }; // No limit set
 
   const occ = Occupants.get(toK) || new Set();
   
-  // DYNAMIC CALCULATION:
-  // Count how many people currently in that seat have a LOWER seniority number (are senior) to me
+  // LOGIC:
+  // Calculate projected rank based on current occupants.
+  // NOTE: This simulation updates 'Occupants' in real-time as people move.
+  // If 10 senior people leave SFO CA, they are removed from 'Occupants'.
+  // If 5 senior people arrive, they are added.
+  // Therefore, counting current occupants who are senior to me gives the correct projected rank.
+  
   const mySen = Number(p.sen);
   const seniorsInSeat = [...occ].filter(sen => Number(sen) < mySen).length;
-  const myProjectedRank = seniorsInSeat + 1; // I would be the next one
+  const myProjectedRank = seniorsInSeat + 1; 
   
-  // If my rank is greater (worse) than my limit, I don't want it
-  return (myProjectedRank > limit) ? {ok:false, rank:myProjectedRank} : {ok:true, rank:myProjectedRank};
+  // console.log(`Pilot ${p.sen} bid ${toK}. Limit ${limit}. Proj Rank: ${myProjectedRank}`);
+
+  if (myProjectedRank <= limit) {
+      return { ok: true, rank: myProjectedRank };
+  } else {
+      return { ok: false, rank: myProjectedRank };
+  }
 }
 
 // ===== RENDERERS =====
@@ -383,7 +391,7 @@ function run(){
         }
         
         // Add BPL Info
-        if(bplInfo) sourceInfo += ` <span style="color:var(--warning); font-size:10px;">(BPL Met: Rank ${bplInfo})</span>`;
+        if(bplInfo) sourceInfo += ` <span style="color:var(--warning); font-weight:bold; font-size:10px;">(BPL Met: Rank ${bplInfo})</span>`;
 
         let narr = `Reduce <b style="color:var(--text-muted)">${tb} ${ts}</b> vacancy from <span class="count-change">${vacDest}</span> to <span class="count-change">${vacDestNew}</span>. Awarded: ${pilRef}.${sourceInfo}`;
         
