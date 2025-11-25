@@ -22,7 +22,6 @@
       --accent: #3b82f6; 
       --success: #10b981; 
       --warning: #f59e0b; 
-      --danger: #ef4444;
       --font-ui: 'Inter', sans-serif; 
       --font-code: 'JetBrains Mono', monospace; 
     }
@@ -305,6 +304,7 @@ function run(){
   
   document.getElementById('status').textContent = "Running...";
   
+  // Use setTimeout to unblock the main thread for UI updates
   setTimeout(() => {
       const sorted = roster.slice().sort((a,b)=>Number(a.sen)-Number(b.sen));
       const pinned = new Set(); 
@@ -363,7 +363,7 @@ function run(){
       let loopSafety = 0;
 
       VacFirst: while(true){
-        if(loopSafety++ > 5000) break;
+        if(loopSafety++ > 5000) break; // Safety Break
         let awarded = false;
         for (const p of sorted){
           if (pinned.has(p.sen)) continue;
@@ -372,6 +372,7 @@ function run(){
           for (const w of wants){
             const toK = key(w.base, w.seat);
             
+            // --- Check "Stay" Bids in Vacancy Phase ---
             if (sameChoice(w.base, w.seat, p.current.base, p.current.seat)) {
                 const bplCheck = bplSatisfied(p,w,toK);
                 if(bplCheck.ok) {
@@ -403,7 +404,7 @@ function run(){
       loopSafety = 0;
 
       Cascade: while(true){
-        if(loopSafety++ > 5000) break; 
+        if(loopSafety++ > 5000) break; // Safety Break
         let awarded = false;
         for (const p of sorted){
           if (pinned.has(p.sen)) continue;
@@ -445,7 +446,9 @@ function run(){
 
       renderOpen(); 
       
+      // Optimized rendering: Use fragment for ledger
       const fragment = document.createDocumentFragment();
+      // Only show last 2000 ledger entries to prevent DOM overload if massive
       const ledgerSlice = ledgerBuffer.slice(0, 2000); 
       
       const rowsHTML = ledgerSlice.map(r => `
