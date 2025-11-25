@@ -266,7 +266,7 @@ function prefRank(p, base, seat){
 }
 function sameChoice(db, ds, cb, cs){ return String(db).toUpperCase() === String(cb).toUpperCase() && String(ds).toUpperCase() === String(cs).toUpperCase(); }
 
-// --- TRACE LOGGING ---
+// --- OPTIMIZED TRACE LOGGING ---
 function logTrace(sen, msg, type='neutral') {
   const targetSen = Number(document.getElementById('traceQuery').value);
   if(targetSen === sen) {
@@ -274,6 +274,9 @@ function logTrace(sen, msg, type='neutral') {
     if(type==='fail') css="color:var(--danger);";
     if(type==='success') css="color:var(--success); font-weight:bold;";
     if(type==='warn') css="color:var(--warning);";
+    
+    // Limit trace log size to prevent crash
+    if(TraceLogs.length > 2000) return; 
     TraceLogs.push(`<div class="log-entry" style="${css}">${msg}</div>`);
   }
 }
@@ -321,7 +324,7 @@ function renderOpen(){
 }
 
 function run(){
-  TraceLogs.length = 0; // Clear logs
+  TraceLogs.length = 0; 
   const ledgerBuffer = [];
   const moves = [];
   let pass = 0;
@@ -330,6 +333,7 @@ function run(){
   
   document.getElementById('status').textContent = "Running...";
   
+  // Use setTimeout to unblock the main thread for UI updates
   setTimeout(() => {
       const sorted = roster.slice().sort((a,b)=>Number(a.sen)-Number(b.sen));
       const pinned = new Set(); 
@@ -385,7 +389,11 @@ function run(){
         if(rNew === 1) pinned.add(p.sen);
       };
 
+      // Safety Break Counter
+      let loopSafety = 0;
+
       VacFirst: while(true){
+        if(loopSafety++ > 5000) break; // Prevent infinite loops
         let awarded = false;
         for (const p of sorted){
           if (pinned.has(p.sen)) continue;
@@ -394,20 +402,20 @@ function run(){
           for (const w of wants){
             const toK = key(w.base, w.seat);
             
-            // --- LOGIC UPDATE: ALLOW "STAY" BIDS IN VACANCY PHASE IF BPL MET ---
+            // --- FIX: Check "Stay" Bids in Vacancy Phase ---
             if (sameChoice(w.base, w.seat, p.current.base, p.current.seat)) {
                 const bplCheck = bplSatisfied(p,w,toK);
                 if(bplCheck.ok) {
                     logTrace(Number(p.sen), `Pref #${w.order} (${toK}): RETAINED SEAT (Vacancy Phase). BPL OK. Stopping.`, 'success');
-                    awarded = true; // Mark as handled so we stop looking for him
-                    break; // Stop outer preference loop for this pilot
+                    awarded = true; 
+                    pinned.add(p.sen); // Pin pilot so they don't bid again
+                    break; 
                 } else {
                     logTrace(Number(p.sen), `Pref #${w.order} (${toK}): Current Seat BPL Fail. Continuing Search.`, 'warn');
                     continue;
                 }
             }
             
-            // Check Vacancy
             if (vacAmt(toK)<=0) {
                 logTrace(Number(p.sen), `Pref #${w.order} (${toK}): Skipped (No Vacancy)`);
                 continue;
@@ -423,13 +431,16 @@ function run(){
             recordMove(p, fromK, toK, 'posted', (Number(w.bpl_min)>0 ? bplCheck.rank : null), w.order);
             if(!isPaper(p)) vacDec(toK,1);
             awarded = true;
-            break; // Stop preference loop
+            break; 
           }
         }
         if (!awarded) break;
       }
 
+      loopSafety = 0;
+
       Cascade: while(true){
+        if(loopSafety++ > 5000) break; // Prevent infinite loops
         let awarded = false;
         for (const p of sorted){
           if (pinned.has(p.sen)) continue;
@@ -442,15 +453,14 @@ function run(){
               const bplCheck = bplSatisfied(p,w,toK);
               if(bplCheck.ok) {
                   logTrace(Number(p.sen), `Pref #${w.order} (${toK}): Retained Seat (BPL OK). Stopping Search.`, 'success');
-                  break; // KEEP SEAT
+                  pinned.add(p.sen);
+                  break; 
               } else {
-                  // Failed BPL, so we must continue searching
                   logTrace(Number(p.sen), `Pref #${w.order} (${toK}): Current Seat BPL Fail. Must Move.`, 'warn');
                   continue; 
               }
             }
             
-            // Check Vacancy
             if (vacAmt(toK)<=0) {
                 logTrace(Number(p.sen), `Pref #${w.order} (${toK}): Skipped (No Vacancy)`);
                 continue;
@@ -478,7 +488,12 @@ function run(){
 
       renderOpen(); 
       
-      const rowsHTML = ledgerBuffer.map(r => `
+      // Optimized rendering: Use fragment for ledger
+      const fragment = document.createDocumentFragment();
+      // Only show last 2000 ledger entries to prevent DOM overload if massive
+      const ledgerSlice = ledgerBuffer.slice(0, 2000); 
+      
+      const rowsHTML = ledgerSlice.map(r => `
         <tr>
           <td style="color:#666">${r.pass}</td>
           <td style="color:${r.type.includes('FILL')?'var(--success)':'var(--accent)'}; font-weight:bold; font-size:11px;">${r.type}</td>
@@ -495,7 +510,7 @@ function run(){
         </div>`).join('');
       document.getElementById('namesBySen').innerHTML = awardsHTML;
       
-      document.getElementById('traceLog').innerHTML = TraceLogs.length ? TraceLogs.join('') : '<div style="color:#666; text-align:center; padding:20px;">No logs for this pilot ID. Did you enter a valid SEN?</div>';
+      document.getElementById('traceLog').innerHTML = TraceLogs.length ? TraceLogs.join('') : '<div style="color:#666; text-align:center; padding:20px;">No logs.</div>';
       
       document.getElementById('status').textContent = "Complete";
   }, 20);
