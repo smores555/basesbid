@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -22,6 +22,7 @@
       --accent: #3b82f6; 
       --success: #10b981; 
       --warning: #f59e0b; 
+      --danger: #ef4444;
       --font-ui: 'Inter', sans-serif; 
       --font-code: 'JetBrains Mono', monospace; 
     }
@@ -33,14 +34,13 @@
       background: var(--bg-app); 
       color: var(--text-main); 
       font-family: var(--font-ui); 
-      height: 100vh; /* Desktop Default */
-      height: 100dvh; /* Mobile Modern */
+      height: 100vh; 
+      height: 100dvh; 
       display: flex; 
       flex-direction: column; 
-      overflow: hidden; /* Desktop Default */
+      overflow: hidden; 
     }
 
-    /* --- LAYOUT (RESPONSIVE) --- */
     .app-grid { 
       display: grid; 
       grid-template-columns: 360px 1fr; 
@@ -70,43 +70,13 @@
 
     /* --- MOBILE OVERRIDES --- */
     @media (max-width: 768px) {
-      body {
-        height: auto;
-        overflow: auto; /* Let body scroll naturally */
-        display: block;
-      }
-      .app-grid {
-        display: flex;
-        flex-direction: column;
-        height: auto;
-        overflow: visible;
-      }
-      .sidebar {
-        width: 100%;
-        height: auto;
-        max-height: none;
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-        padding: 16px;
-      }
-      .main {
-        width: 100%;
-        height: auto;
-        overflow: visible;
-        padding: 16px;
-        padding-bottom: 80px; /* Extra space for scroll */
-      }
-      /* Fix Input Zoom on iPhone by increasing font size */
-      input, select, textarea {
-        font-size: 16px !important; 
-      }
-      /* Allow horizontal scroll on tables */
-      .ledger-wrap {
-        min-height: 500px; /* Ensure it has height on mobile */
-      }
+      body { height: auto; overflow: auto; display: block; }
+      .app-grid { display: flex; flex-direction: column; height: auto; overflow: visible; }
+      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
+      .main { width: 100%; height: auto; overflow: visible; padding-bottom: 80px; }
+      .ledger-wrap { min-height: 500px; }
     }
 
-    /* --- COMPONENTS --- */
     .panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
     .panel-head { padding: 12px 15px; background: rgba(255,255,255,0.03); border-bottom: 1px solid var(--border); font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
     
@@ -118,9 +88,8 @@
     
     input { background: var(--bg-input); border: 1px solid var(--border); color: white; padding: 10px; border-radius: 6px; width: 100%; font-family: var(--font-code); font-size: 13px; }
 
-    /* --- STATS & TABS --- */
     .stats-row { display: flex; gap: 12px; overflow-x: auto; min-height: 70px; padding-bottom: 4px; scrollbar-width: none; }
-    .stats-row::-webkit-scrollbar { display: none; } /* Hide scrollbar for cleaner look */
+    .stats-row::-webkit-scrollbar { display: none; } 
     
     .stat-card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 8px; min-width: 110px; padding: 12px; text-align: center; flex-shrink: 0; }
     .stat-val { font-size: 22px; font-weight: 700; font-family: var(--font-code); color: var(--success); }
@@ -133,19 +102,21 @@
     .tab-content { display: none; flex-grow: 1; overflow: hidden; }
     .tab-content.active { display: flex; flex-direction: column; }
 
-    /* --- TABLES --- */
-    .ledger-table { width: 100%; border-collapse: collapse; font-family: var(--font-code); font-size: 12px; min-width: 400px; /* Force scroll on mobile */ }
+    .ledger-table { width: 100%; border-collapse: collapse; font-family: var(--font-code); font-size: 12px; min-width: 400px; }
     .ledger-table th { text-align: left; background: var(--bg-panel); padding: 12px; position: sticky; top: 0; z-index: 10; }
     .ledger-table td { padding: 10px 12px; border-bottom: 1px solid #1e293b; vertical-align: top; }
     
     .count-change { background: rgba(255,255,255,0.1); padding: 2px 5px; border-radius: 4px; color: #fff; font-weight: bold; }
-    
     .cap-tbl { width: 100%; border-collapse: collapse; font-size: 12px; }
     .cap-tbl td { padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
     .cap-tbl input { text-align: center; width: 100%; padding: 8px; }
-
-    /* Mobile Scroll Helper */
     .scroll-box { overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; }
+
+    /* Trace Log Styles */
+    .log-entry { padding: 8px; border-bottom: 1px solid #333; font-family: var(--font-code); font-size: 12px; }
+    .log-fail { color: var(--danger); }
+    .log-warn { color: var(--warning); }
+    .log-success { color: var(--success); }
   </style>
 </head>
 <body>
@@ -170,15 +141,16 @@
 
     <div class="panel" style="max-height: 300px; flex-grow: 1;">
       <div class="panel-head">Capacity Setup</div>
-      <div style="overflow-y:auto; padding:0; -webkit-overflow-scrolling: touch;">
+      <div style="overflow-y:auto; padding:0;">
         <div id="capTable"></div>
       </div>
     </div>
 
     <div class="panel">
-      <div class="panel-head">Search / Trace</div>
+      <div class="panel-head">Deep Trace Pilot</div>
       <div style="padding:16px;">
-        <input id="traceQuery" placeholder="Enter SEN or Name">
+        <input id="traceQuery" placeholder="Enter Pilot SEN (e.g. 897)">
+        <div style="font-size:10px; color:var(--text-muted); margin-top:5px;">Enables detailed logs in Trace tab</div>
       </div>
     </div>
   </div>
@@ -193,6 +165,7 @@
       <div class="tabs">
         <div class="tab active" onclick="setTab('ledger')">Active Ledger</div>
         <div class="tab" onclick="setTab('awards')">Award List</div>
+        <div class="tab" onclick="setTab('trace')">Trace Log</div>
       </div>
 
       <div id="view-ledger" class="tab-content active">
@@ -205,7 +178,11 @@
       </div>
 
       <div id="view-awards" class="tab-content">
-        <div id="namesBySen" style="padding:15px; overflow-y:auto; height:100%; font-family:var(--font-code); font-size:13px; -webkit-overflow-scrolling: touch;"></div>
+        <div id="namesBySen" style="padding:15px; overflow-y:auto; height:100%; font-family:var(--font-code); font-size:13px;"></div>
+      </div>
+
+      <div id="view-trace" class="tab-content">
+        <div id="traceLog" style="padding:15px; overflow-y:auto; height:100%; background:#000;"></div>
       </div>
     </div>
     
@@ -214,9 +191,6 @@
 </div>
 
 <script>
-// ======================================================
-//  UI HELPERS
-// ======================================================
 function setTab(id) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -224,9 +198,6 @@ function setTab(id) {
   document.getElementById('view-' + id).classList.add('active');
 }
 
-// ======================================================
-//  ENGINE
-// ======================================================
 const BASES = ["SEA","ANC","PDX","SFO","LAX"];
 const SEATS = ["CA","FO"];
 const key = (b,s)=>`${String(b).toUpperCase()}__${String(s).toUpperCase()}`;
@@ -235,10 +206,10 @@ const capMap = new Map();
 let roster = [];          
 let prefs  = {};          
 
-// --- TRACE TRACKING LOGIC ---
 const Vac = new Map(); 
 const Occupants = new Map();
 const VacCreators = new Map(); 
+const TraceLogs = [];
 
 const vacAmt = k => Vac.get(k)||0;
 
@@ -268,7 +239,7 @@ function seedOccupants(){
     if (isPaper(p)) continue;
     const k = key(p.current.base, p.current.seat);
     if (!Occupants.has(k)) Occupants.set(k, new Set());
-    Occupants.get(k).add(Number(p.sen)); // STORE SENIORITY AS NUMBER
+    Occupants.get(k).add(Number(p.sen));
   }
 }
 
@@ -295,29 +266,33 @@ function prefRank(p, base, seat){
 }
 function sameChoice(db, ds, cb, cs){ return String(db).toUpperCase() === String(cb).toUpperCase() && String(ds).toUpperCase() === String(cs).toUpperCase(); }
 
-// --- DYNAMIC BPL LOGIC ---
+// --- TRACE LOGGING ---
+function logTrace(sen, msg, type='neutral') {
+  const targetSen = Number(document.getElementById('traceQuery').value);
+  if(targetSen === sen) {
+    let css = "color:#999;";
+    if(type==='fail') css="color:var(--danger);";
+    if(type==='success') css="color:var(--success); font-weight:bold;";
+    if(type==='warn') css="color:var(--warning);";
+    TraceLogs.push(`<div class="log-entry" style="${css}">${msg}</div>`);
+  }
+}
+
 function bplSatisfied(p, w, toK) {
   const limit = Number(w.bpl_min ?? 0); 
-  if (limit <= 0) return { ok: true }; 
-
   const occ = Occupants.get(toK) || new Set();
   const mySen = Number(p.sen);
   const seniorsInSeat = [...occ].filter(sen => Number(sen) < mySen).length;
   const myProjectedRank = seniorsInSeat + 1; 
   
-  // DEBUG LOG FOR PILOT 897
-  if(mySen === 897) {
-      console.log(`Pilot 897 checking ${toK} (Order: ${w.order}). Proj Rank: ${myProjectedRank} vs Limit: ${limit}`);
-  }
-
-  if (myProjectedRank <= limit) {
-      return { ok: true, rank: myProjectedRank };
-  } else {
+  if (limit > 0 && myProjectedRank > limit) {
+      logTrace(mySen, `Pref #${w.order} (${toK}): BPL Fail. Rank ${myProjectedRank} > Limit ${limit}`, 'fail');
       return { ok: false, rank: myProjectedRank };
   }
+  
+  return { ok: true, rank: myProjectedRank };
 }
 
-// ===== RENDERERS =====
 function renderCapTable(){
   let html = '<table class="cap-tbl">';
   const entries = [...capMap.values()].sort((a,b) => a.base.localeCompare(b.base) || a.seat.localeCompare(b.seat));
@@ -345,8 +320,8 @@ function renderOpen(){
   }).join('');
 }
 
-// ===== BATCH ENGINE =====
 function run(){
+  TraceLogs.length = 0; // Clear logs
   const ledgerBuffer = [];
   const moves = [];
   let pass = 0;
@@ -356,7 +331,6 @@ function run(){
   document.getElementById('status').textContent = "Running...";
   
   setTimeout(() => {
-      // SORT BY SENIORITY
       const sorted = roster.slice().sort((a,b)=>Number(a.sen)-Number(b.sen));
       const pinned = new Set(); 
       const bestRank = new Map();
@@ -376,7 +350,6 @@ function run(){
         const vacDest = vacAmt(toK);
         const vacDestNew = paper ? vacDest : (vacDest - 1);
         
-        // Source Trace
         let sourceInfo = "";
         if (VacCreators.has(toK) && VacCreators.get(toK).length > 0) {
             const creator = VacCreators.get(toK).shift(); 
@@ -385,7 +358,6 @@ function run(){
              sourceInfo = `<br><span style="color:var(--text-muted); font-size:11px;">Open position available.</span>`;
         }
         
-        // --- NEW: Add Preference Order to Ledger ---
         if(prefOrder) sourceInfo += ` <span style="color:var(--accent); font-weight:bold; font-size:10px;">(Choice #${prefOrder})</span>`;
         if(bplInfo) sourceInfo += ` <span style="color:var(--warning); font-weight:bold; font-size:10px;">(BPL Met: Rank ${bplInfo})</span>`;
 
@@ -420,18 +392,26 @@ function run(){
           const fromK = key(p.current.base, p.current.seat);
           const wants = rankPrefs(p);
           for (const w of wants){
-            if (sameChoice(w.base, w.seat, p.current.base, p.current.seat)) continue;
             const toK = key(w.base, w.seat);
-            if (vacAmt(toK)<=0) continue;
+            
+            if (sameChoice(w.base, w.seat, p.current.base, p.current.seat)) {
+                // Skip in VacFirst phase
+                continue;
+            }
+            
+            // Check Vacancy
+            if (vacAmt(toK)<=0) {
+                logTrace(Number(p.sen), `Pref #${w.order} (${toK}): Skipped (No Vacancy)`);
+                continue;
+            }
 
             if (prefRank(p,w.base,w.seat) >= (bestRank.get(p.sen)??Infinity)) continue;
             
-            // Check BPL
             const bplCheck = bplSatisfied(p,w,toK);
             if (!bplCheck.ok) continue;
 
             pass++;
-            // PASS PREFERENCE ORDER (w.order)
+            logTrace(Number(p.sen), `Pref #${w.order} (${toK}): AWARDED!`, 'success');
             recordMove(p, fromK, toK, 'posted', (Number(w.bpl_min)>0 ? bplCheck.rank : null), w.order);
             if(!isPaper(p)) vacDec(toK,1);
             awarded = true;
@@ -448,12 +428,25 @@ function run(){
           const fromK = key(p.current.base, p.current.seat);
           const wants = rankPrefs(p);
           for (const w of wants) {
-            if (sameChoice(w.base, w.seat, p.current.base, p.current.seat)){
-              if(bplSatisfied(p,w,key(w.base,w.seat)).ok) break; 
-              else continue; 
-            }
             const toK = key(w.base, w.seat);
-            if (vacAmt(toK)<=0) continue;
+            
+            if (sameChoice(w.base, w.seat, p.current.base, p.current.seat)){
+              const bplCheck = bplSatisfied(p,w,toK);
+              if(bplCheck.ok) {
+                  logTrace(Number(p.sen), `Pref #${w.order} (${toK}): Retained Seat (BPL OK). Stopping Search.`, 'success');
+                  break; // KEEP SEAT
+              } else {
+                  // Failed BPL, so we must continue searching
+                  logTrace(Number(p.sen), `Pref #${w.order} (${toK}): Current Seat BPL Fail. Must Move.`, 'warn');
+                  continue; 
+              }
+            }
+            
+            // Check Vacancy
+            if (vacAmt(toK)<=0) {
+                logTrace(Number(p.sen), `Pref #${w.order} (${toK}): Skipped (No Vacancy)`);
+                continue;
+            }
             
             const rNow = bestRank.get(p.sen)??Infinity;
             const rWish = prefRank(p, w.base, w.seat);
@@ -465,7 +458,7 @@ function run(){
             if (!bplCheck.ok) continue;
 
             pass++;
-            // PASS PREFERENCE ORDER (w.order)
+            logTrace(Number(p.sen), `Pref #${w.order} (${toK}): AWARDED!`, 'success');
             recordMove(p, fromK, toK, 'cascade', (Number(w.bpl_min)>0 ? bplCheck.rank : null), w.order);
             if(!isPaper(p)) vacDec(toK,1);
             awarded = true;
@@ -494,6 +487,8 @@ function run(){
         </div>`).join('');
       document.getElementById('namesBySen').innerHTML = awardsHTML;
       
+      document.getElementById('traceLog').innerHTML = TraceLogs.length ? TraceLogs.join('') : '<div style="color:#666; text-align:center; padding:20px;">No logs for this pilot ID. Did you enter a valid SEN?</div>';
+      
       document.getElementById('status').textContent = "Complete";
   }, 20);
 }
@@ -504,7 +499,6 @@ async function loadJSON(){
   const d = { c: await sf('capacities.json')||await sf('data/capacities.json'), r: await sf('roster.json')||await sf('data/roster.json'), p: await sf('preferences.json')||await sf('data/preferences.json') };
   
   if(!d.c||!d.r){ 
-    // Demo
     d.c = BASES.flatMap(b=>SEATS.map(s=>({base:b, seat:s, startCapacity:100, delta:0})));
     d.r = Array.from({length:100},(_,i)=>({sen:i+1, name:`Pilot ${i+1}`, current:{base:BASES[i%5], seat:i%3?'FO':'CA'}}));
     d.p = {};
@@ -512,7 +506,6 @@ async function loadJSON(){
   capMap.clear();
   d.c.forEach(c => capMap.set(key(c.base,c.seat), {base:c.base.toUpperCase(), seat:c.seat.toUpperCase(), start:+c.startCapacity||+c.start||0, delta:+c.delta||0}));
   
-  // FORCE SENIORITY TO NUMBER
   roster = d.r.map(x=>({
     ...x, 
     sen: Number(x.sen), 
