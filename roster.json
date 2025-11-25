@@ -3050,16 +3050,6 @@
     }
   },
   {
-    "id": "pil313",
-    "sen": 313,
-    "name": "DUNCAN, DELBERT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil314",
     "sen": 314,
     "name": "FRIDLUND, JAY R.",
@@ -6420,36 +6410,6 @@
     }
   },
   {
-    "id": "pil654",
-    "sen": 654,
-    "name": "DAVEY, STEPHEN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil654",
-    "sen": 654,
-    "name": "DAVEY, STEPHEN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil654",
-    "sen": 654,
-    "name": "DAVEY, STEPHEN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
     "id": "pil655",
     "sen": 655,
     "name": "BALENTINE, JENNIFER M.",
@@ -8140,26 +8100,6 @@
     }
   },
   {
-    "id": "pil824",
-    "sen": 824,
-    "name": "LOSEY, PAUL D.",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil824",
-    "sen": 824,
-    "name": "LOSEY, PAUL D.",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil825",
     "sen": 825,
     "name": "KLOPPING, CHRISTOPHER B.",
@@ -8890,106 +8830,6 @@
     }
   },
   {
-    "id": "pil897",
-    "sen": 897,
-    "name": "ANDERSEN, JUSTIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil897",
-    "sen": 897,
-    "name": "ANDERSEN, JUSTIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil897",
-    "sen": 897,
-    "name": "ANDERSEN, JUSTIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil897",
-    "sen": 897,
-    "name": "ANDERSEN, JUSTIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil897",
-    "sen": 897,
-    "name": "ANDERSEN, JUSTIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil897",
-    "sen": 897,
-    "name": "ANDERSEN, JUSTIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil897",
-    "sen": 897,
-    "name": "ANDERSEN, JUSTIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil897",
-    "sen": 897,
-    "name": "ANDERSEN, JUSTIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil897",
-    "sen": 897,
-    "name": "ANDERSEN, JUSTIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil897",
-    "sen": 897,
-    "name": "ANDERSEN, JUSTIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil898",
     "sen": 898,
     "name": "RUHL, JASON R.",
@@ -9617,26 +9457,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil962",
-    "sen": 962,
-    "name": "ROSSING, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil962",
-    "sen": 962,
-    "name": "ROSSING, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
     }
   },
   {
@@ -14540,16 +14360,6 @@
     }
   },
   {
-    "id": "pil1452",
-    "sen": 1452,
-    "name": "LARSON, JOSHUA",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil1453",
     "sen": 1453,
     "name": "HUDSON, DEAN",
@@ -15350,26 +15160,6 @@
     }
   },
   {
-    "id": "pil1532",
-    "sen": 1532,
-    "name": "MATTHEWS, RICHARD",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil1532",
-    "sen": 1532,
-    "name": "MATTHEWS, RICHARD",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil1533",
     "sen": 1533,
     "name": "FISHER, MARVIN",
@@ -15477,16 +15267,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil1544",
-    "sen": 1544,
-    "name": "SCHUELER, TIMO",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
     }
   },
   {
@@ -15610,49 +15390,9 @@
     }
   },
   {
-    "id": "pil1555",
-    "sen": 1555,
-    "name": "JACOBSON, DOUGLAS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil1555",
-    "sen": 1555,
-    "name": "JACOBSON, DOUGLAS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil1556",
     "sen": 1556,
     "name": "JOHNSON, GREGORY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil1557",
-    "sen": 1557,
-    "name": "RAMEY, AARON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil1557",
-    "sen": 1557,
-    "name": "RAMEY, AARON",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -15677,26 +15417,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil1559",
-    "sen": 1559,
-    "name": "MASON, CHRISTOPHER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil1559",
-    "sen": 1559,
-    "name": "MASON, CHRISTOPHER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
     }
   },
   {
@@ -16260,16 +15980,6 @@
     }
   },
   {
-    "id": "pil1614",
-    "sen": 1614,
-    "name": "MEISBERGER, JUSTIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil1615",
     "sen": 1615,
     "name": "GREGORY, SEAN",
@@ -16780,16 +16490,6 @@
     }
   },
   {
-    "id": "pil1665",
-    "sen": 1665,
-    "name": "DE KRUYF, JASON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil1666",
     "sen": 1666,
     "name": "LASPE, CRAIG",
@@ -17250,16 +16950,6 @@
     }
   },
   {
-    "id": "pil1712",
-    "sen": 1712,
-    "name": "HEARN, JAMES",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil1713",
     "sen": 1713,
     "name": "GROB, THOMAS",
@@ -17400,16 +17090,6 @@
     }
   },
   {
-    "id": "pil1726",
-    "sen": 1726,
-    "name": "EDWARDS, STEVE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
     "id": "pil1727",
     "sen": 1727,
     "name": "DAVISS, TODD",
@@ -17477,16 +17157,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil1734",
-    "sen": 1734,
-    "name": "HANDSAKER, BRIAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -17620,16 +17290,6 @@
     }
   },
   {
-    "id": "pil1746",
-    "sen": 1746,
-    "name": "MILLER, RICHARD",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil1747",
     "sen": 1747,
     "name": "ABDO, JASON",
@@ -17710,26 +17370,6 @@
     }
   },
   {
-    "id": "pil1754",
-    "sen": 1754,
-    "name": "MITCHELL, ROBERT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil1755",
-    "sen": 1755,
-    "name": "COX, STEVEN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
     "id": "pil1755",
     "sen": 1755,
     "name": "COX, STEVEN",
@@ -17793,16 +17433,6 @@
     "id": "pil1761",
     "sen": 1761,
     "name": "HART, ANDREW",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil1762",
-    "sen": 1762,
-    "name": "AMBROSE, PAUL",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -17993,16 +17623,6 @@
     "id": "pil1780",
     "sen": 1780,
     "name": "MCCULLOUGH, JOSEPH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil1781",
-    "sen": 1781,
-    "name": "DEAN, JOSH",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -18320,16 +17940,6 @@
     }
   },
   {
-    "id": "pil1811",
-    "sen": 1811,
-    "name": "BULGER, TREVOR",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil1812",
     "sen": 1812,
     "name": "LOCKHART, PAUL",
@@ -18480,16 +18090,6 @@
     }
   },
   {
-    "id": "pil1826",
-    "sen": 1826,
-    "name": "HEICHEL, ARON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil1827",
     "sen": 1827,
     "name": "WATSON, CREASP",
@@ -18577,36 +18177,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil1835",
-    "sen": 1835,
-    "name": "HOLDEN, MARK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil1835",
-    "sen": 1835,
-    "name": "HOLDEN, MARK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil1836",
-    "sen": 1836,
-    "name": "MCELHERAN, KYLE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -19190,16 +18760,6 @@
     }
   },
   {
-    "id": "pil1893",
-    "sen": 1893,
-    "name": "SMITH, CRAIG",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil1894",
     "sen": 1894,
     "name": "GULLICKSON, BERNDT",
@@ -19217,16 +18777,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil1896",
-    "sen": 1896,
-    "name": "LITTLE, BRIAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -19307,16 +18857,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil1904",
-    "sen": 1904,
-    "name": "PRUITT, CHARLEY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
     }
   },
   {
@@ -19430,26 +18970,6 @@
     }
   },
   {
-    "id": "pil1914",
-    "sen": 1914,
-    "name": "HELTON, MIKE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil1915",
-    "sen": 1915,
-    "name": "NOGOWSKI, JEREMY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
     "id": "pil1915",
     "sen": 1915,
     "name": "NOGOWSKI, JEREMY",
@@ -19463,16 +18983,6 @@
     "id": "pil1916",
     "sen": 1916,
     "name": "SMITH, JENNY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil1917",
-    "sen": 1917,
-    "name": "O'CONNOR, TOM",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -19513,16 +19023,6 @@
     "id": "pil1920",
     "sen": 1920,
     "name": "WHITING, SETH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil1921",
-    "sen": 1921,
-    "name": "KEMPF, STEVE",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -19630,16 +19130,6 @@
     }
   },
   {
-    "id": "pil1930",
-    "sen": 1930,
-    "name": "GERMAN, VAL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
     "id": "pil1931",
     "sen": 1931,
     "name": "URIA, JASON",
@@ -19647,16 +19137,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil1932",
-    "sen": 1932,
-    "name": "CHASE, CLINT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
     }
   },
   {
@@ -19720,16 +19200,6 @@
     }
   },
   {
-    "id": "pil1937",
-    "sen": 1937,
-    "name": "KIM, ROBIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
     "id": "pil1938",
     "sen": 1938,
     "name": "TURK, SCOTT",
@@ -19750,16 +19220,6 @@
     }
   },
   {
-    "id": "pil1939",
-    "sen": 1939,
-    "name": "JOHNSON, ZACHARY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil1940",
     "sen": 1940,
     "name": "SCOVILLE, DAVID",
@@ -19767,16 +19227,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil1941",
-    "sen": 1941,
-    "name": "UNTERSEHER, BRIAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
     }
   },
   {
@@ -19820,16 +19270,6 @@
     }
   },
   {
-    "id": "pil1944",
-    "sen": 1944,
-    "name": "MAJIDI, ARASH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil1945",
     "sen": 1945,
     "name": "FINCHER, BEAU",
@@ -19837,26 +19277,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil1945",
-    "sen": 1945,
-    "name": "FINCHER, BEAU",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil1946",
-    "sen": 1946,
-    "name": "SCHAPER, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
     }
   },
   {
@@ -20090,16 +19510,6 @@
     }
   },
   {
-    "id": "pil1968",
-    "sen": 1968,
-    "name": "SCHILLER, GARRETT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil1969",
     "sen": 1969,
     "name": "ZELLER, JUSTIN",
@@ -20137,26 +19547,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil1972",
-    "sen": 1972,
-    "name": "ETTLIN, JOSEPH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil1973",
-    "sen": 1973,
-    "name": "KILKUTS, NICHOLAS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
     }
   },
   {
@@ -20203,16 +19593,6 @@
     "id": "pil1977",
     "sen": 1977,
     "name": "CERRETA, JEFFREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil1978",
-    "sen": 1978,
-    "name": "POLSLEY, RYAN",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -20370,16 +19750,6 @@
     }
   },
   {
-    "id": "pil1992",
-    "sen": 1992,
-    "name": "WHITTINGHAM, MATTHEW",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil1993",
     "sen": 1993,
     "name": "NIESLEY-MEYER, MONIQUE",
@@ -20407,16 +19777,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil1996",
-    "sen": 1996,
-    "name": "MAREAN, STEVE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
     }
   },
   {
@@ -20503,16 +19863,6 @@
     "id": "pil2004",
     "sen": 2004,
     "name": "MACNAUGHTON, PEARSON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2005",
-    "sen": 2005,
-    "name": "GRUBBS, NATE",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -20650,16 +20000,6 @@
     }
   },
   {
-    "id": "pil2017",
-    "sen": 2017,
-    "name": "CONROY, TREVOR",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
     "id": "pil2018",
     "sen": 2018,
     "name": "HARFORD, PAUL",
@@ -20710,16 +20050,6 @@
     }
   },
   {
-    "id": "pil2022",
-    "sen": 2022,
-    "name": "DELAVAR, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
     "id": "pil2023",
     "sen": 2023,
     "name": "LAUKKANEN, HEIKKI",
@@ -20727,26 +20057,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2023",
-    "sen": 2023,
-    "name": "LAUKKANEN, HEIKKI",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2024",
-    "sen": 2024,
-    "name": "PALA, AUDREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
     }
   },
   {
@@ -20830,16 +20140,6 @@
     }
   },
   {
-    "id": "pil2031",
-    "sen": 2031,
-    "name": "NORMAN, RONNEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil2032",
     "sen": 2032,
     "name": "HILL, ADAM",
@@ -20847,16 +20147,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2033",
-    "sen": 2033,
-    "name": "DONEY, JOHN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
     }
   },
   {
@@ -20900,16 +20190,6 @@
     }
   },
   {
-    "id": "pil2036",
-    "sen": 2036,
-    "name": "SWALWELL, DAVID",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
     "id": "pil2037",
     "sen": 2037,
     "name": "MCLAUGHLIN, GEORGE",
@@ -20927,16 +20207,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2039",
-    "sen": 2039,
-    "name": "COOLEY, CLIFF",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -21007,56 +20277,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2046",
-    "sen": 2046,
-    "name": "VILLANI, NICK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2046",
-    "sen": 2046,
-    "name": "VILLANI, NICK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2046",
-    "sen": 2046,
-    "name": "VILLANI, NICK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2046",
-    "sen": 2046,
-    "name": "VILLANI, NICK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2046",
-    "sen": 2046,
-    "name": "VILLANI, NICK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -21230,16 +20450,6 @@
     }
   },
   {
-    "id": "pil2062",
-    "sen": 2062,
-    "name": "HARTMAN, JACOB",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2063",
     "sen": 2063,
     "name": "JOHNSON, RUSSELL",
@@ -21310,26 +20520,6 @@
     }
   },
   {
-    "id": "pil2069",
-    "sen": 2069,
-    "name": "ROBERTS, BRYCE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2069",
-    "sen": 2069,
-    "name": "ROBERTS, BRYCE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2070",
     "sen": 2070,
     "name": "SPRAGUE, KRISTEN",
@@ -21347,46 +20537,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2072",
-    "sen": 2072,
-    "name": "ROARK, CHARLES (CHARLIE)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2072",
-    "sen": 2072,
-    "name": "ROARK, CHARLES (CHARLIE)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2072",
-    "sen": 2072,
-    "name": "ROARK, CHARLES (CHARLIE)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2072",
-    "sen": 2072,
-    "name": "ROARK, CHARLES (CHARLIE)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -21460,26 +20610,6 @@
     }
   },
   {
-    "id": "pil2078",
-    "sen": 2078,
-    "name": "ERICKSON, KALIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2078",
-    "sen": 2078,
-    "name": "ERICKSON, KALIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2079",
     "sen": 2079,
     "name": "SALEH, PASHA",
@@ -21510,16 +20640,6 @@
     }
   },
   {
-    "id": "pil2081",
-    "sen": 2081,
-    "name": "CLARKSON, CASEY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2082",
     "sen": 2082,
     "name": "GOLD, NATHAN",
@@ -21527,16 +20647,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2083",
-    "sen": 2083,
-    "name": "TOMPKINS, TRAVIS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -21660,16 +20770,6 @@
     }
   },
   {
-    "id": "pil2094",
-    "sen": 2094,
-    "name": "SKINNER, CASEY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2095",
     "sen": 2095,
     "name": "MORAINE, MATTHEW",
@@ -21740,16 +20840,6 @@
     }
   },
   {
-    "id": "pil2101",
-    "sen": 2101,
-    "name": "CAVE, MALLORY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2102",
     "sen": 2102,
     "name": "RICKS, THOMAS",
@@ -21787,16 +20877,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2106",
-    "sen": 2106,
-    "name": "DAVIS, ROBERT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
     }
   },
   {
@@ -21887,36 +20967,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2114",
-    "sen": 2114,
-    "name": "LYNN, BYRON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2115",
-    "sen": 2115,
-    "name": "INKMANN, EDWARD",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2115",
-    "sen": 2115,
-    "name": "INKMANN, EDWARD",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
     }
   },
   {
@@ -22040,26 +21090,6 @@
     }
   },
   {
-    "id": "pil2126",
-    "sen": 2126,
-    "name": "THOMSEN, CHRISTOPHER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2126",
-    "sen": 2126,
-    "name": "THOMSEN, CHRISTOPHER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
     "id": "pil2127",
     "sen": 2127,
     "name": "O'CONNOR, BRIAN",
@@ -22073,16 +21103,6 @@
     "id": "pil2128",
     "sen": 2128,
     "name": "MEYER, RYAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2129",
-    "sen": 2129,
-    "name": "KALINSKI, MIKE",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -22120,16 +21140,6 @@
     }
   },
   {
-    "id": "pil2131",
-    "sen": 2131,
-    "name": "FOLEY, SEAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil2132",
     "sen": 2132,
     "name": "MCKILLOP, RILEY",
@@ -22137,16 +21147,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2133",
-    "sen": 2133,
-    "name": "CHRZANOWSKI, ANNA",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
     }
   },
   {
@@ -22200,26 +21200,6 @@
     }
   },
   {
-    "id": "pil2137",
-    "sen": 2137,
-    "name": "HEAD, DEREK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2138",
-    "sen": 2138,
-    "name": "GAZELEY, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil2138",
     "sen": 2138,
     "name": "GAZELEY, MICHAEL",
@@ -22263,46 +21243,6 @@
     "id": "pil2142",
     "sen": 2142,
     "name": "MOESGES, BRAD",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2143",
-    "sen": 2143,
-    "name": "HOLTON, PETER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2143",
-    "sen": 2143,
-    "name": "HOLTON, PETER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2143",
-    "sen": 2143,
-    "name": "HOLTON, PETER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2143",
-    "sen": 2143,
-    "name": "HOLTON, PETER",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -22430,16 +21370,6 @@
     }
   },
   {
-    "id": "pil2154",
-    "sen": 2154,
-    "name": "ROLLER, DAVID",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
     "id": "pil2155",
     "sen": 2155,
     "name": "RICH, JOHN",
@@ -22470,16 +21400,6 @@
     }
   },
   {
-    "id": "pil2157",
-    "sen": 2157,
-    "name": "MILLER, OWEN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
     "id": "pil2158",
     "sen": 2158,
     "name": "KLINZING, CHAD",
@@ -22487,16 +21407,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2159",
-    "sen": 2159,
-    "name": "BRUNNER, LANCE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -22650,16 +21560,6 @@
     }
   },
   {
-    "id": "pil2173",
-    "sen": 2173,
-    "name": "BILGRAV, CULLEN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2174",
     "sen": 2174,
     "name": "DODD, JASON R",
@@ -22697,16 +21597,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2178",
-    "sen": 2178,
-    "name": "GRICE, ZACHARY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
     }
   },
   {
@@ -22960,29 +21850,9 @@
     }
   },
   {
-    "id": "pil2202",
-    "sen": 2202,
-    "name": "BACCHUS, CHRIS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2203",
     "sen": 2203,
     "name": "BOWIE, GRIFFITH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2204",
-    "sen": 2204,
-    "name": "GIRARDET, CHRIS",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -23140,16 +22010,6 @@
     }
   },
   {
-    "id": "pil2218",
-    "sen": 2218,
-    "name": "BUCKLEY, DAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2219",
     "sen": 2219,
     "name": "ENGEBRETSON, AUSTIN",
@@ -23200,26 +22060,6 @@
     }
   },
   {
-    "id": "pil2223",
-    "sen": 2223,
-    "name": "JONES, BENJAMIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2223",
-    "sen": 2223,
-    "name": "JONES, BENJAMIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil2224",
     "sen": 2224,
     "name": "GRINDEL, KEVIN",
@@ -23227,16 +22067,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2225",
-    "sen": 2225,
-    "name": "KUNRATH, ERICH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
     }
   },
   {
@@ -23280,36 +22110,6 @@
     }
   },
   {
-    "id": "pil2228",
-    "sen": 2228,
-    "name": "BAILLY, NICHOLAS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2228",
-    "sen": 2228,
-    "name": "BAILLY, NICHOLAS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2228",
-    "sen": 2228,
-    "name": "BAILLY, NICHOLAS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2229",
     "sen": 2229,
     "name": "OLSON, ERIC",
@@ -23340,49 +22140,9 @@
     }
   },
   {
-    "id": "pil2231",
-    "sen": 2231,
-    "name": "WATSON, CHRISTOPHER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2231",
-    "sen": 2231,
-    "name": "WATSON, CHRISTOPHER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil2232",
     "sen": 2232,
     "name": "WEES, JOEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2233",
-    "sen": 2233,
-    "name": "PEARL, TIMOTHY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2233",
-    "sen": 2233,
-    "name": "PEARL, TIMOTHY",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -23460,56 +22220,6 @@
     }
   },
   {
-    "id": "pil2239",
-    "sen": 2239,
-    "name": "BURRILL, ASHLEY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2239",
-    "sen": 2239,
-    "name": "BURRILL, ASHLEY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2239",
-    "sen": 2239,
-    "name": "BURRILL, ASHLEY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2239",
-    "sen": 2239,
-    "name": "BURRILL, ASHLEY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2239",
-    "sen": 2239,
-    "name": "BURRILL, ASHLEY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2240",
     "sen": 2240,
     "name": "SIEMENS, COLBY",
@@ -23527,26 +22237,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2242",
-    "sen": 2242,
-    "name": "VAN HOOF, MIGUEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2242",
-    "sen": 2242,
-    "name": "VAN HOOF, MIGUEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
     }
   },
   {
@@ -23590,26 +22280,6 @@
     }
   },
   {
-    "id": "pil2245",
-    "sen": 2245,
-    "name": "JENSEN, SOREN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2245",
-    "sen": 2245,
-    "name": "JENSEN, SOREN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2246",
     "sen": 2246,
     "name": "STROMBERG, BRIAN",
@@ -23627,26 +22297,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2247",
-    "sen": 2247,
-    "name": "REYNOLDS, KIRK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2248",
-    "sen": 2248,
-    "name": "WILLIS, ANTHONY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
     }
   },
   {
@@ -23690,56 +22340,6 @@
     }
   },
   {
-    "id": "pil2251",
-    "sen": 2251,
-    "name": "WEST, BRANDON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2251",
-    "sen": 2251,
-    "name": "WEST, BRANDON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2251",
-    "sen": 2251,
-    "name": "WEST, BRANDON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2251",
-    "sen": 2251,
-    "name": "WEST, BRANDON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2251",
-    "sen": 2251,
-    "name": "WEST, BRANDON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2252",
     "sen": 2252,
     "name": "TUITE, CHRISTOPHER",
@@ -23747,16 +22347,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2253",
-    "sen": 2253,
-    "name": "TOWNSEND, PATRICK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
     }
   },
   {
@@ -23800,16 +22390,6 @@
     }
   },
   {
-    "id": "pil2256",
-    "sen": 2256,
-    "name": "PETERSON, JOHN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
     "id": "pil2257",
     "sen": 2257,
     "name": "CORLEY, LAUREN",
@@ -23817,26 +22397,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2258",
-    "sen": 2258,
-    "name": "HUBBARD, MARCUS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2258",
-    "sen": 2258,
-    "name": "HUBBARD, MARCUS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -23890,56 +22450,6 @@
     }
   },
   {
-    "id": "pil2262",
-    "sen": 2262,
-    "name": "RUDDELL, BRIAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2262",
-    "sen": 2262,
-    "name": "RUDDELL, BRIAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2262",
-    "sen": 2262,
-    "name": "RUDDELL, BRIAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2262",
-    "sen": 2262,
-    "name": "RUDDELL, BRIAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2263",
-    "sen": 2263,
-    "name": "MOSBRUCKER, ANDREW",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
     "id": "pil2263",
     "sen": 2263,
     "name": "MOSBRUCKER, ANDREW",
@@ -23980,56 +22490,6 @@
     }
   },
   {
-    "id": "pil2266",
-    "sen": 2266,
-    "name": "VAN DER WALT, BAREND",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2266",
-    "sen": 2266,
-    "name": "VAN DER WALT, BAREND",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2266",
-    "sen": 2266,
-    "name": "VAN DER WALT, BAREND",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2266",
-    "sen": 2266,
-    "name": "VAN DER WALT, BAREND",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2266",
-    "sen": 2266,
-    "name": "VAN DER WALT, BAREND",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
     "id": "pil2267",
     "sen": 2267,
     "name": "BISENIEKS, JAMES",
@@ -24043,26 +22503,6 @@
     "id": "pil2268",
     "sen": 2268,
     "name": "ATTERBURY, JASON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2268",
-    "sen": 2268,
-    "name": "ATTERBURY, JASON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2269",
-    "sen": 2269,
-    "name": "KUPERS, KYLE",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -24087,16 +22527,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2271",
-    "sen": 2271,
-    "name": "GESER, RYAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
     }
   },
   {
@@ -24150,36 +22580,6 @@
     }
   },
   {
-    "id": "pil2275",
-    "sen": 2275,
-    "name": "MAHR, DANIEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2275",
-    "sen": 2275,
-    "name": "MAHR, DANIEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2275",
-    "sen": 2275,
-    "name": "MAHR, DANIEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
     "id": "pil2276",
     "sen": 2276,
     "name": "CROWDER, APRIL",
@@ -24210,16 +22610,6 @@
     }
   },
   {
-    "id": "pil2278",
-    "sen": 2278,
-    "name": "GRAY, GARRETT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2279",
     "sen": 2279,
     "name": "CUMMINS, DANIEL",
@@ -24227,26 +22617,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2279",
-    "sen": 2279,
-    "name": "CUMMINS, DANIEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2280",
-    "sen": 2280,
-    "name": "WAYNER, PAUL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
     }
   },
   {
@@ -24280,26 +22650,6 @@
     }
   },
   {
-    "id": "pil2282",
-    "sen": 2282,
-    "name": "THOMPSON, MATTHEW",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2283",
-    "sen": 2283,
-    "name": "HAWKINS, KENNETH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
     "id": "pil2283",
     "sen": 2283,
     "name": "HAWKINS, KENNETH",
@@ -24317,16 +22667,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2285",
-    "sen": 2285,
-    "name": "THUMMA, SHAWN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
     }
   },
   {
@@ -24400,26 +22740,6 @@
     }
   },
   {
-    "id": "pil2291",
-    "sen": 2291,
-    "name": "MCNELIS, JOSEPH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2291",
-    "sen": 2291,
-    "name": "MCNELIS, JOSEPH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil2292",
     "sen": 2292,
     "name": "METCALF, QUINTON",
@@ -24427,36 +22747,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2292",
-    "sen": 2292,
-    "name": "METCALF, QUINTON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2293",
-    "sen": 2293,
-    "name": "BRANDS, TIMOTHY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2293",
-    "sen": 2293,
-    "name": "BRANDS, TIMOTHY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
     }
   },
   {
@@ -24477,36 +22767,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2295",
-    "sen": 2295,
-    "name": "CAMPBELL, JAMES",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2295",
-    "sen": 2295,
-    "name": "CAMPBELL, JAMES",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2295",
-    "sen": 2295,
-    "name": "CAMPBELL, JAMES",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -24610,16 +22870,6 @@
     }
   },
   {
-    "id": "pil2304",
-    "sen": 2304,
-    "name": "CAROLLO, ADAM",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2305",
     "sen": 2305,
     "name": "FARRIS, CHRISTOPHER",
@@ -24660,16 +22910,6 @@
     }
   },
   {
-    "id": "pil2308",
-    "sen": 2308,
-    "name": "ISOM, DONALD",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2309",
     "sen": 2309,
     "name": "NIEMAN, CHADLER",
@@ -24687,26 +22927,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2310",
-    "sen": 2310,
-    "name": "FUNK, JOEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2311",
-    "sen": 2311,
-    "name": "MATTHEWS, MONICA",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
     }
   },
   {
@@ -24770,16 +22990,6 @@
     }
   },
   {
-    "id": "pil2316",
-    "sen": 2316,
-    "name": "SINGH, NAVNEIL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
     "id": "pil2317",
     "sen": 2317,
     "name": "STREET, ALEC",
@@ -24820,86 +23030,6 @@
     }
   },
   {
-    "id": "pil2320",
-    "sen": 2320,
-    "name": "QUINTERO, JORGE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2320",
-    "sen": 2320,
-    "name": "QUINTERO, JORGE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2320",
-    "sen": 2320,
-    "name": "QUINTERO, JORGE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2321",
-    "sen": 2321,
-    "name": "MOROSHAN, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2321",
-    "sen": 2321,
-    "name": "MOROSHAN, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2321",
-    "sen": 2321,
-    "name": "MOROSHAN, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2321",
-    "sen": 2321,
-    "name": "MOROSHAN, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2321",
-    "sen": 2321,
-    "name": "MOROSHAN, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2321",
     "sen": 2321,
     "name": "MOROSHAN, MICHAEL",
@@ -24933,46 +23063,6 @@
     "id": "pil2324",
     "sen": 2324,
     "name": "MIRANDA, JOHN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2325",
-    "sen": 2325,
-    "name": "HOLMAN, KEITH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2325",
-    "sen": 2325,
-    "name": "HOLMAN, KEITH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2325",
-    "sen": 2325,
-    "name": "HOLMAN, KEITH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2325",
-    "sen": 2325,
-    "name": "HOLMAN, KEITH",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -25110,16 +23200,6 @@
     }
   },
   {
-    "id": "pil2337",
-    "sen": 2337,
-    "name": "SMITH, TYLER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2338",
     "sen": 2338,
     "name": "FRIEDMAN, JON",
@@ -25143,56 +23223,6 @@
     "id": "pil2340",
     "sen": 2340,
     "name": "LANGHOLZ, DENISE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2341",
-    "sen": 2341,
-    "name": "LOVE, BRENT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2341",
-    "sen": 2341,
-    "name": "LOVE, BRENT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2341",
-    "sen": 2341,
-    "name": "LOVE, BRENT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2341",
-    "sen": 2341,
-    "name": "LOVE, BRENT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2341",
-    "sen": 2341,
-    "name": "LOVE, BRENT",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -25250,16 +23280,6 @@
     }
   },
   {
-    "id": "pil2345",
-    "sen": 2345,
-    "name": "LAUCHLAND, SCOTT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil2346",
     "sen": 2346,
     "name": "FITZWATER, DAVID",
@@ -25300,26 +23320,6 @@
     }
   },
   {
-    "id": "pil2349",
-    "sen": 2349,
-    "name": "JONES, CHRISTOPHER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2349",
-    "sen": 2349,
-    "name": "JONES, CHRISTOPHER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2350",
     "sen": 2350,
     "name": "SERRANO, MARLON",
@@ -25327,16 +23327,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2351",
-    "sen": 2351,
-    "name": "HARWOOD, PREM",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -25490,36 +23480,6 @@
     }
   },
   {
-    "id": "pil2365",
-    "sen": 2365,
-    "name": "DURTSCHI, TRAVIS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2365",
-    "sen": 2365,
-    "name": "DURTSCHI, TRAVIS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2365",
-    "sen": 2365,
-    "name": "DURTSCHI, TRAVIS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2366",
     "sen": 2366,
     "name": "BURRIS, JOHN",
@@ -25547,16 +23507,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2369",
-    "sen": 2369,
-    "name": "STRUIKSMA, JUSTIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -25600,56 +23550,6 @@
     }
   },
   {
-    "id": "pil2372",
-    "sen": 2372,
-    "name": "ZEMBOY, PAUL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2372",
-    "sen": 2372,
-    "name": "ZEMBOY, PAUL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2372",
-    "sen": 2372,
-    "name": "ZEMBOY, PAUL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2372",
-    "sen": 2372,
-    "name": "ZEMBOY, PAUL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2372",
-    "sen": 2372,
-    "name": "ZEMBOY, PAUL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
     "id": "pil2373",
     "sen": 2373,
     "name": "MANIER, TIMOTHY",
@@ -25657,106 +23557,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2373",
-    "sen": 2373,
-    "name": "MANIER, TIMOTHY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2373",
-    "sen": 2373,
-    "name": "MANIER, TIMOTHY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2373",
-    "sen": 2373,
-    "name": "MANIER, TIMOTHY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2373",
-    "sen": 2373,
-    "name": "MANIER, TIMOTHY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2373",
-    "sen": 2373,
-    "name": "MANIER, TIMOTHY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2374",
-    "sen": 2374,
-    "name": "STEVENS, JEFFREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2374",
-    "sen": 2374,
-    "name": "STEVENS, JEFFREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2374",
-    "sen": 2374,
-    "name": "STEVENS, JEFFREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2374",
-    "sen": 2374,
-    "name": "STEVENS, JEFFREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2374",
-    "sen": 2374,
-    "name": "STEVENS, JEFFREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
     }
   },
   {
@@ -25777,26 +23577,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2376",
-    "sen": 2376,
-    "name": "WALKER, TRAVIS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2376",
-    "sen": 2376,
-    "name": "WALKER, TRAVIS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
     }
   },
   {
@@ -25840,39 +23620,9 @@
     }
   },
   {
-    "id": "pil2379",
-    "sen": 2379,
-    "name": "FRITTS, SARAH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
     "id": "pil2380",
     "sen": 2380,
     "name": "MCGHEE, MARK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2380",
-    "sen": 2380,
-    "name": "MCGHEE, MARK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2381",
-    "sen": 2381,
-    "name": "RUETER, JOSHUA",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -25937,16 +23687,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2387",
-    "sen": 2387,
-    "name": "HOMMERDING, AARON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
     }
   },
   {
@@ -26060,29 +23800,9 @@
     }
   },
   {
-    "id": "pil2397",
-    "sen": 2397,
-    "name": "MCGRATH, MARK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2398",
     "sen": 2398,
     "name": "WHITE, CARSON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2399",
-    "sen": 2399,
-    "name": "GOFMAN, MICHAEL",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -26120,39 +23840,9 @@
     }
   },
   {
-    "id": "pil2401",
-    "sen": 2401,
-    "name": "DETWILER, NATHAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2402",
     "sen": 2402,
     "name": "FRICK, JOEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2403",
-    "sen": 2403,
-    "name": "BARRY, KEVAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2403",
-    "sen": 2403,
-    "name": "BARRY, KEVAN",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -26190,16 +23880,6 @@
     }
   },
   {
-    "id": "pil2405",
-    "sen": 2405,
-    "name": "ORWICK, DOUGLAS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
     "id": "pil2406",
     "sen": 2406,
     "name": "HAYDEN, ERIC",
@@ -26207,66 +23887,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2406",
-    "sen": 2406,
-    "name": "HAYDEN, ERIC",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2407",
-    "sen": 2407,
-    "name": "ANDERSON, BURKE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2407",
-    "sen": 2407,
-    "name": "ANDERSON, BURKE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2407",
-    "sen": 2407,
-    "name": "ANDERSON, BURKE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2407",
-    "sen": 2407,
-    "name": "ANDERSON, BURKE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2407",
-    "sen": 2407,
-    "name": "ANDERSON, BURKE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
     }
   },
   {
@@ -26320,106 +23940,6 @@
     }
   },
   {
-    "id": "pil2411",
-    "sen": 2411,
-    "name": "OWENS, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2411",
-    "sen": 2411,
-    "name": "OWENS, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2411",
-    "sen": 2411,
-    "name": "OWENS, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2411",
-    "sen": 2411,
-    "name": "OWENS, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2411",
-    "sen": 2411,
-    "name": "OWENS, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2412",
-    "sen": 2412,
-    "name": "BLAIR-ZINGER, CHANDLER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2412",
-    "sen": 2412,
-    "name": "BLAIR-ZINGER, CHANDLER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2412",
-    "sen": 2412,
-    "name": "BLAIR-ZINGER, CHANDLER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2412",
-    "sen": 2412,
-    "name": "BLAIR-ZINGER, CHANDLER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2412",
-    "sen": 2412,
-    "name": "BLAIR-ZINGER, CHANDLER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2412",
     "sen": 2412,
     "name": "BLAIR-ZINGER, CHANDLER",
@@ -26437,76 +23957,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2413",
-    "sen": 2413,
-    "name": "SCHMIDT, GARRETT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2413",
-    "sen": 2413,
-    "name": "SCHMIDT, GARRETT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2413",
-    "sen": 2413,
-    "name": "SCHMIDT, GARRETT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2413",
-    "sen": 2413,
-    "name": "SCHMIDT, GARRETT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2413",
-    "sen": 2413,
-    "name": "SCHMIDT, GARRETT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2414",
-    "sen": 2414,
-    "name": "NILSON, PAUL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2414",
-    "sen": 2414,
-    "name": "NILSON, PAUL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
     }
   },
   {
@@ -26610,36 +24060,6 @@
     }
   },
   {
-    "id": "pil2423",
-    "sen": 2423,
-    "name": "BOUGHEN, JAMES",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2423",
-    "sen": 2423,
-    "name": "BOUGHEN, JAMES",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2424",
-    "sen": 2424,
-    "name": "SMITH, JEREMY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
     "id": "pil2424",
     "sen": 2424,
     "name": "SMITH, JEREMY",
@@ -26657,56 +24077,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2426",
-    "sen": 2426,
-    "name": "ROMBACH, MATTHEW",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2426",
-    "sen": 2426,
-    "name": "ROMBACH, MATTHEW",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2426",
-    "sen": 2426,
-    "name": "ROMBACH, MATTHEW",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2426",
-    "sen": 2426,
-    "name": "ROMBACH, MATTHEW",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2426",
-    "sen": 2426,
-    "name": "ROMBACH, MATTHEW",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
     }
   },
   {
@@ -26770,16 +24140,6 @@
     }
   },
   {
-    "id": "pil2431",
-    "sen": 2431,
-    "name": "ALLEN, TIMOTHY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2432",
     "sen": 2432,
     "name": "GARRY, CHRISTOPHER",
@@ -26800,46 +24160,6 @@
     }
   },
   {
-    "id": "pil2433",
-    "sen": 2433,
-    "name": "RYDELL, GARTH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2433",
-    "sen": 2433,
-    "name": "RYDELL, GARTH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2433",
-    "sen": 2433,
-    "name": "RYDELL, GARTH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2433",
-    "sen": 2433,
-    "name": "RYDELL, GARTH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2434",
     "sen": 2434,
     "name": "SIMMONS, PETER",
@@ -26847,16 +24167,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2435",
-    "sen": 2435,
-    "name": "HANEY, CURTIS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
     }
   },
   {
@@ -26900,106 +24210,6 @@
     }
   },
   {
-    "id": "pil2438",
-    "sen": 2438,
-    "name": "PREISS, MARK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2438",
-    "sen": 2438,
-    "name": "PREISS, MARK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2438",
-    "sen": 2438,
-    "name": "PREISS, MARK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2438",
-    "sen": 2438,
-    "name": "PREISS, MARK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2438",
-    "sen": 2438,
-    "name": "PREISS, MARK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2439",
-    "sen": 2439,
-    "name": "O'DONNELL, ANDREW",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2439",
-    "sen": 2439,
-    "name": "O'DONNELL, ANDREW",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2439",
-    "sen": 2439,
-    "name": "O'DONNELL, ANDREW",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2439",
-    "sen": 2439,
-    "name": "O'DONNELL, ANDREW",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2439",
-    "sen": 2439,
-    "name": "O'DONNELL, ANDREW",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
     "id": "pil2439",
     "sen": 2439,
     "name": "O'DONNELL, ANDREW",
@@ -27013,16 +24223,6 @@
     "id": "pil2440",
     "sen": 2440,
     "name": "GUILLETTE, THOMAS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2441",
-    "sen": 2441,
-    "name": "BECKER, GREGORY",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -27100,46 +24300,6 @@
     }
   },
   {
-    "id": "pil2447",
-    "sen": 2447,
-    "name": "CROWTHER, TYLER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2447",
-    "sen": 2447,
-    "name": "CROWTHER, TYLER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2447",
-    "sen": 2447,
-    "name": "CROWTHER, TYLER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2447",
-    "sen": 2447,
-    "name": "CROWTHER, TYLER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil2448",
     "sen": 2448,
     "name": "MARSH, CURTIS",
@@ -27153,16 +24313,6 @@
     "id": "pil2449",
     "sen": 2449,
     "name": "PATEL, DHAWAL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2450",
-    "sen": 2450,
-    "name": "KINDSVATER, MICHAEL",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -27200,26 +24350,6 @@
     }
   },
   {
-    "id": "pil2452",
-    "sen": 2452,
-    "name": "WILSON, CHARLES III",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2453",
-    "sen": 2453,
-    "name": "HATLESTAD, KURT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2453",
     "sen": 2453,
     "name": "HATLESTAD, KURT",
@@ -27237,56 +24367,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2455",
-    "sen": 2455,
-    "name": "BEITZEL, WENDELL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2455",
-    "sen": 2455,
-    "name": "BEITZEL, WENDELL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2455",
-    "sen": 2455,
-    "name": "BEITZEL, WENDELL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2455",
-    "sen": 2455,
-    "name": "BEITZEL, WENDELL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2455",
-    "sen": 2455,
-    "name": "BEITZEL, WENDELL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -27333,26 +24413,6 @@
     "id": "pil2459",
     "sen": 2459,
     "name": "ERICKSON, PATRICK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2460",
-    "sen": 2460,
-    "name": "SAUNDERS, JEFFREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2460",
-    "sen": 2460,
-    "name": "SAUNDERS, JEFFREY",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -27500,56 +24560,6 @@
     }
   },
   {
-    "id": "pil2473",
-    "sen": 2473,
-    "name": "FERTAL, DENNIS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2473",
-    "sen": 2473,
-    "name": "FERTAL, DENNIS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2473",
-    "sen": 2473,
-    "name": "FERTAL, DENNIS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2473",
-    "sen": 2473,
-    "name": "FERTAL, DENNIS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2474",
-    "sen": 2474,
-    "name": "ELLISON, ERIC",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil2474",
     "sen": 2474,
     "name": "ELLISON, ERIC",
@@ -27590,56 +24600,6 @@
     }
   },
   {
-    "id": "pil2477",
-    "sen": 2477,
-    "name": "MALMBERG, ERIK GUSTAV JESPER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2477",
-    "sen": 2477,
-    "name": "MALMBERG, ERIK GUSTAV JESPER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2477",
-    "sen": 2477,
-    "name": "MALMBERG, ERIK GUSTAV JESPER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2477",
-    "sen": 2477,
-    "name": "MALMBERG, ERIK GUSTAV JESPER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2477",
-    "sen": 2477,
-    "name": "MALMBERG, ERIK GUSTAV JESPER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
     "id": "pil2478",
     "sen": 2478,
     "name": "PAPIERNIK, HEATH",
@@ -27647,46 +24607,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2478",
-    "sen": 2478,
-    "name": "PAPIERNIK, HEATH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2479",
-    "sen": 2479,
-    "name": "HALL, ALEXANDER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2479",
-    "sen": 2479,
-    "name": "HALL, ALEXANDER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2479",
-    "sen": 2479,
-    "name": "HALL, ALEXANDER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
     }
   },
   {
@@ -27727,16 +24647,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2483",
-    "sen": 2483,
-    "name": "GUSSAK, JOSHUA",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
     }
   },
   {
@@ -27880,26 +24790,6 @@
     }
   },
   {
-    "id": "pil2496",
-    "sen": 2496,
-    "name": "SOKOLOW, DANIEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2496",
-    "sen": 2496,
-    "name": "SOKOLOW, DANIEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil2497",
     "sen": 2497,
     "name": "IMHOFF, ELI",
@@ -27917,56 +24807,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2498",
-    "sen": 2498,
-    "name": "POPEJOY, KARL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2499",
-    "sen": 2499,
-    "name": "SUCHLAND, SIMON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2499",
-    "sen": 2499,
-    "name": "SUCHLAND, SIMON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2499",
-    "sen": 2499,
-    "name": "SUCHLAND, SIMON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2499",
-    "sen": 2499,
-    "name": "SUCHLAND, SIMON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
     }
   },
   {
@@ -28050,26 +24890,6 @@
     }
   },
   {
-    "id": "pil2506",
-    "sen": 2506,
-    "name": "JAMES, BRYSON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2506",
-    "sen": 2506,
-    "name": "JAMES, BRYSON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
     "id": "pil2507",
     "sen": 2507,
     "name": "KEMNITZER, ERIC",
@@ -28090,26 +24910,6 @@
     }
   },
   {
-    "id": "pil2508",
-    "sen": 2508,
-    "name": "TRANTINA, BRIAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2509",
-    "sen": 2509,
-    "name": "ELIEL, MORGAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2509",
     "sen": 2509,
     "name": "ELIEL, MORGAN",
@@ -28123,26 +24923,6 @@
     "id": "pil2510",
     "sen": 2510,
     "name": "CLOER, GREGORY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2510",
-    "sen": 2510,
-    "name": "CLOER, GREGORY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2511",
-    "sen": 2511,
-    "name": "PRITCHARD, GREGORY",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -28240,16 +25020,6 @@
     }
   },
   {
-    "id": "pil2519",
-    "sen": 2519,
-    "name": "CASHION, JEFFREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2520",
     "sen": 2520,
     "name": "SEVERSON, KURTIS",
@@ -28267,46 +25037,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2522",
-    "sen": 2522,
-    "name": "EVARTS, RAYMOND",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2522",
-    "sen": 2522,
-    "name": "EVARTS, RAYMOND",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2522",
-    "sen": 2522,
-    "name": "EVARTS, RAYMOND",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2522",
-    "sen": 2522,
-    "name": "EVARTS, RAYMOND",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
     }
   },
   {
@@ -28360,46 +25090,6 @@
     }
   },
   {
-    "id": "pil2526",
-    "sen": 2526,
-    "name": "HESSLER, NICHOLAS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2526",
-    "sen": 2526,
-    "name": "HESSLER, NICHOLAS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2526",
-    "sen": 2526,
-    "name": "HESSLER, NICHOLAS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2526",
-    "sen": 2526,
-    "name": "HESSLER, NICHOLAS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2527",
     "sen": 2527,
     "name": "BUTCHER, OWEN",
@@ -28407,16 +25097,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2528",
-    "sen": 2528,
-    "name": "SOLIS, JAMES",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -28457,26 +25137,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2532",
-    "sen": 2532,
-    "name": "VALENTINE, MARK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2532",
-    "sen": 2532,
-    "name": "VALENTINE, MARK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
     }
   },
   {
@@ -28690,26 +25350,6 @@
     }
   },
   {
-    "id": "pil2552",
-    "sen": 2552,
-    "name": "SINKA, THOMAS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2552",
-    "sen": 2552,
-    "name": "SINKA, THOMAS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2553",
     "sen": 2553,
     "name": "SCHEER, MATTHEW",
@@ -28800,66 +25440,6 @@
     }
   },
   {
-    "id": "pil2561",
-    "sen": 2561,
-    "name": "HOWLETT, COREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2561",
-    "sen": 2561,
-    "name": "HOWLETT, COREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2561",
-    "sen": 2561,
-    "name": "HOWLETT, COREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2561",
-    "sen": 2561,
-    "name": "HOWLETT, COREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2561",
-    "sen": 2561,
-    "name": "HOWLETT, COREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2562",
-    "sen": 2562,
-    "name": "MYUNG, STEVE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
     "id": "pil2562",
     "sen": 2562,
     "name": "MYUNG, STEVE",
@@ -28883,26 +25463,6 @@
     "id": "pil2564",
     "sen": 2564,
     "name": "THERRIEN, DANIEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2564",
-    "sen": 2564,
-    "name": "THERRIEN, DANIEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2565",
-    "sen": 2565,
-    "name": "SIMMS, JESSICA",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -28990,66 +25550,6 @@
     }
   },
   {
-    "id": "pil2572",
-    "sen": 2572,
-    "name": "SIDDIQUE, GHAFOOR",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2572",
-    "sen": 2572,
-    "name": "SIDDIQUE, GHAFOOR",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2572",
-    "sen": 2572,
-    "name": "SIDDIQUE, GHAFOOR",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2572",
-    "sen": 2572,
-    "name": "SIDDIQUE, GHAFOOR",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2572",
-    "sen": 2572,
-    "name": "SIDDIQUE, GHAFOOR",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2573",
-    "sen": 2573,
-    "name": "ABEL, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
     "id": "pil2573",
     "sen": 2573,
     "name": "ABEL, MICHAEL",
@@ -29097,16 +25597,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2578",
-    "sen": 2578,
-    "name": "BELOUS, OLEG",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -29170,46 +25660,6 @@
     }
   },
   {
-    "id": "pil2583",
-    "sen": 2583,
-    "name": "MERCER, BLAKE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2583",
-    "sen": 2583,
-    "name": "MERCER, BLAKE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2583",
-    "sen": 2583,
-    "name": "MERCER, BLAKE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2583",
-    "sen": 2583,
-    "name": "MERCER, BLAKE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2584",
     "sen": 2584,
     "name": "ZWANZIGER, JARED",
@@ -29230,16 +25680,6 @@
     }
   },
   {
-    "id": "pil2585",
-    "sen": 2585,
-    "name": "SYLVESTER, SEAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
     "id": "pil2586",
     "sen": 2586,
     "name": "MORGAN, ANTHONY",
@@ -29247,56 +25687,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2587",
-    "sen": 2587,
-    "name": "BALA, NAVIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2587",
-    "sen": 2587,
-    "name": "BALA, NAVIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2587",
-    "sen": 2587,
-    "name": "BALA, NAVIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2587",
-    "sen": 2587,
-    "name": "BALA, NAVIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2587",
-    "sen": 2587,
-    "name": "BALA, NAVIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -29347,106 +25737,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2591",
-    "sen": 2591,
-    "name": "QUINLAN, JAY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2591",
-    "sen": 2591,
-    "name": "QUINLAN, JAY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2591",
-    "sen": 2591,
-    "name": "QUINLAN, JAY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2591",
-    "sen": 2591,
-    "name": "QUINLAN, JAY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2591",
-    "sen": 2591,
-    "name": "QUINLAN, JAY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2592",
-    "sen": 2592,
-    "name": "PEARSON, GAVIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2592",
-    "sen": 2592,
-    "name": "PEARSON, GAVIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2592",
-    "sen": 2592,
-    "name": "PEARSON, GAVIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2592",
-    "sen": 2592,
-    "name": "PEARSON, GAVIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2592",
-    "sen": 2592,
-    "name": "PEARSON, GAVIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
     }
   },
   {
@@ -29580,16 +25870,6 @@
     }
   },
   {
-    "id": "pil2604",
-    "sen": 2604,
-    "name": "SCHEIN, JOSHUA",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
     "id": "pil2605",
     "sen": 2605,
     "name": "EARNSHAW, JACK",
@@ -29607,26 +25887,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2607",
-    "sen": 2607,
-    "name": "HANSON, BRETT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2607",
-    "sen": 2607,
-    "name": "HANSON, BRETT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
     }
   },
   {
@@ -29680,56 +25940,6 @@
     }
   },
   {
-    "id": "pil2611",
-    "sen": 2611,
-    "name": "MENDONCA, JOHN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2611",
-    "sen": 2611,
-    "name": "MENDONCA, JOHN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2611",
-    "sen": 2611,
-    "name": "MENDONCA, JOHN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2611",
-    "sen": 2611,
-    "name": "MENDONCA, JOHN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2611",
-    "sen": 2611,
-    "name": "MENDONCA, JOHN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
     "id": "pil2612",
     "sen": 2612,
     "name": "SCHAMS, DAVID",
@@ -29737,16 +25947,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2613",
-    "sen": 2613,
-    "name": "MORGAN III, HOWARD",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -29920,26 +26120,6 @@
     }
   },
   {
-    "id": "pil2629",
-    "sen": 2629,
-    "name": "KAUFMAN, BRANDYN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2630",
-    "sen": 2630,
-    "name": "AGYEI, WISDOM",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2630",
     "sen": 2630,
     "name": "AGYEI, WISDOM",
@@ -30007,16 +26187,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2637",
-    "sen": 2637,
-    "name": "SOCHA, SHAWN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -30120,46 +26290,6 @@
     }
   },
   {
-    "id": "pil2646",
-    "sen": 2646,
-    "name": "HANSEN, CHRISTOPHER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2646",
-    "sen": 2646,
-    "name": "HANSEN, CHRISTOPHER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2646",
-    "sen": 2646,
-    "name": "HANSEN, CHRISTOPHER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2646",
-    "sen": 2646,
-    "name": "HANSEN, CHRISTOPHER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2647",
     "sen": 2647,
     "name": "TIFEKI, NEXHATI",
@@ -30167,56 +26297,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2648",
-    "sen": 2648,
-    "name": "CHUNG, DARIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2648",
-    "sen": 2648,
-    "name": "CHUNG, DARIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2648",
-    "sen": 2648,
-    "name": "CHUNG, DARIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2648",
-    "sen": 2648,
-    "name": "CHUNG, DARIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2648",
-    "sen": 2648,
-    "name": "CHUNG, DARIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
     }
   },
   {
@@ -30270,16 +26350,6 @@
     }
   },
   {
-    "id": "pil2652",
-    "sen": 2652,
-    "name": "BERRY, STEFAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
     "id": "pil2653",
     "sen": 2653,
     "name": "CHUNG, DARBY",
@@ -30293,46 +26363,6 @@
     "id": "pil2654",
     "sen": 2654,
     "name": "QVIGSTAD, KORY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2655",
-    "sen": 2655,
-    "name": "HOUSTON, JASON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2655",
-    "sen": 2655,
-    "name": "HOUSTON, JASON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2655",
-    "sen": 2655,
-    "name": "HOUSTON, JASON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2655",
-    "sen": 2655,
-    "name": "HOUSTON, JASON",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -30430,26 +26460,6 @@
     }
   },
   {
-    "id": "pil2663",
-    "sen": 2663,
-    "name": "ISAZA, JUAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2663",
-    "sen": 2663,
-    "name": "ISAZA, JUAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
     "id": "pil2664",
     "sen": 2664,
     "name": "REAUME, JEFFREY",
@@ -30477,26 +26487,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2667",
-    "sen": 2667,
-    "name": "LOBKOV, ANDREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2667",
-    "sen": 2667,
-    "name": "LOBKOV, ANDREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -30660,26 +26650,6 @@
     }
   },
   {
-    "id": "pil2682",
-    "sen": 2682,
-    "name": "TINSLEY, WILLIAM",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2682",
-    "sen": 2682,
-    "name": "TINSLEY, WILLIAM",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
     "id": "pil2683",
     "sen": 2683,
     "name": "MOORE, BRIAN",
@@ -30687,56 +26657,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2684",
-    "sen": 2684,
-    "name": "PARKS, RICARDO",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2684",
-    "sen": 2684,
-    "name": "PARKS, RICARDO",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2684",
-    "sen": 2684,
-    "name": "PARKS, RICARDO",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2684",
-    "sen": 2684,
-    "name": "PARKS, RICARDO",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2684",
-    "sen": 2684,
-    "name": "PARKS, RICARDO",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
     }
   },
   {
@@ -30770,56 +26690,6 @@
     }
   },
   {
-    "id": "pil2686",
-    "sen": 2686,
-    "name": "WHITE, DAVID",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2686",
-    "sen": 2686,
-    "name": "WHITE, DAVID",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2686",
-    "sen": 2686,
-    "name": "WHITE, DAVID",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2686",
-    "sen": 2686,
-    "name": "WHITE, DAVID",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2686",
-    "sen": 2686,
-    "name": "WHITE, DAVID",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2687",
     "sen": 2687,
     "name": "MCNEILL, ZENNON",
@@ -30827,96 +26697,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2687",
-    "sen": 2687,
-    "name": "MCNEILL, ZENNON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2687",
-    "sen": 2687,
-    "name": "MCNEILL, ZENNON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2687",
-    "sen": 2687,
-    "name": "MCNEILL, ZENNON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2687",
-    "sen": 2687,
-    "name": "MCNEILL, ZENNON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2687",
-    "sen": 2687,
-    "name": "MCNEILL, ZENNON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2688",
-    "sen": 2688,
-    "name": "HART, EDWARD",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2688",
-    "sen": 2688,
-    "name": "HART, EDWARD",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2688",
-    "sen": 2688,
-    "name": "HART, EDWARD",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2688",
-    "sen": 2688,
-    "name": "HART, EDWARD",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -30937,36 +26717,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2690",
-    "sen": 2690,
-    "name": "KELLY, BRYCE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2690",
-    "sen": 2690,
-    "name": "KELLY, BRYCE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2690",
-    "sen": 2690,
-    "name": "KELLY, BRYCE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
     }
   },
   {
@@ -31010,26 +26760,6 @@
     }
   },
   {
-    "id": "pil2693",
-    "sen": 2693,
-    "name": "DALTON, PETER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2693",
-    "sen": 2693,
-    "name": "DALTON, PETER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
     "id": "pil2694",
     "sen": 2694,
     "name": "DAL PRA, DOMINIC",
@@ -31037,46 +26767,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2694",
-    "sen": 2694,
-    "name": "DAL PRA, DOMINIC",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2694",
-    "sen": 2694,
-    "name": "DAL PRA, DOMINIC",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2694",
-    "sen": 2694,
-    "name": "DAL PRA, DOMINIC",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2695",
-    "sen": 2695,
-    "name": "WARTINGER, THOMAS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -31120,56 +26810,6 @@
     }
   },
   {
-    "id": "pil2698",
-    "sen": 2698,
-    "name": "MOORE, ZACHARY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2698",
-    "sen": 2698,
-    "name": "MOORE, ZACHARY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2698",
-    "sen": 2698,
-    "name": "MOORE, ZACHARY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2698",
-    "sen": 2698,
-    "name": "MOORE, ZACHARY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2698",
-    "sen": 2698,
-    "name": "MOORE, ZACHARY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
     "id": "pil2699",
     "sen": 2699,
     "name": "KLEEH III, JOHN",
@@ -31177,16 +26817,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2700",
-    "sen": 2700,
-    "name": "SHULER, BRADLEY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -31390,26 +27020,6 @@
     }
   },
   {
-    "id": "pil2719",
-    "sen": 2719,
-    "name": "SIRI III, FRANK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2720",
-    "sen": 2720,
-    "name": "SCHROEDER, KEITH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2720",
     "sen": 2720,
     "name": "SCHROEDER, KEITH",
@@ -31437,66 +27047,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2722",
-    "sen": 2722,
-    "name": "DOWNS, JEFFREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2722",
-    "sen": 2722,
-    "name": "DOWNS, JEFFREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2722",
-    "sen": 2722,
-    "name": "DOWNS, JEFFREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2722",
-    "sen": 2722,
-    "name": "DOWNS, JEFFREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2722",
-    "sen": 2722,
-    "name": "DOWNS, JEFFREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2723",
-    "sen": 2723,
-    "name": "WILSON, KEITH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
     }
   },
   {
@@ -31540,56 +27090,6 @@
     }
   },
   {
-    "id": "pil2726",
-    "sen": 2726,
-    "name": "HERSOM, JEFFREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2726",
-    "sen": 2726,
-    "name": "HERSOM, JEFFREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2726",
-    "sen": 2726,
-    "name": "HERSOM, JEFFREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2726",
-    "sen": 2726,
-    "name": "HERSOM, JEFFREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2726",
-    "sen": 2726,
-    "name": "HERSOM, JEFFREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2727",
     "sen": 2727,
     "name": "RUSSELL, BRENT",
@@ -31597,66 +27097,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2727",
-    "sen": 2727,
-    "name": "RUSSELL, BRENT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2728",
-    "sen": 2728,
-    "name": "PLATT, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2728",
-    "sen": 2728,
-    "name": "PLATT, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2728",
-    "sen": 2728,
-    "name": "PLATT, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2728",
-    "sen": 2728,
-    "name": "PLATT, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2728",
-    "sen": 2728,
-    "name": "PLATT, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -31677,56 +27117,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2730",
-    "sen": 2730,
-    "name": "JENNESS, TYLER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2730",
-    "sen": 2730,
-    "name": "JENNESS, TYLER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2730",
-    "sen": 2730,
-    "name": "JENNESS, TYLER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2730",
-    "sen": 2730,
-    "name": "JENNESS, TYLER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2730",
-    "sen": 2730,
-    "name": "JENNESS, TYLER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -31880,16 +27270,6 @@
     }
   },
   {
-    "id": "pil2744",
-    "sen": 2744,
-    "name": "LIU, CLAUDIA",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
     "id": "pil2745",
     "sen": 2745,
     "name": "HUTCHERSON, MIA",
@@ -31930,26 +27310,6 @@
     }
   },
   {
-    "id": "pil2748",
-    "sen": 2748,
-    "name": "RHOADS, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2748",
-    "sen": 2748,
-    "name": "RHOADS, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2749",
     "sen": 2749,
     "name": "MOSELEY, DEBORAH",
@@ -31977,16 +27337,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2752",
-    "sen": 2752,
-    "name": "GRIFFITH, JOSHUA",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
     }
   },
   {
@@ -32050,26 +27400,6 @@
     }
   },
   {
-    "id": "pil2757",
-    "sen": 2757,
-    "name": "HUNTER, BRIAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2757",
-    "sen": 2757,
-    "name": "HUNTER, BRIAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2758",
     "sen": 2758,
     "name": "GURNEE, CONNOR",
@@ -32090,56 +27420,6 @@
     }
   },
   {
-    "id": "pil2759",
-    "sen": 2759,
-    "name": "GIBSON, KENNETH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2759",
-    "sen": 2759,
-    "name": "GIBSON, KENNETH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2759",
-    "sen": 2759,
-    "name": "GIBSON, KENNETH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2759",
-    "sen": 2759,
-    "name": "GIBSON, KENNETH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2759",
-    "sen": 2759,
-    "name": "GIBSON, KENNETH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2760",
     "sen": 2760,
     "name": "HERSHMAN, AUSTIN",
@@ -32147,46 +27427,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2761",
-    "sen": 2761,
-    "name": "FELL, COOPER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2761",
-    "sen": 2761,
-    "name": "FELL, COOPER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2761",
-    "sen": 2761,
-    "name": "FELL, COOPER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2761",
-    "sen": 2761,
-    "name": "FELL, COOPER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
     }
   },
   {
@@ -32290,66 +27530,6 @@
     }
   },
   {
-    "id": "pil2770",
-    "sen": 2770,
-    "name": "CAMPBELL, CALEB",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2771",
-    "sen": 2771,
-    "name": "JACOB, BENJAMIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2771",
-    "sen": 2771,
-    "name": "JACOB, BENJAMIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2771",
-    "sen": 2771,
-    "name": "JACOB, BENJAMIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2771",
-    "sen": 2771,
-    "name": "JACOB, BENJAMIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2771",
-    "sen": 2771,
-    "name": "JACOB, BENJAMIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
     "id": "pil2771",
     "sen": 2771,
     "name": "JACOB, BENJAMIN",
@@ -32400,16 +27580,6 @@
     }
   },
   {
-    "id": "pil2775",
-    "sen": 2775,
-    "name": "GLAZIER, JOSHUA",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2776",
     "sen": 2776,
     "name": "GERKEN, PATRICK",
@@ -32440,36 +27610,6 @@
     }
   },
   {
-    "id": "pil2778",
-    "sen": 2778,
-    "name": "WEST, TYLER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2778",
-    "sen": 2778,
-    "name": "WEST, TYLER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2778",
-    "sen": 2778,
-    "name": "WEST, TYLER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
     "id": "pil2779",
     "sen": 2779,
     "name": "ARNOLD, JEFFREY",
@@ -32487,56 +27627,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2781",
-    "sen": 2781,
-    "name": "MORITA, KEVIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2781",
-    "sen": 2781,
-    "name": "MORITA, KEVIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2781",
-    "sen": 2781,
-    "name": "MORITA, KEVIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2781",
-    "sen": 2781,
-    "name": "MORITA, KEVIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2781",
-    "sen": 2781,
-    "name": "MORITA, KEVIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
     }
   },
   {
@@ -32633,56 +27723,6 @@
     "id": "pil2790",
     "sen": 2790,
     "name": "DOCKERY, HUBERT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2791",
-    "sen": 2791,
-    "name": "HOLMSTROM, JAMES",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2791",
-    "sen": 2791,
-    "name": "HOLMSTROM, JAMES",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2791",
-    "sen": 2791,
-    "name": "HOLMSTROM, JAMES",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2791",
-    "sen": 2791,
-    "name": "HOLMSTROM, JAMES",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2791",
-    "sen": 2791,
-    "name": "HOLMSTROM, JAMES",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -32880,36 +27920,6 @@
     }
   },
   {
-    "id": "pil2809",
-    "sen": 2809,
-    "name": "GARCIA, DANIEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2809",
-    "sen": 2809,
-    "name": "GARCIA, DANIEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2809",
-    "sen": 2809,
-    "name": "GARCIA, DANIEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil2810",
     "sen": 2810,
     "name": "JOHNSON, CHARLES",
@@ -33080,16 +28090,6 @@
     }
   },
   {
-    "id": "pil2826",
-    "sen": 2826,
-    "name": "COULTER, LOREN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
     "id": "pil2827",
     "sen": 2827,
     "name": "HENSICK, WILLIAM",
@@ -33167,16 +28167,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2835",
-    "sen": 2835,
-    "name": "MARITZ, ADAM",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -33310,26 +28300,6 @@
     }
   },
   {
-    "id": "pil2847",
-    "sen": 2847,
-    "name": "PETERSON, BLYTHE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2847",
-    "sen": 2847,
-    "name": "PETERSON, BLYTHE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2848",
     "sen": 2848,
     "name": "GERMAIN, JARED",
@@ -33367,66 +28337,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2851",
-    "sen": 2851,
-    "name": "OEVERAAS, MAGNUS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2851",
-    "sen": 2851,
-    "name": "OEVERAAS, MAGNUS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2852",
-    "sen": 2852,
-    "name": "CLARKE, STEVEN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2852",
-    "sen": 2852,
-    "name": "CLARKE, STEVEN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2852",
-    "sen": 2852,
-    "name": "CLARKE, STEVEN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2852",
-    "sen": 2852,
-    "name": "CLARKE, STEVEN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -33570,16 +28480,6 @@
     }
   },
   {
-    "id": "pil2865",
-    "sen": 2865,
-    "name": "HORTTOR, JEFFREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2866",
     "sen": 2866,
     "name": "SETIAWAN, MARTIN",
@@ -33627,16 +28527,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2871",
-    "sen": 2871,
-    "name": "HEIR, GRANT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
     }
   },
   {
@@ -33710,56 +28600,6 @@
     }
   },
   {
-    "id": "pil2877",
-    "sen": 2877,
-    "name": "LORIG, TIMOTHY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2877",
-    "sen": 2877,
-    "name": "LORIG, TIMOTHY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2877",
-    "sen": 2877,
-    "name": "LORIG, TIMOTHY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2877",
-    "sen": 2877,
-    "name": "LORIG, TIMOTHY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2877",
-    "sen": 2877,
-    "name": "LORIG, TIMOTHY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2878",
     "sen": 2878,
     "name": "HOOVER, ALEX",
@@ -33777,16 +28617,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2880",
-    "sen": 2880,
-    "name": "LOWERY, CHAD",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
     }
   },
   {
@@ -33847,16 +28677,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2886",
-    "sen": 2886,
-    "name": "SCHREINER, JUSTIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -33990,49 +28810,9 @@
     }
   },
   {
-    "id": "pil2898",
-    "sen": 2898,
-    "name": "TOROSSIAN, HRACH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2898",
-    "sen": 2898,
-    "name": "TOROSSIAN, HRACH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
     "id": "pil2899",
     "sen": 2899,
     "name": "PRUETT, THOMAS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2900",
-    "sen": 2900,
-    "name": "RIX, SHAUN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil2900",
-    "sen": 2900,
-    "name": "RIX, SHAUN",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -34140,16 +28920,6 @@
     }
   },
   {
-    "id": "pil2909",
-    "sen": 2909,
-    "name": "MACDONALD, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2910",
     "sen": 2910,
     "name": "GARDNER, EVAN",
@@ -34167,16 +28937,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2912",
-    "sen": 2912,
-    "name": "RIEHN, CHRISTOPHER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
     }
   },
   {
@@ -34330,16 +29090,6 @@
     }
   },
   {
-    "id": "pil2926",
-    "sen": 2926,
-    "name": "WILSON, MARK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
     "id": "pil2927",
     "sen": 2927,
     "name": "CUMMINS, NICOLAS",
@@ -34353,56 +29103,6 @@
     "id": "pil2928",
     "sen": 2928,
     "name": "HINES, ERIK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2929",
-    "sen": 2929,
-    "name": "GOUDREAU, OLIVIER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2929",
-    "sen": 2929,
-    "name": "GOUDREAU, OLIVIER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2929",
-    "sen": 2929,
-    "name": "GOUDREAU, OLIVIER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2929",
-    "sen": 2929,
-    "name": "GOUDREAU, OLIVIER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2929",
-    "sen": 2929,
-    "name": "GOUDREAU, OLIVIER",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -34460,46 +29160,6 @@
     }
   },
   {
-    "id": "pil2933",
-    "sen": 2933,
-    "name": "KHACHATRYAN, RUBEN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2933",
-    "sen": 2933,
-    "name": "KHACHATRYAN, RUBEN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2933",
-    "sen": 2933,
-    "name": "KHACHATRYAN, RUBEN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2933",
-    "sen": 2933,
-    "name": "KHACHATRYAN, RUBEN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
     "id": "pil2934",
     "sen": 2934,
     "name": "MAXWELL, BRUCE",
@@ -34507,56 +29167,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2935",
-    "sen": 2935,
-    "name": "VAUGHAN, CRYSTAL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2935",
-    "sen": 2935,
-    "name": "VAUGHAN, CRYSTAL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2935",
-    "sen": 2935,
-    "name": "VAUGHAN, CRYSTAL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2935",
-    "sen": 2935,
-    "name": "VAUGHAN, CRYSTAL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
-    }
-  },
-  {
-    "id": "pil2935",
-    "sen": 2935,
-    "name": "VAUGHAN, CRYSTAL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
     }
   },
   {
@@ -34637,16 +29247,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil2943",
-    "sen": 2943,
-    "name": "POPPLER, WILLIAM",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
     }
   },
   {
@@ -34810,16 +29410,6 @@
     }
   },
   {
-    "id": "pil2958",
-    "sen": 2958,
-    "name": "CHARLIE, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
     "id": "pil2959",
     "sen": 2959,
     "name": "OWEN, SCOTT",
@@ -34853,16 +29443,6 @@
     "id": "pil2962",
     "sen": 2962,
     "name": "GATES, MICHAEL (MIKE)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2963",
-    "sen": 2963,
-    "name": "SPITZER, ROBERT",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -34960,16 +29540,6 @@
     }
   },
   {
-    "id": "pil2971",
-    "sen": 2971,
-    "name": "LARKINS, DOUGLAS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2972",
     "sen": 2972,
     "name": "DAVIDSON, RILEY",
@@ -34983,16 +29553,6 @@
     "id": "pil2973",
     "sen": 2973,
     "name": "PURCELL, JEFFREY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2974",
-    "sen": 2974,
-    "name": "HOUGH, RYAN",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -35057,56 +29617,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil2980",
-    "sen": 2980,
-    "name": "SWENSON, ERIC",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2980",
-    "sen": 2980,
-    "name": "SWENSON, ERIC",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2980",
-    "sen": 2980,
-    "name": "SWENSON, ERIC",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2980",
-    "sen": 2980,
-    "name": "SWENSON, ERIC",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2980",
-    "sen": 2980,
-    "name": "SWENSON, ERIC",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -35290,56 +29800,6 @@
     }
   },
   {
-    "id": "pil2997",
-    "sen": 2997,
-    "name": "CLARKE, DAVID",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2997",
-    "sen": 2997,
-    "name": "CLARKE, DAVID",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2997",
-    "sen": 2997,
-    "name": "CLARKE, DAVID",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2997",
-    "sen": 2997,
-    "name": "CLARKE, DAVID",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil2997",
-    "sen": 2997,
-    "name": "CLARKE, DAVID",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil2998",
     "sen": 2998,
     "name": "REYNOLDS, DAVID",
@@ -35480,16 +29940,6 @@
     }
   },
   {
-    "id": "pil3011",
-    "sen": 3011,
-    "name": "SIMON, JAMES",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil3012",
     "sen": 3012,
     "name": "MCCREA, ANDREW",
@@ -35497,26 +29947,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "ANC"
-    }
-  },
-  {
-    "id": "pil3013",
-    "sen": 3013,
-    "name": "STAUFFER, KENNETH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3013",
-    "sen": 3013,
-    "name": "STAUFFER, KENNETH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
     }
   },
   {
@@ -35600,26 +30030,6 @@
     }
   },
   {
-    "id": "pil3020",
-    "sen": 3020,
-    "name": "HUSAIN, SAJJAD",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3020",
-    "sen": 3020,
-    "name": "HUSAIN, SAJJAD",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
     "id": "pil3021",
     "sen": 3021,
     "name": "COCHRAN, JASON",
@@ -35647,16 +30057,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3024",
-    "sen": 3024,
-    "name": "HOBBY, CONNOR",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -35820,16 +30220,6 @@
     }
   },
   {
-    "id": "pil3039",
-    "sen": 3039,
-    "name": "SAUNDERS, WOODSEN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "ANC"
-    }
-  },
-  {
     "id": "pil3040",
     "sen": 3040,
     "name": "ROBOLD, ANTHONY (AJ)",
@@ -35837,16 +30227,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3041",
-    "sen": 3041,
-    "name": "LARIVIERE, MATTHEW (MATT)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
     }
   },
   {
@@ -36000,16 +30380,6 @@
     }
   },
   {
-    "id": "pil3055",
-    "sen": 3055,
-    "name": "PARKER, ISAAC",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil3056",
     "sen": 3056,
     "name": "WILLIAMS, MITCHELL",
@@ -36140,66 +30510,6 @@
     }
   },
   {
-    "id": "pil3068",
-    "sen": 3068,
-    "name": "PETERSON, SAMUEL (SAM)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3068",
-    "sen": 3068,
-    "name": "PETERSON, SAMUEL (SAM)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3068",
-    "sen": 3068,
-    "name": "PETERSON, SAMUEL (SAM)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3068",
-    "sen": 3068,
-    "name": "PETERSON, SAMUEL (SAM)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3068",
-    "sen": 3068,
-    "name": "PETERSON, SAMUEL (SAM)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3069",
-    "sen": 3069,
-    "name": "PIPKIN, SHAD",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil3069",
     "sen": 3069,
     "name": "PIPKIN, SHAD",
@@ -36213,16 +30523,6 @@
     "id": "pil3070",
     "sen": 3070,
     "name": "WARWICK, MARKUS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3071",
-    "sen": 3071,
-    "name": "WEST, JESSE",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -36460,36 +30760,6 @@
     }
   },
   {
-    "id": "pil3093",
-    "sen": 3093,
-    "name": "MORRIS, JOSHUA",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3093",
-    "sen": 3093,
-    "name": "MORRIS, JOSHUA",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3093",
-    "sen": 3093,
-    "name": "MORRIS, JOSHUA",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil3094",
     "sen": 3094,
     "name": "ASHTON, CHRISTOPHER",
@@ -36527,66 +30797,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3097",
-    "sen": 3097,
-    "name": "MIMS, PATRICK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3097",
-    "sen": 3097,
-    "name": "MIMS, PATRICK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3097",
-    "sen": 3097,
-    "name": "MIMS, PATRICK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3097",
-    "sen": 3097,
-    "name": "MIMS, PATRICK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3097",
-    "sen": 3097,
-    "name": "MIMS, PATRICK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3098",
-    "sen": 3098,
-    "name": "SOL, RYAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -36630,89 +30840,9 @@
     }
   },
   {
-    "id": "pil3101",
-    "sen": 3101,
-    "name": "LUNDBERG, CAY (ROLAND)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3101",
-    "sen": 3101,
-    "name": "LUNDBERG, CAY (ROLAND)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3101",
-    "sen": 3101,
-    "name": "LUNDBERG, CAY (ROLAND)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3101",
-    "sen": 3101,
-    "name": "LUNDBERG, CAY (ROLAND)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil3102",
     "sen": 3102,
     "name": "KENNEDY, ALBERT (AL)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3103",
-    "sen": 3103,
-    "name": "KERR, KEVIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3103",
-    "sen": 3103,
-    "name": "KERR, KEVIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3103",
-    "sen": 3103,
-    "name": "KERR, KEVIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3103",
-    "sen": 3103,
-    "name": "KERR, KEVIN",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -36840,56 +30970,6 @@
     }
   },
   {
-    "id": "pil3114",
-    "sen": 3114,
-    "name": "BROOKS, ADAM",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3114",
-    "sen": 3114,
-    "name": "BROOKS, ADAM",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3114",
-    "sen": 3114,
-    "name": "BROOKS, ADAM",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3114",
-    "sen": 3114,
-    "name": "BROOKS, ADAM",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3115",
-    "sen": 3115,
-    "name": "NELTNER, MICHAEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil3115",
     "sen": 3115,
     "name": "NELTNER, MICHAEL",
@@ -36937,16 +31017,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3120",
-    "sen": 3120,
-    "name": "JACKSON, DANIEL (DAN)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "PDX"
     }
   },
   {
@@ -37040,16 +31110,6 @@
     }
   },
   {
-    "id": "pil3128",
-    "sen": 3128,
-    "name": "BICKERSTAFF JR. , THOMAS (TOM)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil3129",
     "sen": 3129,
     "name": "NELSON, DANIEL",
@@ -37063,56 +31123,6 @@
     "id": "pil3130",
     "sen": 3130,
     "name": "BECRAFT, RUSSELL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3131",
-    "sen": 3131,
-    "name": "WILKERSON, NICHOLAS (NICK)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3131",
-    "sen": 3131,
-    "name": "WILKERSON, NICHOLAS (NICK)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3131",
-    "sen": 3131,
-    "name": "WILKERSON, NICHOLAS (NICK)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3131",
-    "sen": 3131,
-    "name": "WILKERSON, NICHOLAS (NICK)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3131",
-    "sen": 3131,
-    "name": "WILKERSON, NICHOLAS (NICK)",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -37210,16 +31220,6 @@
     }
   },
   {
-    "id": "pil3139",
-    "sen": 3139,
-    "name": "ZIMMERMAN, KYLE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil3140",
     "sen": 3140,
     "name": "BABINSKI, JAMES",
@@ -37250,69 +31250,9 @@
     }
   },
   {
-    "id": "pil3142",
-    "sen": 3142,
-    "name": "PANTER, BRYCE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil3143",
     "sen": 3143,
     "name": "CROWE, STEVEN (STEVE)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3144",
-    "sen": 3144,
-    "name": "VAN KAMPEN, DAVID",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3144",
-    "sen": 3144,
-    "name": "VAN KAMPEN, DAVID",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3144",
-    "sen": 3144,
-    "name": "VAN KAMPEN, DAVID",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3144",
-    "sen": 3144,
-    "name": "VAN KAMPEN, DAVID",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3144",
-    "sen": 3144,
-    "name": "VAN KAMPEN, DAVID",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -37367,16 +31307,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3149",
-    "sen": 3149,
-    "name": "CARTER, RUSSELL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -37450,16 +31380,6 @@
     }
   },
   {
-    "id": "pil3155",
-    "sen": 3155,
-    "name": "DUNHAM, MARK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil3156",
     "sen": 3156,
     "name": "HERNANDEZ, ERICK",
@@ -37467,56 +31387,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3157",
-    "sen": 3157,
-    "name": "LAW, ALAN (CAMERON)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3157",
-    "sen": 3157,
-    "name": "LAW, ALAN (CAMERON)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3157",
-    "sen": 3157,
-    "name": "LAW, ALAN (CAMERON)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3157",
-    "sen": 3157,
-    "name": "LAW, ALAN (CAMERON)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3157",
-    "sen": 3157,
-    "name": "LAW, ALAN (CAMERON)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -37630,66 +31500,6 @@
     }
   },
   {
-    "id": "pil3167",
-    "sen": 3167,
-    "name": "HARTUNG, ANDREW",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3167",
-    "sen": 3167,
-    "name": "HARTUNG, ANDREW",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3167",
-    "sen": 3167,
-    "name": "HARTUNG, ANDREW",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3167",
-    "sen": 3167,
-    "name": "HARTUNG, ANDREW",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3167",
-    "sen": 3167,
-    "name": "HARTUNG, ANDREW",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3167",
-    "sen": 3167,
-    "name": "HARTUNG, ANDREW",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil3168",
     "sen": 3168,
     "name": "DARWISH, ISLAM",
@@ -37710,16 +31520,6 @@
     }
   },
   {
-    "id": "pil3169",
-    "sen": 3169,
-    "name": "STEPHENS, RICHARD (RICK)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil3170",
     "sen": 3170,
     "name": "EELLS, PAUL (CHRIS)",
@@ -37727,16 +31527,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3171",
-    "sen": 3171,
-    "name": "MONFORE, ROBERT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
     }
   },
   {
@@ -37810,16 +31600,6 @@
     }
   },
   {
-    "id": "pil3177",
-    "sen": 3177,
-    "name": "WHITEMAN, GARY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil3178",
     "sen": 3178,
     "name": "CARVER, NICHOLAS (NICK)",
@@ -37833,16 +31613,6 @@
     "id": "pil3179",
     "sen": 3179,
     "name": "MILLER, JOSEPH (JOE)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3180",
-    "sen": 3180,
-    "name": "MOSCHOS, KELCEY",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -37920,79 +31690,9 @@
     }
   },
   {
-    "id": "pil3186",
-    "sen": 3186,
-    "name": "HILLIARD, RYAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3186",
-    "sen": 3186,
-    "name": "HILLIARD, RYAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3186",
-    "sen": 3186,
-    "name": "HILLIARD, RYAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3186",
-    "sen": 3186,
-    "name": "HILLIARD, RYAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3186",
-    "sen": 3186,
-    "name": "HILLIARD, RYAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil3187",
     "sen": 3187,
     "name": "ALLEN, JEREMY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3187",
-    "sen": 3187,
-    "name": "ALLEN, JEREMY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3188",
-    "sen": 3188,
-    "name": "WEBER, ADAM",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -38020,16 +31720,6 @@
     }
   },
   {
-    "id": "pil3189",
-    "sen": 3189,
-    "name": "CASEY, ANDREW",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil3190",
     "sen": 3190,
     "name": "LANCHEROS, JOSEPH",
@@ -38037,36 +31727,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3190",
-    "sen": 3190,
-    "name": "LANCHEROS, JOSEPH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3190",
-    "sen": 3190,
-    "name": "LANCHEROS, JOSEPH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3191",
-    "sen": 3191,
-    "name": "FAIRBANKS, ROBERT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -38140,26 +31800,6 @@
     }
   },
   {
-    "id": "pil3197",
-    "sen": 3197,
-    "name": "BERREMAN, JEFFREY (JEFF)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3197",
-    "sen": 3197,
-    "name": "BERREMAN, JEFFREY (JEFF)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil3198",
     "sen": 3198,
     "name": "LUNDIN, JOHN",
@@ -38177,16 +31817,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3200",
-    "sen": 3200,
-    "name": "BYERLEY, GARRETT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -38247,16 +31877,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3206",
-    "sen": 3206,
-    "name": "SCHEURER, JOHVAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
     }
   },
   {
@@ -38390,66 +32010,6 @@
     }
   },
   {
-    "id": "pil3218",
-    "sen": 3218,
-    "name": "MUNYE, ADDE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3218",
-    "sen": 3218,
-    "name": "MUNYE, ADDE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3218",
-    "sen": 3218,
-    "name": "MUNYE, ADDE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3218",
-    "sen": 3218,
-    "name": "MUNYE, ADDE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3218",
-    "sen": 3218,
-    "name": "MUNYE, ADDE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3219",
-    "sen": 3219,
-    "name": "LAZZARO, JOSEPH (ROB)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil3219",
     "sen": 3219,
     "name": "LAZZARO, JOSEPH (ROB)",
@@ -38500,46 +32060,6 @@
     }
   },
   {
-    "id": "pil3223",
-    "sen": 3223,
-    "name": "SUSENS, DENNIS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3223",
-    "sen": 3223,
-    "name": "SUSENS, DENNIS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3223",
-    "sen": 3223,
-    "name": "SUSENS, DENNIS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3224",
-    "sen": 3224,
-    "name": "ZIELESCH, CHRISTOPHER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil3224",
     "sen": 3224,
     "name": "ZIELESCH, CHRISTOPHER",
@@ -38557,76 +32077,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3225",
-    "sen": 3225,
-    "name": "MILLIARD, JOHN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3225",
-    "sen": 3225,
-    "name": "MILLIARD, JOHN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3225",
-    "sen": 3225,
-    "name": "MILLIARD, JOHN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3225",
-    "sen": 3225,
-    "name": "MILLIARD, JOHN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3225",
-    "sen": 3225,
-    "name": "MILLIARD, JOHN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3225",
-    "sen": 3225,
-    "name": "MILLIARD, JOHN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3226",
-    "sen": 3226,
-    "name": "KELLY, KEVIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -38670,136 +32120,6 @@
     }
   },
   {
-    "id": "pil3229",
-    "sen": 3229,
-    "name": "BUCKMILLER, ERIK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3229",
-    "sen": 3229,
-    "name": "BUCKMILLER, ERIK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3229",
-    "sen": 3229,
-    "name": "BUCKMILLER, ERIK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3229",
-    "sen": 3229,
-    "name": "BUCKMILLER, ERIK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3229",
-    "sen": 3229,
-    "name": "BUCKMILLER, ERIK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3230",
-    "sen": 3230,
-    "name": "AMBROSE, STERLING",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3230",
-    "sen": 3230,
-    "name": "AMBROSE, STERLING",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3230",
-    "sen": 3230,
-    "name": "AMBROSE, STERLING",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3230",
-    "sen": 3230,
-    "name": "AMBROSE, STERLING",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3230",
-    "sen": 3230,
-    "name": "AMBROSE, STERLING",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3230",
-    "sen": 3230,
-    "name": "AMBROSE, STERLING",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3230",
-    "sen": 3230,
-    "name": "AMBROSE, STERLING",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3230",
-    "sen": 3230,
-    "name": "AMBROSE, STERLING",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil3230",
     "sen": 3230,
     "name": "AMBROSE, STERLING",
@@ -38817,26 +32137,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3232",
-    "sen": 3232,
-    "name": "DUNLAP, DAVIS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3232",
-    "sen": 3232,
-    "name": "DUNLAP, DAVIS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -38890,16 +32190,6 @@
     }
   },
   {
-    "id": "pil3237",
-    "sen": 3237,
-    "name": "PEARSON, LUKE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil3238",
     "sen": 3238,
     "name": "DARLING, BRADLEY (BRAD)",
@@ -38907,46 +32197,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3238",
-    "sen": 3238,
-    "name": "DARLING, BRADLEY (BRAD)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3238",
-    "sen": 3238,
-    "name": "DARLING, BRADLEY (BRAD)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3238",
-    "sen": 3238,
-    "name": "DARLING, BRADLEY (BRAD)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3239",
-    "sen": 3239,
-    "name": "THICKSTUN, BENJAMIN (TYLER)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -38990,46 +32240,6 @@
     }
   },
   {
-    "id": "pil3242",
-    "sen": 3242,
-    "name": "ARENDSEE, ZACHARY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3243",
-    "sen": 3243,
-    "name": "GUDMUNSON, MICHAEL (MIKE)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3243",
-    "sen": 3243,
-    "name": "GUDMUNSON, MICHAEL (MIKE)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3243",
-    "sen": 3243,
-    "name": "GUDMUNSON, MICHAEL (MIKE)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil3243",
     "sen": 3243,
     "name": "GUDMUNSON, MICHAEL (MIKE)",
@@ -39047,16 +32257,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3245",
-    "sen": 3245,
-    "name": "KOCHERT, TIMOTHY (KEITH)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
     }
   },
   {
@@ -39093,36 +32293,6 @@
     "id": "pil3248",
     "sen": 3248,
     "name": "NGUYEN, JONATHAN (JON)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3249",
-    "sen": 3249,
-    "name": "ATKINS, DANA",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3249",
-    "sen": 3249,
-    "name": "ATKINS, DANA",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3249",
-    "sen": 3249,
-    "name": "ATKINS, DANA",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -39200,26 +32370,6 @@
     }
   },
   {
-    "id": "pil3255",
-    "sen": 3255,
-    "name": "BLESSINGER, DAVID",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3256",
-    "sen": 3256,
-    "name": "KENNEDY, LIAM",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil3256",
     "sen": 3256,
     "name": "KENNEDY, LIAM",
@@ -39247,16 +32397,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3259",
-    "sen": 3259,
-    "name": "LESTER, JOSHUA",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
     }
   },
   {
@@ -39460,39 +32600,9 @@
     }
   },
   {
-    "id": "pil3278",
-    "sen": 3278,
-    "name": "WELBORN, STUART",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil3279",
     "sen": 3279,
     "name": "BEATTE, GORDON (GORDY)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3279",
-    "sen": 3279,
-    "name": "BEATTE, GORDON (GORDY)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3280",
-    "sen": 3280,
-    "name": "BURNETT, BRIAN",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -39530,36 +32640,6 @@
     }
   },
   {
-    "id": "pil3282",
-    "sen": 3282,
-    "name": "GIRON, ROLAND (RENE)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3282",
-    "sen": 3282,
-    "name": "GIRON, ROLAND (RENE)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3282",
-    "sen": 3282,
-    "name": "GIRON, ROLAND (RENE)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
     "id": "pil3283",
     "sen": 3283,
     "name": "BRYANT, ERICK",
@@ -39567,16 +32647,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3284",
-    "sen": 3284,
-    "name": "PETERS, CORY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
     }
   },
   {
@@ -39607,46 +32677,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3286",
-    "sen": 3286,
-    "name": "ROUSE III, FRANK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3286",
-    "sen": 3286,
-    "name": "ROUSE III, FRANK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3287",
-    "sen": 3287,
-    "name": "TROJA, JOHN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3287",
-    "sen": 3287,
-    "name": "TROJA, JOHN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -39690,36 +32720,6 @@
     }
   },
   {
-    "id": "pil3290",
-    "sen": 3290,
-    "name": "STUDEMAN, TYLER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3290",
-    "sen": 3290,
-    "name": "STUDEMAN, TYLER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3291",
-    "sen": 3291,
-    "name": "WALTON, RYAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil3291",
     "sen": 3291,
     "name": "WALTON, RYAN",
@@ -39737,26 +32737,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3292",
-    "sen": 3292,
-    "name": "SISTO, CASSIDY (CASS)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3293",
-    "sen": 3293,
-    "name": "POJOGA, DANIEL",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
     }
   },
   {
@@ -39787,36 +32767,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3295",
-    "sen": 3295,
-    "name": "YOAKUM, ZACHARY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3296",
-    "sen": 3296,
-    "name": "FOX, EMMA",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3296",
-    "sen": 3296,
-    "name": "FOX, EMMA",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
     }
   },
   {
@@ -39870,56 +32820,6 @@
     }
   },
   {
-    "id": "pil3300",
-    "sen": 3300,
-    "name": "ROBERTS, JESSE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3300",
-    "sen": 3300,
-    "name": "ROBERTS, JESSE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3300",
-    "sen": 3300,
-    "name": "ROBERTS, JESSE",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3301",
-    "sen": 3301,
-    "name": "BRAUN, ROGER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3301",
-    "sen": 3301,
-    "name": "BRAUN, ROGER",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil3301",
     "sen": 3301,
     "name": "BRAUN, ROGER",
@@ -39947,26 +32847,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3303",
-    "sen": 3303,
-    "name": "MURRAY, JASON",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3304",
-    "sen": 3304,
-    "name": "MILNE, BRADLEY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
     }
   },
   {
@@ -40050,69 +32930,9 @@
     }
   },
   {
-    "id": "pil3311",
-    "sen": 3311,
-    "name": "HEDMAN, ALEX",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3311",
-    "sen": 3311,
-    "name": "HEDMAN, ALEX",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3311",
-    "sen": 3311,
-    "name": "HEDMAN, ALEX",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil3312",
     "sen": 3312,
     "name": "JOHNSON, JENNIFER (JENNY)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3312",
-    "sen": 3312,
-    "name": "JOHNSON, JENNIFER (JENNY)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3312",
-    "sen": 3312,
-    "name": "JOHNSON, JENNIFER (JENNY)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3313",
-    "sen": 3313,
-    "name": "OLAH, MICHAEL (MIKE)",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -40150,66 +32970,6 @@
     }
   },
   {
-    "id": "pil3315",
-    "sen": 3315,
-    "name": "DARROW, JACOB (JAKE)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3315",
-    "sen": 3315,
-    "name": "DARROW, JACOB (JAKE)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3315",
-    "sen": 3315,
-    "name": "DARROW, JACOB (JAKE)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3315",
-    "sen": 3315,
-    "name": "DARROW, JACOB (JAKE)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3315",
-    "sen": 3315,
-    "name": "DARROW, JACOB (JAKE)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3315",
-    "sen": 3315,
-    "name": "DARROW, JACOB (JAKE)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
     "id": "pil3316",
     "sen": 3316,
     "name": "BLOHM, LESLIE (NICK)",
@@ -40217,56 +32977,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3316",
-    "sen": 3316,
-    "name": "BLOHM, LESLIE (NICK)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3316",
-    "sen": 3316,
-    "name": "BLOHM, LESLIE (NICK)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3316",
-    "sen": 3316,
-    "name": "BLOHM, LESLIE (NICK)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3316",
-    "sen": 3316,
-    "name": "BLOHM, LESLIE (NICK)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SEA"
-    }
-  },
-  {
-    "id": "pil3317",
-    "sen": 3317,
-    "name": "RIEMER, MAXWELL (MAX)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
     }
   },
   {
@@ -40330,16 +33040,6 @@
     }
   },
   {
-    "id": "pil3322",
-    "sen": 3322,
-    "name": "HATFIELD, FAITH",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil3323",
     "sen": 3323,
     "name": "SEARS, GLENN",
@@ -40347,36 +33047,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3323",
-    "sen": 3323,
-    "name": "SEARS, GLENN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3324",
-    "sen": 3324,
-    "name": "GRIFFIN, DANA",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3324",
-    "sen": 3324,
-    "name": "GRIFFIN, DANA",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
     }
   },
   {
@@ -40440,16 +33110,6 @@
     }
   },
   {
-    "id": "pil3329",
-    "sen": 3329,
-    "name": "LECHNER, BRYCEN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil3330",
     "sen": 3330,
     "name": "CAILEANU, LARISA (LISA)",
@@ -40480,86 +33140,6 @@
     }
   },
   {
-    "id": "pil3332",
-    "sen": 3332,
-    "name": "CICERONE, DOMINIC",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3332",
-    "sen": 3332,
-    "name": "CICERONE, DOMINIC",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3332",
-    "sen": 3332,
-    "name": "CICERONE, DOMINIC",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3332",
-    "sen": 3332,
-    "name": "CICERONE, DOMINIC",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3332",
-    "sen": 3332,
-    "name": "CICERONE, DOMINIC",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3333",
-    "sen": 3333,
-    "name": "HATFIELD, ISAAC",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3333",
-    "sen": 3333,
-    "name": "HATFIELD, ISAAC",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3333",
-    "sen": 3333,
-    "name": "HATFIELD, ISAAC",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil3333",
     "sen": 3333,
     "name": "HATFIELD, ISAAC",
@@ -40573,46 +33153,6 @@
     "id": "pil3334",
     "sen": 3334,
     "name": "MCGUIRE, NATHAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3334",
-    "sen": 3334,
-    "name": "MCGUIRE, NATHAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3335",
-    "sen": 3335,
-    "name": "BRONSON, ZACHARY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3335",
-    "sen": 3335,
-    "name": "BRONSON, ZACHARY",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3335",
-    "sen": 3335,
-    "name": "BRONSON, ZACHARY",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -40637,16 +33177,6 @@
       "equip": "73G",
       "base": "737",
       "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3337",
-    "sen": 3337,
-    "name": "DEAN, MATTHEW",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
     }
   },
   {
@@ -40750,39 +33280,9 @@
     }
   },
   {
-    "id": "pil3346",
-    "sen": 3346,
-    "name": "CLARK, MATTHEW (MATT)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil3347",
     "sen": 3347,
     "name": "WILLS, DAVID (DAVE)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3348",
-    "sen": 3348,
-    "name": "WRIGHT, PATRICK",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3348",
-    "sen": 3348,
-    "name": "WRIGHT, PATRICK",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -40823,26 +33323,6 @@
     "id": "pil3351",
     "sen": 3351,
     "name": "SCHERSCHLIGT, DREW",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3352",
-    "sen": 3352,
-    "name": "DOW-WALHOOD, TORIN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3352",
-    "sen": 3352,
-    "name": "DOW-WALHOOD, TORIN",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -40910,26 +33390,6 @@
     }
   },
   {
-    "id": "pil3357",
-    "sen": 3357,
-    "name": "AGUILAR, YOANDRIS",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3358",
-    "sen": 3358,
-    "name": "WHIPP , JOSHUA (JOSH)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
     "id": "pil3358",
     "sen": 3358,
     "name": "WHIPP , JOSHUA (JOSH)",
@@ -40960,16 +33420,6 @@
     }
   },
   {
-    "id": "pil3360",
-    "sen": 3360,
-    "name": "WOODSON, MICHAEL (MIKE)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
     "id": "pil3361",
     "sen": 3361,
     "name": "CALL, JORDY",
@@ -40983,26 +33433,6 @@
     "id": "pil3362",
     "sen": 3362,
     "name": "HUBBARD, CHARLES (CHARLEY)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3362",
-    "sen": 3362,
-    "name": "HUBBARD, CHARLES (CHARLEY)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3363",
-    "sen": 3363,
-    "name": "CARTER, RICHARD (RICK)",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -41050,26 +33480,6 @@
     }
   },
   {
-    "id": "pil3366",
-    "sen": 3366,
-    "name": "SHUNK, ROBERT",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3367",
-    "sen": 3367,
-    "name": "BIRON, NICHOLAS (NICK)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil3367",
     "sen": 3367,
     "name": "BIRON, NICHOLAS (NICK)",
@@ -41100,69 +33510,9 @@
     }
   },
   {
-    "id": "pil3369",
-    "sen": 3369,
-    "name": "MATTHEWS , SAMUEL (SAM)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3369",
-    "sen": 3369,
-    "name": "MATTHEWS , SAMUEL (SAM)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
     "id": "pil3370",
     "sen": 3370,
     "name": "WUNDER, JAMES",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3370",
-    "sen": 3370,
-    "name": "WUNDER, JAMES",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3370",
-    "sen": 3370,
-    "name": "WUNDER, JAMES",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3371",
-    "sen": 3371,
-    "name": "GREENBERG, NATHAN",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "SFO"
-    }
-  },
-  {
-    "id": "pil3371",
-    "sen": 3371,
-    "name": "GREENBERG, NATHAN",
     "current": {
       "equip": "73G",
       "base": "737",
@@ -41183,36 +33533,6 @@
     "id": "pil3372",
     "sen": 3372,
     "name": "MCMAHON, MANDI",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3372",
-    "sen": 3372,
-    "name": "MCMAHON, MANDI",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3373",
-    "sen": 3373,
-    "name": "KOCH, ALEXANDER (ALEX)",
-    "current": {
-      "equip": "73G",
-      "base": "737",
-      "seat": "LAX"
-    }
-  },
-  {
-    "id": "pil3373",
-    "sen": 3373,
-    "name": "KOCH, ALEXANDER (ALEX)",
     "current": {
       "equip": "73G",
       "base": "737",
