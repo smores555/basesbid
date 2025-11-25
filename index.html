@@ -305,7 +305,7 @@ function bplSatisfied(p, w, toK) {
   const seniorsInSeat = [...occ].filter(sen => Number(sen) < mySen).length;
   const myProjectedRank = seniorsInSeat + 1; 
   
-  // DEBUG: Watch Pilot 897 to see why he gets/misses awards
+  // DEBUG LOG FOR PILOT 897
   if(mySen === 897) {
       console.log(`Pilot 897 checking ${toK} (Order: ${w.order}). Proj Rank: ${myProjectedRank} vs Limit: ${limit}`);
   }
@@ -367,7 +367,6 @@ function run(){
         if (r0 === 1) pinned.add(p.sen);
       }
 
-      // Modified to accept preference order number
       const recordMove = (p, fromK, toK, tag, bplInfo=null, prefOrder=null) => {
         const [tb,ts] = toK.split('__');
         const [fb,fs] = (fromK||'|').split('__');
@@ -386,7 +385,7 @@ function run(){
              sourceInfo = `<br><span style="color:var(--text-muted); font-size:11px;">Open position available.</span>`;
         }
         
-        // --- ADD PREFERENCE NUMBER TO LEDGER ---
+        // --- NEW: Add Preference Order to Ledger ---
         if(prefOrder) sourceInfo += ` <span style="color:var(--accent); font-weight:bold; font-size:10px;">(Choice #${prefOrder})</span>`;
         if(bplInfo) sourceInfo += ` <span style="color:var(--warning); font-weight:bold; font-size:10px;">(BPL Met: Rank ${bplInfo})</span>`;
 
@@ -432,7 +431,7 @@ function run(){
             if (!bplCheck.ok) continue;
 
             pass++;
-            // Pass w.order to recordMove
+            // PASS PREFERENCE ORDER (w.order)
             recordMove(p, fromK, toK, 'posted', (Number(w.bpl_min)>0 ? bplCheck.rank : null), w.order);
             if(!isPaper(p)) vacDec(toK,1);
             awarded = true;
@@ -466,7 +465,7 @@ function run(){
             if (!bplCheck.ok) continue;
 
             pass++;
-            // Pass w.order to recordMove
+            // PASS PREFERENCE ORDER (w.order)
             recordMove(p, fromK, toK, 'cascade', (Number(w.bpl_min)>0 ? bplCheck.rank : null), w.order);
             if(!isPaper(p)) vacDec(toK,1);
             awarded = true;
