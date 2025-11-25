@@ -111,12 +111,6 @@
     .cap-tbl td { padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
     .cap-tbl input { text-align: center; width: 100%; padding: 8px; }
     .scroll-box { overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; }
-
-    /* Trace Log Styles */
-    .log-entry { padding: 8px; border-bottom: 1px solid #333; font-family: var(--font-code); font-size: 12px; }
-    .log-fail { color: var(--danger); }
-    .log-warn { color: var(--warning); }
-    .log-success { color: var(--success); }
   </style>
 </head>
 <body>
@@ -147,10 +141,9 @@
     </div>
 
     <div class="panel">
-      <div class="panel-head">Deep Trace Pilot</div>
+      <div class="panel-head">Search / Trace</div>
       <div style="padding:16px;">
-        <input id="traceQuery" placeholder="Enter Pilot SEN (e.g. 897)">
-        <div style="font-size:10px; color:var(--text-muted); margin-top:5px;">Enables detailed logs in Trace tab</div>
+        <input id="traceQuery" placeholder="Enter SEN or Name">
       </div>
     </div>
   </div>
@@ -165,7 +158,6 @@
       <div class="tabs">
         <div class="tab active" onclick="setTab('ledger')">Active Ledger</div>
         <div class="tab" onclick="setTab('awards')">Award List</div>
-        <div class="tab" onclick="setTab('trace')">Trace Log</div>
       </div>
 
       <div id="view-ledger" class="tab-content active">
@@ -179,10 +171,6 @@
 
       <div id="view-awards" class="tab-content">
         <div id="namesBySen" style="padding:15px; overflow-y:auto; height:100%; font-family:var(--font-code); font-size:13px;"></div>
-      </div>
-
-      <div id="view-trace" class="tab-content">
-        <div id="traceLog" style="padding:15px; overflow-y:auto; height:100%; background:#000;"></div>
       </div>
     </div>
     
@@ -209,7 +197,6 @@ let prefs  = {};
 const Vac = new Map(); 
 const Occupants = new Map();
 const VacCreators = new Map(); 
-const TraceLogs = [];
 
 const vacAmt = k => Vac.get(k)||0;
 
@@ -266,34 +253,20 @@ function prefRank(p, base, seat){
 }
 function sameChoice(db, ds, cb, cs){ return String(db).toUpperCase() === String(cb).toUpperCase() && String(ds).toUpperCase() === String(cs).toUpperCase(); }
 
-// --- OPTIMIZED TRACE LOGGING ---
-function logTrace(sen, msg, type='neutral') {
-  const targetSen = Number(document.getElementById('traceQuery').value);
-  if(targetSen === sen) {
-    let css = "color:#999;";
-    if(type==='fail') css="color:var(--danger);";
-    if(type==='success') css="color:var(--success); font-weight:bold;";
-    if(type==='warn') css="color:var(--warning);";
-    
-    // Limit trace log size to prevent crash
-    if(TraceLogs.length > 2000) return; 
-    TraceLogs.push(`<div class="log-entry" style="${css}">${msg}</div>`);
-  }
-}
-
 function bplSatisfied(p, w, toK) {
   const limit = Number(w.bpl_min ?? 0); 
+  if (limit <= 0) return { ok: true }; 
+
   const occ = Occupants.get(toK) || new Set();
   const mySen = Number(p.sen);
   const seniorsInSeat = [...occ].filter(sen => Number(sen) < mySen).length;
   const myProjectedRank = seniorsInSeat + 1; 
   
-  if (limit > 0 && myProjectedRank > limit) {
-      logTrace(mySen, `Pref #${w.order} (${toK}): BPL Fail. Rank ${myProjectedRank} > Limit ${limit}`, 'fail');
+  if (myProjectedRank <= limit) {
+      return { ok: true, rank: myProjectedRank };
+  } else {
       return { ok: false, rank: myProjectedRank };
   }
-  
-  return { ok: true, rank: myProjectedRank };
 }
 
 function renderCapTable(){
@@ -324,7 +297,6 @@ function renderOpen(){
 }
 
 function run(){
-  TraceLogs.length = 0; 
   const ledgerBuffer = [];
   const moves = [];
   let pass = 0;
@@ -333,7 +305,6 @@ function run(){
   
   document.getElementById('status').textContent = "Running...";
   
-  // Use setTimeout to unblock the main thread for UI updates
   setTimeout(() => {
       const sorted = roster.slice().sort((a,b)=>Number(a.sen)-Number(b.sen));
       const pinned = new Set(); 
@@ -389,11 +360,10 @@ function run(){
         if(rNew === 1) pinned.add(p.sen);
       };
 
-      // Safety Break Counter
       let loopSafety = 0;
 
       VacFirst: while(true){
-        if(loopSafety++ > 5000) break; // Prevent infinite loops
+        if(loopSafety++ > 5000) break;
         let awarded = false;
         for (const p of sorted){
           if (pinned.has(p.sen)) continue;
@@ -402,24 +372,18 @@ function run(){
           for (const w of wants){
             const toK = key(w.base, w.seat);
             
-            // --- FIX: Check "Stay" Bids in Vacancy Phase ---
             if (sameChoice(w.base, w.seat, p.current.base, p.current.seat)) {
                 const bplCheck = bplSatisfied(p,w,toK);
                 if(bplCheck.ok) {
-                    logTrace(Number(p.sen), `Pref #${w.order} (${toK}): RETAINED SEAT (Vacancy Phase). BPL OK. Stopping.`, 'success');
                     awarded = true; 
-                    pinned.add(p.sen); // Pin pilot so they don't bid again
+                    pinned.add(p.sen); 
                     break; 
                 } else {
-                    logTrace(Number(p.sen), `Pref #${w.order} (${toK}): Current Seat BPL Fail. Continuing Search.`, 'warn');
                     continue;
                 }
             }
             
-            if (vacAmt(toK)<=0) {
-                logTrace(Number(p.sen), `Pref #${w.order} (${toK}): Skipped (No Vacancy)`);
-                continue;
-            }
+            if (vacAmt(toK)<=0) continue;
 
             if (prefRank(p,w.base,w.seat) >= (bestRank.get(p.sen)??Infinity)) continue;
             
@@ -427,7 +391,6 @@ function run(){
             if (!bplCheck.ok) continue;
 
             pass++;
-            logTrace(Number(p.sen), `Pref #${w.order} (${toK}): AWARDED!`, 'success');
             recordMove(p, fromK, toK, 'posted', (Number(w.bpl_min)>0 ? bplCheck.rank : null), w.order);
             if(!isPaper(p)) vacDec(toK,1);
             awarded = true;
@@ -440,7 +403,7 @@ function run(){
       loopSafety = 0;
 
       Cascade: while(true){
-        if(loopSafety++ > 5000) break; // Prevent infinite loops
+        if(loopSafety++ > 5000) break; 
         let awarded = false;
         for (const p of sorted){
           if (pinned.has(p.sen)) continue;
@@ -452,19 +415,14 @@ function run(){
             if (sameChoice(w.base, w.seat, p.current.base, p.current.seat)){
               const bplCheck = bplSatisfied(p,w,toK);
               if(bplCheck.ok) {
-                  logTrace(Number(p.sen), `Pref #${w.order} (${toK}): Retained Seat (BPL OK). Stopping Search.`, 'success');
                   pinned.add(p.sen);
                   break; 
               } else {
-                  logTrace(Number(p.sen), `Pref #${w.order} (${toK}): Current Seat BPL Fail. Must Move.`, 'warn');
                   continue; 
               }
             }
             
-            if (vacAmt(toK)<=0) {
-                logTrace(Number(p.sen), `Pref #${w.order} (${toK}): Skipped (No Vacancy)`);
-                continue;
-            }
+            if (vacAmt(toK)<=0) continue;
             
             const rNow = bestRank.get(p.sen)??Infinity;
             const rWish = prefRank(p, w.base, w.seat);
@@ -476,7 +434,6 @@ function run(){
             if (!bplCheck.ok) continue;
 
             pass++;
-            logTrace(Number(p.sen), `Pref #${w.order} (${toK}): AWARDED!`, 'success');
             recordMove(p, fromK, toK, 'cascade', (Number(w.bpl_min)>0 ? bplCheck.rank : null), w.order);
             if(!isPaper(p)) vacDec(toK,1);
             awarded = true;
@@ -488,9 +445,7 @@ function run(){
 
       renderOpen(); 
       
-      // Optimized rendering: Use fragment for ledger
       const fragment = document.createDocumentFragment();
-      // Only show last 2000 ledger entries to prevent DOM overload if massive
       const ledgerSlice = ledgerBuffer.slice(0, 2000); 
       
       const rowsHTML = ledgerSlice.map(r => `
@@ -509,8 +464,6 @@ function run(){
           </div>
         </div>`).join('');
       document.getElementById('namesBySen').innerHTML = awardsHTML;
-      
-      document.getElementById('traceLog').innerHTML = TraceLogs.length ? TraceLogs.join('') : '<div style="color:#666; text-align:center; padding:20px;">No logs.</div>';
       
       document.getElementById('status').textContent = "Complete";
   }, 20);
