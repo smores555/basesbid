@@ -298,22 +298,17 @@ function sameChoice(db, ds, cb, cs){ return String(db).toUpperCase() === String(
 // --- DYNAMIC BPL LOGIC ---
 function bplSatisfied(p, w, toK) {
   const limit = Number(w.bpl_min ?? 0); 
-  if (limit <= 0) return { ok: true }; // No limit set
+  if (limit <= 0) return { ok: true }; 
 
   const occ = Occupants.get(toK) || new Set();
-  
-  // LOGIC:
-  // Calculate projected rank based on current occupants.
-  // NOTE: This simulation updates 'Occupants' in real-time as people move.
-  // If 10 senior people leave SFO CA, they are removed from 'Occupants'.
-  // If 5 senior people arrive, they are added.
-  // Therefore, counting current occupants who are senior to me gives the correct projected rank.
-  
   const mySen = Number(p.sen);
   const seniorsInSeat = [...occ].filter(sen => Number(sen) < mySen).length;
   const myProjectedRank = seniorsInSeat + 1; 
   
-  // console.log(`Pilot ${p.sen} bid ${toK}. Limit ${limit}. Proj Rank: ${myProjectedRank}`);
+  // DEBUG: Watch Pilot 897 to see why he gets/misses awards
+  if(mySen === 897) {
+      console.log(`Pilot 897 checking ${toK} (Order: ${w.order}). Proj Rank: ${myProjectedRank} vs Limit: ${limit}`);
+  }
 
   if (myProjectedRank <= limit) {
       return { ok: true, rank: myProjectedRank };
@@ -361,7 +356,7 @@ function run(){
   document.getElementById('status').textContent = "Running...";
   
   setTimeout(() => {
-      // SORT BY SENIORITY NUMBER
+      // SORT BY SENIORITY
       const sorted = roster.slice().sort((a,b)=>Number(a.sen)-Number(b.sen));
       const pinned = new Set(); 
       const bestRank = new Map();
@@ -372,7 +367,8 @@ function run(){
         if (r0 === 1) pinned.add(p.sen);
       }
 
-      const recordMove = (p, fromK, toK, tag, bplInfo=null) => {
+      // Modified to accept preference order number
+      const recordMove = (p, fromK, toK, tag, bplInfo=null, prefOrder=null) => {
         const [tb,ts] = toK.split('__');
         const [fb,fs] = (fromK||'|').split('__');
         const paper = isPaper(p);
@@ -381,7 +377,7 @@ function run(){
         const vacDest = vacAmt(toK);
         const vacDestNew = paper ? vacDest : (vacDest - 1);
         
-        // Trace Source
+        // Source Trace
         let sourceInfo = "";
         if (VacCreators.has(toK) && VacCreators.get(toK).length > 0) {
             const creator = VacCreators.get(toK).shift(); 
@@ -390,7 +386,8 @@ function run(){
              sourceInfo = `<br><span style="color:var(--text-muted); font-size:11px;">Open position available.</span>`;
         }
         
-        // Add BPL Info
+        // --- ADD PREFERENCE NUMBER TO LEDGER ---
+        if(prefOrder) sourceInfo += ` <span style="color:var(--accent); font-weight:bold; font-size:10px;">(Choice #${prefOrder})</span>`;
         if(bplInfo) sourceInfo += ` <span style="color:var(--warning); font-weight:bold; font-size:10px;">(BPL Met: Rank ${bplInfo})</span>`;
 
         let narr = `Reduce <b style="color:var(--text-muted)">${tb} ${ts}</b> vacancy from <span class="count-change">${vacDest}</span> to <span class="count-change">${vacDestNew}</span>. Awarded: ${pilRef}.${sourceInfo}`;
@@ -435,7 +432,8 @@ function run(){
             if (!bplCheck.ok) continue;
 
             pass++;
-            recordMove(p, fromK, toK, 'posted', (Number(w.bpl_min)>0 ? bplCheck.rank : null));
+            // Pass w.order to recordMove
+            recordMove(p, fromK, toK, 'posted', (Number(w.bpl_min)>0 ? bplCheck.rank : null), w.order);
             if(!isPaper(p)) vacDec(toK,1);
             awarded = true;
             continue VacFirst;
@@ -468,7 +466,8 @@ function run(){
             if (!bplCheck.ok) continue;
 
             pass++;
-            recordMove(p, fromK, toK, 'cascade', (Number(w.bpl_min)>0 ? bplCheck.rank : null));
+            // Pass w.order to recordMove
+            recordMove(p, fromK, toK, 'cascade', (Number(w.bpl_min)>0 ? bplCheck.rank : null), w.order);
             if(!isPaper(p)) vacDec(toK,1);
             awarded = true;
             continue Cascade;
