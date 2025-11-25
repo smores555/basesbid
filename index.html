@@ -394,9 +394,17 @@ function run(){
           for (const w of wants){
             const toK = key(w.base, w.seat);
             
+            // --- LOGIC UPDATE: ALLOW "STAY" BIDS IN VACANCY PHASE IF BPL MET ---
             if (sameChoice(w.base, w.seat, p.current.base, p.current.seat)) {
-                // Skip in VacFirst phase
-                continue;
+                const bplCheck = bplSatisfied(p,w,toK);
+                if(bplCheck.ok) {
+                    logTrace(Number(p.sen), `Pref #${w.order} (${toK}): RETAINED SEAT (Vacancy Phase). BPL OK. Stopping.`, 'success');
+                    awarded = true; // Mark as handled so we stop looking for him
+                    break; // Stop outer preference loop for this pilot
+                } else {
+                    logTrace(Number(p.sen), `Pref #${w.order} (${toK}): Current Seat BPL Fail. Continuing Search.`, 'warn');
+                    continue;
+                }
             }
             
             // Check Vacancy
@@ -415,7 +423,7 @@ function run(){
             recordMove(p, fromK, toK, 'posted', (Number(w.bpl_min)>0 ? bplCheck.rank : null), w.order);
             if(!isPaper(p)) vacDec(toK,1);
             awarded = true;
-            continue VacFirst;
+            break; // Stop preference loop
           }
         }
         if (!awarded) break;
@@ -462,7 +470,7 @@ function run(){
             recordMove(p, fromK, toK, 'cascade', (Number(w.bpl_min)>0 ? bplCheck.rank : null), w.order);
             if(!isPaper(p)) vacDec(toK,1);
             awarded = true;
-            continue Cascade;
+            break;
           }
         }
         if (!awarded) break;
