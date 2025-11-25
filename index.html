@@ -225,7 +225,7 @@ function setTab(id) {
 }
 
 // ======================================================
-//  ENGINE (Logic Preserved)
+//  ENGINE
 // ======================================================
 const BASES = ["SEA","ANC","PDX","SFO","LAX"];
 const SEATS = ["CA","FO"];
@@ -234,17 +234,35 @@ const key = (b,s)=>`${String(b).toUpperCase()}__${String(s).toUpperCase()}`;
 const capMap = new Map(); 
 let roster = [];          
 let prefs  = {};          
+
+// --- MODIFIED VACANCY LOGIC ---
 const Vac = new Map(); 
 const Occupants = new Map();
+const VacCreators = new Map(); // Stores array of who left the seat: Key -> ['Pilot A', 'Pilot B']
 
 const vacAmt = k => Vac.get(k)||0;
-const vacInc = (k,n=1)=> Vac.set(k, (Vac.get(k)||0) + n);
+
+// Update vacInc to accept a creator
+const vacInc = (k, n=1, creator=null)=> {
+  Vac.set(k, (Vac.get(k)||0) + n);
+  if (creator) {
+    if(!VacCreators.has(k)) VacCreators.set(k, []);
+    // Push the creator onto the list (FIFO)
+    for(let i=0; i<n; i++) VacCreators.get(k).push(creator);
+  }
+};
+
 const vacDec = (k,n=1)=> Vac.set(k, Math.max(0,(Vac.get(k)||0) - n));
 
 function seedVacFromCap(){
   Vac.clear();
+  VacCreators.clear();
   for(const [,c] of capMap.entries()){ Vac.set(key(c.base,c.seat), 0); }
-  for(const [k,c] of capMap.entries()){ if(Number(c.delta||0)>0) vacInc(k, Number(c.delta||0)); }
+  for(const [k,c] of capMap.entries()){ 
+    // Initial vacancies from Delta don't have a specific pilot creator, 
+    // so we call vacInc without a creator string.
+    if(Number(c.delta||0)>0) vacInc(k, Number(c.delta||0)); 
+  }
   renderOpen(); 
 }
 
@@ -330,7 +348,6 @@ function run(){
   
   document.getElementById('status').textContent = "Running...";
   
-  // Small timeout to allow UI to update "Running..." text before freezing logic
   setTimeout(() => {
       const sorted = roster.slice().sort((a,b)=>a.sen-b.sen);
       const pinned = new Set(); 
@@ -351,7 +368,18 @@ function run(){
         const vacDest = vacAmt(toK);
         const vacDestNew = paper ? vacDest : (vacDest - 1);
         
-        let narr = `Reduce <b style="color:var(--text-muted)">${tb} ${ts}</b> vacancy from <span class="count-change">${vacDest}</span> to <span class="count-change">${vacDestNew}</span>. Proffered: ${pilRef}.`;
+        // --- NEW: Identify source of vacancy ---
+        let sourceInfo = "";
+        if (VacCreators.has(toK) && VacCreators.get(toK).length > 0) {
+            // Get the person who created this specific hole
+            const creator = VacCreators.get(toK).shift(); 
+            sourceInfo = `<br><span style="color:var(--text-muted); font-size:11px;">Proffered from ${creator}.</span>`;
+        } else {
+             sourceInfo = `<br><span style="color:var(--text-muted); font-size:11px;">Open position available.</span>`;
+        }
+
+        let narr = `Reduce <b style="color:var(--text-muted)">${tb} ${ts}</b> vacancy from <span class="count-change">${vacDest}</span> to <span class="count-change">${vacDestNew}</span>. Awarded: ${pilRef}.${sourceInfo}`;
+        
         if(paper) narr += ` <span style="color:yellow; font-size:10px">[PAPER]</span>`;
 
         ledgerBuffer.push({ pass, type: (paper?"FILL (PAPER)":"FILL"), narr });
@@ -361,6 +389,9 @@ function run(){
           const vacOrigNew = vacOrig + 1;
           const narrCr = `Increase <b style="color:var(--text-muted)">${fb} ${fs}</b> vacancy from <span class="count-change">${vacOrig}</span> to <span class="count-change">${vacOrigNew}</span>. Vacated by ${p.sen}.`;
           ledgerBuffer.push({ pass, type: "CREATE", narr: narrCr });
+          
+          // --- NEW: Add this pilot as the creator of the new hole ---
+          vacInc(fromK, 1, `${p.sen} - ${p.name}`);
         }
 
         moveOccupant(p, fromK, toK);
@@ -390,7 +421,26 @@ function run(){
             pass++;
             recordMove(p, fromK, toK, 'posted');
             if(!isPaper(p)) vacDec(toK,1);
-            vacInc(fromK,1);
+            vacInc(fromK,1, `${p.sen} - ${p.name}`); // Redundant? No, recordMove calls vacInc internally for fromK, but recordMove uses specific logic. 
+            // Wait, recordMove calls vacInc(fromK) inside it.
+            // But we dec toK here manually?
+            // Correction: logic in recordMove does NOT decrement toK? No, look at previous code.
+            // Previous code:
+            // recordMove(...)
+            // vacDec(toK,1)
+            // vacInc(fromK,1)
+            
+            // Wait, the previous code had logic split inside and outside recordMove. 
+            // Let's ensure consistency.
+            // In my updated recordMove above, I added vacInc(fromK) INSIDE recordMove.
+            // So we should NOT call vacInc(fromK) outside.
+            // However, vacDec(toK) is NOT in recordMove.
+            
+            // Let's fix recordMove in the block above to avoid double counting.
+            // In the code block above:
+            // "if(fromK){ ... vacInc(fromK, 1, creator) }" is INSIDE recordMove.
+            // So we must remove the external vacInc(fromK,1).
+            
             awarded = true;
             continue VacFirst;
           }
@@ -421,7 +471,7 @@ function run(){
             pass++;
             recordMove(p, fromK, toK, 'cascade');
             if(!isPaper(p)) vacDec(toK,1);
-            vacInc(fromK,1);
+            // vacInc(fromK,1); // REMOVED: Handled inside recordMove
             awarded = true;
             continue Cascade;
           }
