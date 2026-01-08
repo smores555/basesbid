@@ -62,13 +62,13 @@
   {
     "base": "SAN",
     "seat": "CA",
-    "startCapacity": 0,
-    "delta": 85
+    "startCapacity": 85,
+    "delta": 
   },
   {
     "base": "SAN",
     "seat": "FO",
-    "startCapacity": 0,
-    "delta": 79
+    "startCapacity": 79,
+    "delta": 
   }
 ]
