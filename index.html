@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
-  <title>ProTrace - Real Queue Engine</title>
+  <title>ProTrace - Master Roster Queue</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
   <style>
     :root { 
@@ -35,8 +35,8 @@
     <select id="targetBase"><option>ANC</option><option>LAX</option><option>PDX</option><option>SAN</option><option>SEA</option><option selected>SFO</option></select>
     <select id="targetSeat"><option selected>CA</option><option>FO</option></select>
   </div>
-  <button onclick="calculateQueue()">ANALYZE ACTUAL QUEUE</button>
-  <div id="status" style="text-align:center; font-size:11px; color:var(--text-muted); margin-top:10px;">Syncing Data...</div>
+  <button onclick="calculateQueue()">ANALYZE MASTER QUEUE</button>
+  <div id="status" style="text-align:center; font-size:11px; color:var(--text-muted); margin-top:10px;">Checking Roster...</div>
 </div>
 
 <div class="main">
@@ -46,7 +46,7 @@
     </div>
   </div>
   <div class="panel" style="flex-grow: 1; display: flex; flex-direction: column;">
-    <div style="font-size:11px; color:var(--text-muted); margin-bottom:8px;">ACTUAL SENIOR COMPETITORS</div>
+    <div style="font-size:11px; color:var(--text-muted); margin-bottom:8px;">ACTIVE SENIOR COMPETITORS (FROM MASTER ROSTER)</div>
     <div id="seniorList" style="flex-grow: 1; overflow-y: auto; font-family: 'JetBrains Mono'; font-size: 13px; color: var(--text-muted); background: var(--bg-input); padding: 15px; border-radius: 6px;"></div>
   </div>
 </div>
@@ -57,9 +57,10 @@ let roster = [], preferences = {};
 async function loadData() {
   try {
     const [rRes, pRes] = await Promise.all([fetch('roster.json'), fetch('preferences.json')]);
-    roster = await rRes.json(); preferences = await pRes.json();
-    document.getElementById('status').textContent = "Data Synced";
-  } catch(e) { document.getElementById('status').textContent = "File Error"; }
+    roster = await rRes.json(); 
+    preferences = await pRes.json();
+    document.getElementById('status').textContent = "Master Roster Synced";
+  } catch(e) { document.getElementById('status').textContent = "Data Error"; }
 }
 
 function calculateQueue() {
@@ -70,32 +71,32 @@ function calculateQueue() {
   let realCompetitors = 0;
   let listHtml = "";
 
-  // 1. Filter for senior pilots
+  // 1. Loop through pilots senior to you in the Master Roster
   const seniors = roster.filter(p => Number(p.sen) < mySen).sort((a,b) => Number(a.sen) - Number(b.sen));
 
   seniors.forEach(p => {
-    const pId = "pil" + p.sen;
-    const pPrefsData = preferences[pId] || preferences[p.sen] || preferences[String(p.sen)];
+    const pId = p.id || ("pil" + p.sen);
+    const pPrefsData = preferences[pId];
     const pPrefsList = pPrefsData?.preferences || [];
     
-    // Get their current seat from the Roster
+    // 2. Get their ACTUAL assignment from the Roster
     const curBase = String(p.current.base).toUpperCase();
     const curSeat = String(p.current.seat).toUpperCase();
 
     let isCompetitor = false;
 
-    // 2. Step through bids in order of priority
+    // 3. Compare Target Bid vs. Current Assignment priority
     for (const bid of pPrefsList) {
       const bBase = String(bid.base).toUpperCase();
       const bSeat = String(bid.seat).toUpperCase();
 
-      // IF THEY HIT TARGET FIRST: They want your seat more than staying put.
+      // If they hit your Target Base/Seat first, they are a real competitor
       if (bBase === tBase && bSeat === tSeat) {
         isCompetitor = true;
         break;
       }
 
-      // IF THEY HIT CURRENT SEAT FIRST: They hold their current spot and stop bidding.
+      // If they hit their Current Assignment first, they are satisfied and stay put
       if (bBase === curBase && bSeat === curSeat) {
         isCompetitor = false;
         break;
@@ -104,7 +105,9 @@ function calculateQueue() {
 
     if (isCompetitor) {
       realCompetitors++;
-      listHtml += `<div style="padding:4px 0;">#${p.sen} - ${p.name.split(',')[0]}</div>`;
+      listHtml += `<div style="padding:6px 0; border-bottom:1px solid #1e293b;">
+        <b style="color:var(--accent)">#${p.sen}</b> - ${p.name.split(',')[0]} (Currently ${curBase} ${curSeat})
+      </div>`;
     }
   });
 
@@ -115,10 +118,10 @@ function calculateQueue() {
       <div class="queue-val">${realCompetitors}</div>
       <div style="font-size:14px; margin-top:10px;">
         Real Line Position: <b style="color:white">#${realCompetitors + 1}</b><br>
-        You need <b style="color:var(--warning)">${realCompetitors + 1}</b> spots to hold <b>${tBase} ${tSeat}</b>.
+        Required vacancies to hold <b>${tBase} ${tSeat}</b>: <b style="color:var(--warning)">${realCompetitors + 1}</b>
       </div>
     </div>`;
-  document.getElementById('seniorList').innerHTML = listHtml || "No active senior bidders.";
+  document.getElementById('seniorList').innerHTML = listHtml || "No senior pilots want to move to this seat.";
 }
 loadData();
 </script>
