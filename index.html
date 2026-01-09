@@ -8,12 +8,12 @@
     :root {
       --bg: #0b0f16; --card: #121a27; --accent: #2a66ff;
       --text: #e8eefc; --border: rgba(255,255,255,.1);
-      --success: #7dff9a; --danger: #ff7d7d; --warning: #ffb86c;
+      --success: #7dff9a; --danger: #ff7d7d;
     }
     body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
     .container { max-width: 1200px; margin: 0 auto; }
     .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; }
     
     label { display: block; font-size: 11px; font-weight: 700; opacity: .6; text-transform: uppercase; margin-bottom: 8px; }
     input, select, button { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,.1); background: #0d1420; color: white; box-sizing: border-box; }
@@ -24,14 +24,14 @@
     th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); font-size: 13px; }
     th { color: var(--accent); text-transform: uppercase; font-size: 11px; }
     
-    .bpl-warning { display: inline-block; padding: 2px 8px; background: rgba(255, 125, 125, 0.2); border: 1px solid var(--danger); border-radius: 4px; color: var(--danger); font-weight: 800; font-size: 10px; margin-left: 8px; }
+    .bpl-pill { display: inline-block; padding: 2px 6px; background: rgba(255, 125, 125, 0.15); border: 1px solid var(--danger); border-radius: 4px; color: var(--danger); font-weight: 800; font-size: 10px; margin-left: 8px; }
     .ok { color: var(--success); } .no { color: var(--danger); }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="card">
-      <h2>ProTrace BPL Analytics</h2>
+      <h2>ProTrace BPL & Seniority Analytics</h2>
       <div class="grid">
         <div>
           <label>Your Seniority #</label>
@@ -53,7 +53,7 @@
           </select>
         </div>
       </div>
-      <button id="calcBtn">Analyze Standing</button>
+      <button id="calcBtn">Run Analytics</button>
     </div>
 
     <div class="grid">
@@ -66,7 +66,7 @@
         <div id="bplResult" class="big-num" style="color:var(--danger);">-</div>
       </div>
       <div class="card" style="text-align:center;">
-        <label>Base Capacity</label>
+        <label>Base Openings</label>
         <div id="capResult" class="big-num">-</div>
       </div>
       <div class="card" style="text-align:center;">
@@ -76,16 +76,16 @@
     </div>
 
     <div class="card">
-      <label>Senior Competitor Detail</label>
+      <label>Senior Competitors Breakdown</label>
       <table>
         <thead>
           <tr>
             <th>Sen</th>
             <th>Name</th>
             <th>Current Status</th>
-            <th>Bid Rank</th>
+            <th>Bid Order</th>
             <th>BPL Limit</th>
-            <th>Full Preference</th>
+            <th>Full Bid</th>
           </tr>
         </thead>
         <tbody id="competitorTable"></tbody>
@@ -96,11 +96,12 @@
 <script>
 let ROSTER = [], PREFS = {}, CAPACITIES = [];
 
-function pick(val) {
-  if (!val) return "";
-  if (typeof val === 'string') return val.trim();
-  if (typeof val === 'object') return val.base || val.code || val.text || val.current || "";
-  return String(val);
+// Deep cleaner to find base/seat in complex roster objects
+function findCurrent(p) {
+  if (!p) return "";
+  const b = p.base || (p.current ? p.current.base : "");
+  const s = p.seat || (p.current ? p.current.seat : "");
+  return `${String(b).trim()} ${String(s).trim()}`;
 }
 
 async function loadData() {
@@ -113,64 +114,66 @@ async function loadData() {
     ROSTER = Array.isArray(r) ? r : Object.values(r);
     PREFS = p;
     CAPACITIES = c;
-  } catch (e) { console.error("Data load failed."); }
+  } catch (e) { console.error("Error loading JSON."); }
 }
 
 function runAnalysis() {
   const mySen = parseInt(document.getElementById("senInput").value);
   const tBase = document.getElementById("baseSelect").value;
   const tSeat = document.getElementById("seatSelect").value;
-  const targetTag = `${tBase} ${tSeat}`;
+  const tBid = `${tBase} ${tSeat}`;
 
   const user = ROSTER.find(p => parseInt(p.sen) === mySen);
   if (!user) return alert("Pilot not found.");
 
   const competitors = [];
-  let bplCompetitorsCount = 0;
+  let bplCount = 0;
 
   ROSTER.forEach(p => {
     const pSen = parseInt(p.sen);
-    if (pSen >= mySen) return;
+    if (pSen >= mySen) return; // Ignore juniors
 
-    const pPref = PREFS[`pil${pSen}`] || PREFS[pSen];
-    if (!pPref || !pPref.preferences) return;
+    const pPrefObj = PREFS[`pil${pSen}`] || PREFS[pSen];
+    if (!pPrefObj || !pPrefObj.preferences) return;
 
-    const curBase = pick(p.base || (p.current ? p.current.base : ""));
-    const curSeat = pick(p.seat || (p.current ? p.current.seat : ""));
-    const curStatus = `${curBase} ${curSeat}`;
+    const curStatus = findCurrent(p);
 
-    for (const bidEntry of pPref.preferences) {
-      const bidStr = pick(bidEntry.bid);
-      const bidOrder = parseInt(bidEntry.order);
-      const bplLimit = parseInt(bidEntry.bpl_min || 0);
+    for (const entry of pPrefObj.preferences) {
+      const bidStr = String(entry.bid || "").trim();
+      const bidOrder = parseInt(entry.order);
+      const bplVal = parseInt(entry.bpl_min || 0);
 
-      if (bidOrder === 1 && (!bidStr || bidStr === "" || bidStr === curStatus)) break;
+      // STAY RULE: If Order 1 is current status or blank, skip them
+      if (bidOrder === 1 && (bidStr === "" || bidStr.includes(curStatus))) break;
       
+      // TARGET MATCH: Does the bid contain your target base + seat?
       if (bidStr.includes(tBase) && bidStr.includes(tSeat)) {
-        if (curStatus !== bidStr) {
-          if (bplLimit > 0) bplCompetitorsCount++;
-          
-          competitors.push({
-            sen: pSen,
-            name: p.name,
-            current: curStatus,
-            order: bidOrder,
-            bpl: bplLimit,
-            full: bidStr
-          });
-        }
-        break;
+        // ALREADY HOLDING RULE: If their bid is exactly where they already are, skip
+        if (bidStr.includes(curStatus)) break;
+
+        if (bplVal > 0) bplCount++;
+        competitors.push({
+          sen: pSen,
+          name: p.name,
+          current: curStatus,
+          order: bidOrder,
+          bpl: bplVal,
+          full: bidStr
+        });
+        break; 
       }
-      if (bidStr === curStatus) break;
+      
+      // LIST STOP: If they hit their current status later in the list, stop checking
+      if (bidStr.includes(curStatus)) break;
     }
   });
 
   const cap = CAPACITIES.find(c => c.base === tBase && c.seat === tSeat)?.delta || 0;
-  const totalInLine = competitors.length + 1;
-  const delta = Math.max(0, totalInLine - cap);
+  const pos = competitors.length + 1;
+  const delta = Math.max(0, pos - cap);
 
-  document.getElementById("lineResult").textContent = totalInLine;
-  document.getElementById("bplResult").textContent = bplCompetitorsCount;
+  document.getElementById("lineResult").textContent = pos;
+  document.getElementById("bplResult").textContent = bplCount;
   document.getElementById("capResult").textContent = cap;
   document.getElementById("deltaResult").textContent = delta;
   document.getElementById("deltaResult").className = delta === 0 ? "big-num ok" : "big-num no";
@@ -178,10 +181,7 @@ function runAnalysis() {
   document.getElementById("competitorTable").innerHTML = competitors.sort((a,b) => a.sen - b.sen).map(c => `
     <tr>
       <td>${c.sen}</td>
-      <td>
-        ${c.name} 
-        ${c.bpl > 0 ? `<span class="bpl-warning">BPL ${c.bpl}</span>` : ''}
-      </td>
+      <td>${c.name} ${c.bpl > 0 ? `<span class="bpl-pill">BPL ${c.bpl}</span>` : ''}</td>
       <td>${c.current}</td>
       <td>#${c.order}</td>
       <td>${c.bpl}</td>
