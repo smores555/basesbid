@@ -4,52 +4,189 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>ProTrace - Seniority Queue</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+
   <style>
     :root {
       --bg-app: #0f172a; --bg-panel: #1e293b; --bg-input: #020617;
       --border: #334155; --text-main: #f1f5f9; --text-muted: #94a3b8;
       --accent: #3b82f6; --danger: #ef4444; --success: #22c55e;
     }
-    body { margin: 0; background: var(--bg-app); color: var(--text-main); font-family: 'Inter', sans-serif; display: flex; height: 100vh; overflow: hidden; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg-app);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
 
-    .sidebar { width: 340px; background: var(--bg-panel); border-right: 1px solid var(--border); padding: 24px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
-    .logo { font-weight: 800; font-size: 22px; color: var(--accent); letter-spacing: -1px; margin-bottom: 10px; }
+    .sidebar {
+      width: 360px;
+      background: var(--bg-panel);
+      border-right: 1px solid var(--border);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      overflow-y: auto;
+    }
+    .logo {
+      font-weight: 800;
+      font-size: 22px;
+      color: var(--accent);
+      letter-spacing: -1px;
+      margin-bottom: 6px;
+    }
+    .sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-top: -8px;
+    }
 
     .input-group { display: flex; flex-direction: column; gap: 8px; }
-    label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
-    input, select { background: var(--bg-input); border: 1px solid var(--border); color: white; padding: 12px; border-radius: 6px; font-size: 14px; outline: none; transition: border 0.2s; }
+    label { font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; }
+    input, select {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      color: white;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      outline: none;
+      transition: border 0.15s, transform 0.05s;
+    }
     input:focus, select:focus { border-color: var(--accent); }
+    button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: 900;
+      cursor: pointer;
+      margin-top: 6px;
+      letter-spacing: .02em;
+    }
+    button:hover { filter: brightness(1.06); }
+    button:active { transform: translateY(1px); }
 
-    button { background: var(--accent); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; cursor: pointer; margin-top: 10px; }
-    button:hover { filter: brightness(1.1); }
+    .mini {
+      font-size: 12px;
+      color: var(--text-muted);
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      line-height: 1.45;
+    }
+    .mini b { color: white; }
 
-    .main { flex: 1; padding: 40px; display: flex; align-items: center; justify-content: center; }
-    .card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 16px; padding: 40px; max-width: 700px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+    .main {
+      flex: 1;
+      padding: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 34px;
+      width: min(860px, 100%);
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
 
-    .queue-msg { font-size: 26px; font-weight: 600; line-height: 1.5; color: var(--text-main); }
+    .title {
+      font-size: 14px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .queue-msg {
+      font-size: 26px;
+      font-weight: 650;
+      line-height: 1.5;
+      color: var(--text-main);
+      margin: 0;
+    }
     .queue-msg b { color: var(--accent); }
-    .highlight-red { color: var(--danger); font-weight: 800; text-decoration: underline; }
-    .highlight-green { color: var(--success); font-weight: 800; }
+    .highlight-red { color: var(--danger); font-weight: 900; text-decoration: underline; }
+    .highlight-green { color: var(--success); font-weight: 900; }
 
-    .meta { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: center; gap: 40px; font-size: 13px; color: var(--text-muted); flex-wrap: wrap; }
-    .meta b { color: white; font-family: 'JetBrains Mono'; }
+    .meta {
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(4, minmax(120px, 1fr));
+      gap: 14px;
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: left;
+    }
+    .meta .box {
+      background: rgba(2,6,23,.45);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .meta b { color: white; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+    .meta .k { font-size: 11px; text-transform: uppercase; letter-spacing: .10em; margin-bottom: 6px; color: var(--text-muted); font-weight: 800; }
 
-    .loader { position: fixed; inset: 0; background: var(--bg-app); display: flex; align-items: center; justify-content: center; z-index: 100; font-weight: 600; padding: 24px; text-align: center; }
-    .errbox { max-width: 800px; background: #111827; border: 1px solid #374151; padding: 18px; border-radius: 12px; }
-    .errtitle { color: var(--danger); font-weight: 800; margin-bottom: 10px; }
-    .errmono { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #cbd5e1; white-space: pre-wrap; text-align: left; }
-    .hint { margin-top: 10px; color: var(--text-muted); font-size: 13px; text-align: left; }
-    .hint code { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #e2e8f0; }
+    .loader {
+      position: fixed; inset: 0;
+      background: var(--bg-app);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 24px;
+      text-align: center;
+    }
+    .errbox {
+      width: min(860px, 100%);
+      background: #0b1220;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 18px;
+      text-align: left;
+    }
+    .errtitle { color: var(--danger); font-weight: 900; margin-bottom: 10px; }
+    .errmono {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #cbd5e1;
+      white-space: pre-wrap;
+      line-height: 1.45;
+    }
+    .hint { margin-top: 12px; color: var(--text-muted); font-size: 13px; }
+    .hint code { font-family: 'JetBrains Mono', monospace; color: #e2e8f0; font-size: 12px; }
+
+    @media (max-width: 980px) {
+      body { flex-direction: column; height: auto; overflow: auto; }
+      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
+      .main { padding: 18px; }
+      .meta { grid-template-columns: repeat(2, minmax(120px, 1fr)); }
+    }
   </style>
 
   <script>
-    // GitHub Pages project-site trap:
-    // If you load /basesbid (no trailing slash), relative fetch('roster.json') resolves WRONG.
-    // Force a trailing slash so relative paths behave.
+    // GitHub Pages project-site trap fix:
+    // If you open /repo (no slash), relative fetch('roster.json') resolves to /roster.json instead of /repo/roster.json.
     (function forceTrailingSlash() {
       const p = location.pathname;
-      if (!p.endsWith('/') && !p.split('/').pop().includes('.')) {
+      const last = p.split('/').pop() || '';
+      const looksLikeFile = last.includes('.');
+      if (!looksLikeFile && !p.endsWith('/')) {
         location.replace(p + '/' + location.search + location.hash);
       }
     })();
@@ -58,15 +195,19 @@
 
 <body>
   <div id="loadingScreen" class="loader">
-    <div>Fetching Roster & Preferences...</div>
+    <div>Fetching roster + preferences + capacities…</div>
   </div>
 
   <div class="sidebar">
     <div class="logo">PROTRACE</div>
+    <div class="sub">
+      “In line” = senior pilots whose bid list hits the <b>target base/seat</b>
+      <b>before</b> their <b>current base/seat</b>.
+    </div>
 
     <div class="input-group">
       <label>Pilot Seniority #</label>
-      <input type="text" id="pilotSearch" placeholder="Ex: 3388" value="">
+      <input type="text" id="pilotSearch" placeholder="Ex: 2670">
     </div>
 
     <div class="input-group">
@@ -76,7 +217,7 @@
         <option value="LAX">LAX</option>
         <option value="PDX">PDX</option>
         <option value="SAN">SAN</option>
-        <option value="SEA" selected>SEA</option>
+        <option value="SEA">SEA</option>
         <option value="SFO">SFO</option>
       </select>
     </div>
@@ -90,25 +231,60 @@
     </div>
 
     <button id="runBtn">Run Base Analysis</button>
+
+    <div class="mini">
+      <b>Important:</b> If you already hold the target base/seat,
+      the tool will say “you’re already in” (no “line”).
+    </div>
   </div>
 
   <div class="main">
     <div id="results" class="card" style="display:none;">
-      <div id="statusOutput" class="queue-msg"></div>
+      <div class="title">Results</div>
+      <p id="statusOutput" class="queue-msg"></p>
 
       <div class="meta">
-        <div>Pilot: <b id="resName">-</b></div>
-        <div>Sen: <b id="resSen">-</b></div>
-        <div>Base/Seat Delta: <b id="resDelta">-</b></div>
-        <div>People in line: <b id="resLine">-</b></div>
+        <div class="box">
+          <div class="k">Pilot</div>
+          <div><b id="resName">-</b></div>
+        </div>
+        <div class="box">
+          <div class="k">Seniority</div>
+          <div><b id="resSen">-</b></div>
+        </div>
+        <div class="box">
+          <div class="k">Current</div>
+          <div><b id="resCur">-</b></div>
+        </div>
+        <div class="box">
+          <div class="k">Target</div>
+          <div><b id="resTgt">-</b></div>
+        </div>
+
+        <div class="box">
+          <div class="k">Senior competitors</div>
+          <div><b id="resSeniors">-</b></div>
+        </div>
+        <div class="box">
+          <div class="k">Total in line</div>
+          <div><b id="resLine">-</b></div>
+        </div>
+        <div class="box">
+          <div class="k">Capacity delta</div>
+          <div><b id="resDelta">-</b></div>
+        </div>
+        <div class="box">
+          <div class="k">Needed openings</div>
+          <div><b id="resNeed">-</b></div>
+        </div>
       </div>
     </div>
 
-    <div id="intro" style="color:var(--text-muted); max-width: 720px; text-align:center;">
-      Enter a seniority number and select a target base/seat.
-      <div style="margin-top:10px; font-size:13px;">
-        Tip: If the page can’t load JSON, it will tell you exactly which file failed.
-      </div>
+    <div id="intro" class="card" style="background: transparent; border: 1px dashed var(--border); box-shadow: none;">
+      <div class="title">ProTrace</div>
+      <p class="queue-msg" style="font-size:20px; color: var(--text-muted);">
+        Enter a seniority number and choose a target base/seat.
+      </p>
     </div>
   </div>
 
@@ -117,38 +293,31 @@
     let PREFS = {};
     let CAPACITIES = [];
 
+    // Always resolve JSON relative to the directory that contains this page.
     function dirBaseUrl() {
-      // Always resolve JSON relative to the directory containing this page
-      // Works on GitHub Pages project sites and normal hosting.
       const u = new URL(location.href);
-      if (!u.pathname.endsWith('/')) {
-        u.pathname = u.pathname.replace(/\/[^/]*$/, '/');
-      }
+      if (!u.pathname.endsWith('/')) u.pathname = u.pathname.replace(/\/[^/]*$/, '/');
       return u.toString();
     }
 
     async function fetchJsonStrict(filename) {
-      const base = dirBaseUrl();
-      const url = new URL(filename, base).toString();
-
+      const url = new URL(filename, dirBaseUrl()).toString();
       const res = await fetch(url, { cache: "no-store" });
 
       if (!res.ok) {
-        const text = await res.text().catch(() => "");
+        const body = await res.text().catch(() => "");
         throw new Error(
-          `HTTP ${res.status} loading ${filename}\nURL: ${url}\n` +
-          (text ? `Body (first 300 chars):\n${text.slice(0, 300)}` : "")
+          `HTTP ${res.status} while loading ${filename}\nURL: ${url}\n` +
+          (body ? `Body (first 300 chars):\n${body.slice(0, 300)}` : "")
         );
       }
 
-      // JSON parse can throw; we want a clear message
       const raw = await res.text();
       try {
         return JSON.parse(raw);
       } catch (e) {
         throw new Error(
-          `Invalid JSON in ${filename}\nURL: ${url}\n` +
-          `Parse error: ${e.message}\n` +
+          `Invalid JSON in ${filename}\nURL: ${url}\nParse error: ${e.message}\n` +
           `First 300 chars:\n${raw.slice(0, 300)}`
         );
       }
@@ -158,34 +327,37 @@
       const loading = document.getElementById('loadingScreen');
       loading.innerHTML = `
         <div class="errbox">
-          <div class="errtitle">Error loading data files</div>
-          <div class="errmono">${String(err).replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+          <div class="errtitle">Error loading data</div>
+          <div class="errmono">${escapeHtml(String(err))}</div>
           <div class="hint">
-            <div><b>Common fixes:</b></div>
+            Fix checklist:
             <ul>
-              <li>Make sure these files exist in the same folder as <code>index.html</code>: <code>roster.json</code>, <code>preferences.json</code>, <code>capacities.json</code></li>
-              <li>Open the site with a trailing slash: <code>.../basesbid/</code></li>
-              <li>Click each JSON file directly in your browser to confirm it loads (no 404)</li>
+              <li>Confirm these exist next to <code>index.html</code>: <code>roster.json</code>, <code>preferences.json</code>, <code>capacities.json</code></li>
+              <li>Open site with trailing slash: <code>.../basesbid/</code></li>
+              <li>Try opening each JSON in the browser to confirm no 404</li>
             </ul>
           </div>
         </div>
       `;
     }
 
+    function escapeHtml(s) {
+      return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    // preferences.json can be either:
+    //  - { "pil123": { "preferences": [...] } }
+    //  - { "pil123": { "preferences": { "preferences": [...] } } }
     function normalizePrefsEntry(prefEntry) {
-      // Accept:
-      // 1) { preferences: ["73G SEA CA", ...] }
-      // 2) { preferences: { preferences: [...] } }   (nested)
       if (!prefEntry) return null;
       if (Array.isArray(prefEntry.preferences)) return prefEntry.preferences;
       if (prefEntry.preferences && Array.isArray(prefEntry.preferences.preferences)) return prefEntry.preferences.preferences;
       return null;
     }
 
+    // Accept "73G SEA CA" or "737 SEA CA"
     function parseBidString(bid) {
-      // Expected: "73G SEA CA" or "737 SEA CA"
       const parts = String(bid || "").trim().split(/\s+/);
-      // Handle if someone put just "SEA CA" (bad data)
       if (parts.length === 3) return { equip: parts[0], base: parts[1], seat: parts[2] };
       if (parts.length === 2) return { equip: null, base: parts[0], seat: parts[1] };
       return { equip: null, base: null, seat: null };
@@ -196,26 +368,83 @@
       return Number.isFinite(n) ? n : 0;
     }
 
+    function fmtCur(p) {
+      const c = p.current || {};
+      const eq = c.equip ? String(c.equip) + " " : "";
+      return `${eq}${c.base || "?"} ${c.seat || "?"}`.trim();
+    }
+
+    function setText(id, value) {
+      document.getElementById(id).textContent = value;
+    }
+
+    function showResults() {
+      document.getElementById('intro').style.display = 'none';
+      document.getElementById('results').style.display = 'block';
+    }
+
     async function init() {
       try {
         const [r, p, c] = await Promise.all([
           fetchJsonStrict('roster.json'),
           fetchJsonStrict('preferences.json'),
-          fetchJsonStrict('capacities.json'),
+          fetchJsonStrict('capacities.json')
         ]);
 
         ROSTER = Array.isArray(r) ? r : [];
-        PREFS = (p && typeof p === 'object') ? p : {};
+        PREFS = (p && typeof p === "object") ? p : {};
         CAPACITIES = Array.isArray(c) ? c : [];
-
-        // Nice UX: set a default seniority if you want
-        // If roster has someone around mid-list, leave blank
-        document.getElementById('pilotSearch').value = "";
 
         document.getElementById('loadingScreen').style.display = 'none';
       } catch (err) {
         showError(err);
       }
+    }
+
+    // CORE LOGIC:
+    // Count a senior pilot as a competitor ONLY if:
+    //  - Their preference list hits TARGET base+seat BEFORE their CURRENT base+seat.
+    //  - If they hit current first, they "stick" and should not be counted for anything below.
+    function countSeniorCompetitors(userSen, tBase, tSeat) {
+      let count = 0;
+
+      for (const p of ROSTER) {
+        if (Number(p.sen) >= userSen) continue;
+
+        const prefList = normalizePrefsEntry(PREFS[p.id]);
+        if (!prefList) continue;
+
+        const curBase = p.current?.base;
+        const curSeat = p.current?.seat;
+
+        let isCompetitor = false;
+
+        for (const bid of prefList) {
+          const b = parseBidString(bid);
+          if (!b.base || !b.seat) continue;
+
+          // stop at current: they hold it, so nothing below matters
+          if (b.base === curBase && b.seat === curSeat) {
+            isCompetitor = false;
+            break;
+          }
+
+          // target before current => true competitor
+          if (b.base === tBase && b.seat === tSeat) {
+            isCompetitor = true;
+            break;
+          }
+        }
+
+        if (isCompetitor) count++;
+      }
+
+      return count;
+    }
+
+    function getCapacityDelta(tBase, tSeat) {
+      const cap = CAPACITIES.find(x => x.base === tBase && x.seat === tSeat);
+      return safeDelta(cap?.delta);
     }
 
     function runAnalysis() {
@@ -225,64 +454,57 @@
 
       if (!query) { alert("Enter a seniority number."); return; }
 
-      // Find pilot by seniority number
       const user = ROSTER.find(p => String(p.sen) === query);
       if (!user) { alert("Pilot not found in roster.json."); return; }
 
       const userSen = Number(user.sen);
+      const userCurBase = user.current?.base;
+      const userCurSeat = user.current?.seat;
 
-      // Count senior pilots who would take target BEFORE their current assignment appears in their bid list
-      let seniorCompetitors = 0;
+      // Header fields
+      showResults();
+      setText('resName', (String(user.name || "").split(',')[0] || "-"));
+      setText('resSen', "#" + user.sen);
+      setText('resCur', fmtCur(user));
+      setText('resTgt', `${tBase} ${tSeat}`);
 
-      for (const p of ROSTER) {
-        if (Number(p.sen) >= userSen) continue;
+      // IMPORTANT FIX:
+      // If you already hold the target base/seat, there is no "line to get in."
+      if (userCurBase === tBase && userCurSeat === tSeat) {
+        setText('resSeniors', "—");
+        setText('resLine', "—");
+        setText('resDelta', "—");
+        setText('resNeed', "0");
 
-        const prefEntry = PREFS[p.id];
-        const prefList = normalizePrefsEntry(prefEntry);
-        if (!prefList) continue;
+        document.getElementById('statusOutput').innerHTML =
+          `You already hold <b>${tBase} ${tSeat}</b>.<br>` +
+          `<span class="highlight-green">No line to “get in” (you’re already there).</span>`;
 
-        const curBase = p.current?.base;
-        const curSeat = p.current?.seat;
-
-        for (const bid of prefList) {
-          const b = parseBidString(bid);
-          const bBase = b.base;
-          const bSeat = b.seat;
-
-          if (bBase === tBase && bSeat === tSeat) {
-            seniorCompetitors++;
-            break;
-          }
-          // Stop when they hit their current assignment (they'd hold it)
-          if (bBase === curBase && bSeat === curSeat) break;
-        }
+        return;
       }
 
-      // Capacity delta
-      const cap = CAPACITIES.find(x => x.base === tBase && x.seat === tSeat) || { delta: 0 };
-      const delta = safeDelta(cap.delta);
-
+      // Competitors + delta
+      const seniorCompetitors = countSeniorCompetitors(userSen, tBase, tSeat);
       const totalInLine = seniorCompetitors + 1; // seniors + you
-      const diff = totalInLine - delta;
+      const delta = getCapacityDelta(tBase, tSeat);
 
-      // Update UI
-      document.getElementById('intro').style.display = 'none';
-      document.getElementById('results').style.display = 'block';
+      // Needed openings (simple model)
+      // If delta is "openings / growth slots", then you need totalInLine <= delta to "get in"
+      const needed = Math.max(0, totalInLine - delta);
 
-      document.getElementById('resName').textContent = String(user.name || "").split(',')[0] || "-";
-      document.getElementById('resSen').textContent = "#" + user.sen;
-      document.getElementById('resDelta').textContent = String(delta);
-      document.getElementById('resLine').textContent = String(totalInLine);
+      setText('resSeniors', String(seniorCompetitors));
+      setText('resLine', String(totalInLine));
+      setText('resDelta', String(delta));
+      setText('resNeed', String(needed));
 
-      const output = document.getElementById('statusOutput');
-      if (diff <= 0) {
-        output.innerHTML =
-          `There are <b>${totalInLine}</b> people in line for <b>${tBase} ${tSeat}</b>.<br>` +
+      if (needed === 0) {
+        document.getElementById('statusOutput').innerHTML =
+          `There are <b>${totalInLine}</b> in line for <b>${tBase} ${tSeat}</b>.<br>` +
           `<span class="highlight-green">Projected to get in (based on bids + delta).</span>`;
       } else {
-        output.innerHTML =
-          `There are <b>${totalInLine}</b> people in line for <b>${tBase} ${tSeat}</b>.<br>` +
-          `You’ll need <span class="highlight-red">${diff} more openings</span> to clear.`;
+        document.getElementById('statusOutput').innerHTML =
+          `There are <b>${totalInLine}</b> in line for <b>${tBase} ${tSeat}</b>.<br>` +
+          `You’ll need <span class="highlight-red">${needed} more openings</span> to clear.`;
       }
     }
 
