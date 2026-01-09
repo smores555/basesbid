@@ -3,50 +3,39 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>ProTrace - Seniority Queue</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <title>ProTrace - Base Queue</title>
   <style>
     :root { 
-      --bg-app: #0f172a; --bg-panel: #1e293b; --bg-input: #020617; 
-      --border: #334155; --text-main: #f1f5f9; --text-muted: #94a3b8; 
+      --bg: #0f172a; --panel: #1e293b; --input: #020617; 
+      --border: #334155; --text: #f1f5f9; --muted: #94a3b8; 
       --accent: #3b82f6; --danger: #ef4444; --success: #22c55e;
     }
-    body { margin: 0; background: var(--bg-app); color: var(--text-main); font-family: 'Inter', sans-serif; display: flex; height: 100vh; overflow: hidden; }
-    
-    .sidebar { width: 340px; background: var(--bg-panel); border-right: 1px solid var(--border); padding: 24px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
-    .logo { font-weight: 800; font-size: 22px; color: var(--accent); letter-spacing: -1px; margin-bottom: 10px; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: sans-serif; display: flex; height: 100vh; }
+    .sidebar { width: 320px; background: var(--panel); border-right: 1px solid var(--border); padding: 25px; display: flex; flex-direction: column; gap: 20px; }
+    .main { flex: 1; padding: 40px; display: flex; align-items: center; justify-content: center; }
     
     .input-group { display: flex; flex-direction: column; gap: 8px; }
-    label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
-    input, select { background: var(--bg-input); border: 1px solid var(--border); color: white; padding: 12px; border-radius: 6px; font-size: 14px; outline: none; transition: border 0.2s; }
-    input:focus { border-color: var(--accent); }
-    
-    button { background: var(--accent); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; cursor: pointer; margin-top: 10px; }
-    button:hover { filter: brightness(1.1); }
+    label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+    input, select { background: var(--input); border: 1px solid var(--border); color: white; padding: 12px; border-radius: 6px; font-size: 14px; outline: none; }
+    button { background: var(--accent); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; cursor: pointer; }
 
-    .main { flex: 1; padding: 40px; display: flex; align-items: center; justify-content: center; }
-    .card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 16px; padding: 40px; max-width: 650px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-    
-    .queue-msg { font-size: 26px; font-weight: 600; line-height: 1.5; color: var(--text-main); }
-    .queue-msg b { color: var(--accent); }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 40px; max-width: 600px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+    .queue-msg { font-size: 24px; font-weight: 600; line-height: 1.5; }
     .highlight-red { color: var(--danger); font-weight: 800; text-decoration: underline; }
     .highlight-green { color: var(--success); font-weight: 800; }
-
-    .meta { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: center; gap: 40px; font-size: 13px; color: var(--text-muted); }
-    .meta b { color: white; font-family: 'JetBrains Mono'; }
-
-    .loader { position: fixed; inset: 0; background: var(--bg-app); display: flex; align-items: center; justify-content: center; z-index: 100; font-weight: 600; }
+    
+    .loading { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 100; font-weight: bold; }
   </style>
 </head>
 <body>
 
-  <div id="loadingScreen" class="loader">Fetching Roster & Preferences...</div>
+  <div id="loader" class="loading">SYNCING REPO DATA...</div>
 
   <div class="sidebar">
-    <div class="logo">PROTRACE</div>
+    <h2 style="color: var(--accent); margin: 0 0 10px 0;">PROTRACE</h2>
     
     <div class="input-group">
-      <label>Pilot Seniority #</label>
+      <label>Seniority #</label>
       <input type="text" id="pilotSearch" placeholder="Ex: 3388" value="3388">
     </div>
 
@@ -70,21 +59,13 @@
       </select>
     </div>
 
-    <button onclick="runAnalysis()">Run Base Analysis</button>
+    <button onclick="runAnalysis()">Update Status</button>
   </div>
 
   <div class="main">
     <div id="results" class="card" style="display:none;">
-      <div id="statusOutput" class="queue-msg"></div>
-      
-      <div class="meta">
-        <div>Pilot: <b id="resName">-</b></div>
-        <div>Sen: <b id="resSen">-</b></div>
-        <div>Base Delta: <b id="resDelta">-</b></div>
-      </div>
+      <div id="output" class="queue-msg"></div>
     </div>
-    
-    <div id="intro" style="color:var(--text-muted);">Enter a Seniority number to see your position.</div>
   </div>
 
   <script>
@@ -92,24 +73,24 @@
     let PREFS = {};
     let CAPACITIES = [];
 
-    // Automatically fetch files from your directory
     async function init() {
       try {
+        // Fetching files from the root directory
         const [r, p, c] = await Promise.all([
           fetch('roster.json').then(res => res.json()),
           fetch('preferences.json').then(res => res.json()),
           fetch('capacities.json').then(res => res.json())
         ]);
+        
         ROSTER = r;
         PREFS = p;
         CAPACITIES = c;
-        document.getElementById('loadingScreen').style.display = 'none';
+        
+        document.getElementById('loader').style.display = 'none';
+        console.log("Data loaded successfully");
       } catch (err) {
-        document.getElementById('loadingScreen').innerHTML = 
-          `<div style="text-align:center; color:var(--danger);">
-            <b>Error loading data files.</b><br>
-            Ensure roster.json, preferences.json, and capacities.json are in this folder.
-          </div>`;
+        document.getElementById('loader').innerHTML = `<div style="color:var(--danger)">ERROR: Make sure all JSON files are in the same folder as this HTML.</div>`;
+        console.error("Fetch Error:", err);
       }
     }
 
@@ -118,14 +99,15 @@
       const tBase = document.getElementById('targetBase').value;
       const tSeat = document.getElementById('targetSeat').value;
 
-      // 1. Find the target pilot
-      const user = ROSTER.find(p => p.sen.toString() === query);
+      // 1. Find User
+      const user = ROSTER.find(p => String(p.sen) === query);
       if (!user) { alert("Pilot not found."); return; }
 
-      // 2. Count senior pilots who prefer target over current seat
-      let seniorCompetitors = 0;
+      // 2. Count Senior Competitors
+      let competitors = 0;
       ROSTER.forEach(p => {
-        if (p.sen < user.sen) {
+        // Only look at pilots with lower seniority numbers
+        if (Number(p.sen) < Number(user.sen)) {
           const prefData = PREFS[p.id];
           if (!prefData || !prefData.preferences) return;
 
@@ -133,39 +115,36 @@
           const curSeat = p.current.seat;
 
           for (let bid of prefData.preferences) {
-            // preferences.json format: "73G SEA CA"
-            const parts = bid.split(' '); 
+            // Bid string example: "73G SEA FO"
+            const parts = bid.split(' ');
             const bBase = parts[1];
             const bSeat = parts[2];
 
             if (bBase === tBase && bSeat === tSeat) {
-              seniorCompetitors++;
+              competitors++;
               break;
             }
-            // If they hit their current assignment first, they stay there
+            // If they reach their current seat first, they aren't trying to move
             if (bBase === curBase && bSeat === curSeat) break;
           }
         }
       });
 
-      // 3. Get capacity delta from capacities.json
+      // 3. Get Capacity Delta
       const cap = CAPACITIES.find(c => c.base === tBase && c.seat === tSeat) || { delta: 0 };
       
-      const totalInLine = seniorCompetitors + 1; // Senior pilots + the searched pilot
-      const diff = totalInLine - cap.delta;
+      const totalInLine = competitors + 1; // Senior pilots + you
+      const needed = totalInLine - cap.delta;
 
       // 4. Update UI
-      document.getElementById('intro').style.display = 'none';
-      document.getElementById('results').style.display = 'block';
-      document.getElementById('resName').textContent = user.name.split(',')[0];
-      document.getElementById('resSen').textContent = "#" + user.sen;
-      document.getElementById('resDelta').textContent = cap.delta;
+      const resDiv = document.getElementById('results');
+      const outDiv = document.getElementById('output');
+      resDiv.style.display = 'block';
 
-      const output = document.getElementById('statusOutput');
-      if (diff <= 0) {
-        output.innerHTML = `There are <b>${totalInLine}</b> people in line for that base.<br><span class="highlight-green">You are projected to get in!</span>`;
+      if (needed <= 0) {
+        outDiv.innerHTML = `There are <b>${totalInLine}</b> people in line for that base.<br><span class="highlight-green">You are projected to get in!</span>`;
       } else {
-        output.innerHTML = `There are <b>${totalInLine}</b> people in line for that base. You'll need <span class="highlight-red">${diff} more openings</span> or <span class="highlight-red">${diff} people to leave</span>.`;
+        outDiv.innerHTML = `There are <b>${totalInLine}</b> people in line for that base. You'll need <span class="highlight-red">${needed} more openings</span> or <span class="highlight-red">${needed} people to leave</span>.`;
       }
     }
 
