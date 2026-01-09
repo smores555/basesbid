@@ -3,415 +3,200 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>BaseBid – In-Line Calculator</title>
+  <title>ProTrace – Seniority Queue</title>
   <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; background: #0b0f16; color: #e8eefc; }
-    .wrap { max-width: 1250px; margin: 0 auto; padding: 22px; }
-    h1 { margin: 0 0 8px; font-size: 22px; }
-    .sub { opacity: .85; margin-bottom: 18px; line-height: 1.35; }
-    .card { background: #121a27; border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 16px; }
-    .grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 14px; }
-    @media (max-width: 950px) { .grid { grid-template-columns: 1fr; } }
-    label { display: block; font-size: 12px; opacity: .9; margin: 0 0 6px; }
-    input, select, button { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,.12); background: #0d1420; color: #e8eefc; }
-    button { cursor: pointer; background: #2a66ff; border: none; font-weight: 800; }
-    button:hover { filter: brightness(1.05); }
-    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-    .pill { display: inline-block; padding: 6px 10px; border-radius: 999px; background: rgba(255,255,255,.08); font-size: 12px; margin-right: 8px; }
-    .big { font-size: 16px; font-weight: 900; }
-    .muted { opacity: .8; }
-    .ok { color: #7dff9a; font-weight: 900; }
-    .no { color: #ff7d7d; font-weight: 900; }
-    table { width: 100%; border-collapse: collapse; margin-top: 12px; overflow: hidden; border-radius: 12px; }
-    th, td { padding: 10px 10px; border-bottom: 1px solid rgba(255,255,255,.07); font-size: 13px; }
-    th { text-align: left; opacity: .9; background: rgba(255,255,255,.04); }
-    tr:hover td { background: rgba(255,255,255,.03); }
-    .error { background: rgba(255, 80, 80, .12); border: 1px solid rgba(255,80,80,.25); padding: 10px 12px; border-radius: 12px; margin-top: 12px; display: none; white-space: pre-wrap; }
-    .note { font-size: 12px; opacity: .82; margin-top: 10px; line-height: 1.35; }
-    code { background: rgba(255,255,255,.06); padding: 2px 6px; border-radius: 6px; }
-    .debug { margin-top: 10px; font-size: 12px; opacity: .9; line-height: 1.35; }
-    .debug b { opacity: 1; }
+    :root {
+      --bg-app: #0b0f16; --bg-card: #121a27; --bg-input: #0d1420;
+      --border: rgba(255,255,255,.1); --accent: #2a66ff;
+      --text: #e8eefc; --success: #7dff9a; --danger: #ff7d7d;
+    }
+    body { font-family: system-ui, sans-serif; margin: 0; background: var(--bg-app); color: var(--text); line-height: 1.5; }
+    .wrap { max-width: 1000px; margin: 0 auto; padding: 20px; }
+    .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+    
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+    
+    label { display: block; font-size: 11px; font-weight: 700; opacity: .6; text-transform: uppercase; margin-bottom: 8px; }
+    input, select, button { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,.15); background: var(--bg-input); color: white; font-size: 14px; }
+    button { cursor: pointer; background: var(--accent); border: none; font-weight: 800; margin-top: 10px; }
+
+    .stat-box { text-align: center; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 10px; border: 1px solid var(--border); }
+    .big-num { font-size: 32px; font-weight: 900; color: var(--accent); display: block; }
+    
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 13px; text-align: left; }
+    th { background: rgba(255,255,255,0.05); color: var(--accent); text-transform: uppercase; font-size: 11px; }
+    
+    .ok { color: var(--success); font-weight: 700; }
+    .no { color: var(--danger); font-weight: 700; }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>BaseBid – In-Line Calculator</h1>
-    <div class="sub">
-      <b>Competitor rule:</b> A senior pilot counts “in line” for a target if they list the target in preferences
-      and the target is ranked <b>above their current base/seat</b> (if current isn’t listed → treated as stay/last).
-      <br><span class="muted">This version ignores the “order > 0” assumption and can read bids from strings or objects.</span>
+    <div style="margin-bottom: 20px;">
+      <h1 style="margin:0;">ProTrace Base Analysis</h1>
+      <p style="margin:0; opacity:0.6;">Cross-referencing Roster (Current) with Preferences (Bids)</p>
     </div>
 
     <div class="grid">
       <div class="card">
-        <div class="row3">
-          <div>
-            <label>Your Seniority #</label>
-            <input id="seniorityInput" type="number" inputmode="numeric" placeholder="e.g. 257" />
-          </div>
+        <label>Your Seniority #</label>
+        <input id="seniorityInput" type="number" placeholder="e.g. 2670" style="margin-bottom:15px;">
+        
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
           <div>
             <label>Target Base</label>
-            <select id="targetBaseSelect"></select>
+            <select id="targetBaseSelect">
+              <option value="ANC">ANC</option><option value="LAX">LAX</option>
+              <option value="PDX">PDX</option><option value="SAN">SAN</option>
+              <option value="SEA">SEA</option><option value="SFO">SFO</option>
+            </select>
           </div>
           <div>
             <label>Target Seat</label>
             <select id="targetSeatSelect">
-              <option value="CA">CA</option>
-              <option value="FO">FO</option>
+              <option value="CA">Captain (CA)</option>
+              <option value="FO">First Officer (FO)</option>
             </select>
           </div>
         </div>
-
-        <div class="row" style="margin-top:12px;">
-          <div>
-            <label>Openings (What-if)</label>
-            <input id="openingsInput" type="number" inputmode="numeric" value="0" />
-          </div>
-          <div style="display:flex;align-items:end;">
-            <button id="runBtn">Run</button>
-          </div>
-        </div>
-
-        <div id="errBox" class="error"></div>
-
-        <div class="debug">
-          <div><b>Loaded:</b> roster <span id="rosterCount">-</span>, preferences <span id="prefsCount">-</span></div>
-          <div><b>Roster sen range:</b> <span id="rosterRange">-</span> | <b>Prefs sen range:</b> <span id="prefsRange">-</span></div>
-          <div><b>Preference parsing:</b></div>
-          <div class="muted">
-            pilots w/ ≥1 parsed bid: <span id="dbgPilotsWithBids">-</span> |
-            avg bids/pilot: <span id="dbgAvgBids">-</span> |
-            “STAY/blank” ignored
-          </div>
-        </div>
-
-        <div class="note">
-          Required files in same folder as <code>index.html</code>: <code>roster.json</code>, <code>preferences.json</code><br/>
-          GitHub Pages project sites should use a trailing slash: <code>.../basesbid/</code>
-        </div>
+        
+        <label>Openings</label>
+        <input id="openingsInput" type="number" value="0">
+        <button id="runBtn">Run Cross-Check</button>
       </div>
 
-      <div class="card">
-        <div id="resultsHeadline" class="big">Enter inputs and click Run.</div>
-        <div style="margin-top:10px;">
-          <span class="pill">You: <span id="pilotName" class="muted">-</span> <span id="pilotSeniority" class="muted"></span></span>
-          <span class="pill">Current: <span id="pilotCurrent" class="muted">-</span></span>
-          <span class="pill">Target: <span id="pilotTarget" class="muted">-</span></span>
+      <div class="card" style="display:flex; flex-direction:column; justify-content:center; gap:15px;">
+        <div class="grid" style="grid-template-columns: 1fr 1fr;">
+          <div class="stat-box">
+            <label>Position In Line</label>
+            <span id="yourPosition" class="big-num">-</span>
+          </div>
+          <div class="stat-box">
+            <label>Openings Required</label>
+            <span id="neededNum" class="big-num">-</span>
+          </div>
         </div>
-
-        <div style="margin-top:12px;" class="row3">
-          <div class="pill">Competitors ahead: <span id="competitorsCount" class="big">-</span></div>
-          <div class="pill">Your position: <span id="yourPosition" class="big">-</span></div>
-          <div class="pill">Clear w/ openings? <span id="clearFlag" class="big">-</span></div>
-        </div>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Sen</th>
-              <th>Name</th>
-              <th>Current</th>
-              <th>Why counted</th>
-            </tr>
-          </thead>
-          <tbody id="competitorsTableBody"></tbody>
-        </table>
+        <div id="statusMsg" style="text-align:center; font-weight:600;"></div>
       </div>
+    </div>
+
+    <div class="card">
+      <label>Queue Breakdown (Senior Competitors Only)</label>
+      <table>
+        <thead>
+          <tr>
+            <th>Sen</th>
+            <th>Name</th>
+            <th>Roster Status</th>
+            <th>Bid Rank</th>
+            <th>Target Bid</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
     </div>
   </div>
 
 <script>
-const ROSTER_URL = "./roster.json";
-const PREFS_URL  = "./preferences.json";
+let ROSTER = [];
+let PREFS = {};
 
-const elSen   = document.getElementById("seniorityInput");
-const elBase  = document.getElementById("targetBaseSelect");
-const elSeat  = document.getElementById("targetSeatSelect");
-const elOpen  = document.getElementById("openingsInput");
-const elRun   = document.getElementById("runBtn");
-const errBox  = document.getElementById("errBox");
-
-const elResultsHeadline  = document.getElementById("resultsHeadline");
-const elPilotName        = document.getElementById("pilotName");
-const elPilotSeniority   = document.getElementById("pilotSeniority");
-const elPilotCurrent     = document.getElementById("pilotCurrent");
-const elPilotTarget      = document.getElementById("pilotTarget");
-const elCompetitorsCount = document.getElementById("competitorsCount");
-const elYourPosition     = document.getElementById("yourPosition");
-const elClearFlag        = document.getElementById("clearFlag");
-const elTableBody        = document.getElementById("competitorsTableBody");
-
-const elRosterCount = document.getElementById("rosterCount");
-const elPrefsCount  = document.getElementById("prefsCount");
-const elRosterRange = document.getElementById("rosterRange");
-const elPrefsRange  = document.getElementById("prefsRange");
-const elDbgPilotsWithBids = document.getElementById("dbgPilotsWithBids");
-const elDbgAvgBids = document.getElementById("dbgAvgBids");
-
-function showError(msg) {
-  errBox.style.display = "block";
-  errBox.textContent = msg;
-}
-function clearError() {
-  errBox.style.display = "none";
-  errBox.textContent = "";
+// Extracts current info from roster.json
+function getRosterStatus(p) {
+  if (!p) return "";
+  // Check common roster keys: base/seat or current.base/current.seat
+  const base = p.base || (p.current ? p.current.base : "");
+  const seat = p.seat || (p.current ? p.current.seat : "");
+  return `${String(base).trim()} ${String(seat).trim()}`;
 }
 
-function toNum(x, fb=NaN){ const n = Number(x); return Number.isFinite(n) ? n : fb; }
-function normStr(x){
-  if (x === null || x === undefined) return "";
-  if (typeof x === "string") return x.trim();
-  if (typeof x === "number") return String(x);
-  return "";
-}
-function pickField(x) {
-  if (x === null || x === undefined) return "";
-  if (typeof x === "string" || typeof x === "number") return normStr(x);
-  if (typeof x === "object") {
-    return normStr(x.code ?? x.value ?? x.name ?? x.text ?? x.iata ?? x.label ?? x.base ?? x.seat ?? "");
+async function init() {
+  try {
+    const [r, p] = await Promise.all([
+      fetch('./roster.json').then(res => res.json()),
+      fetch('./preferences.json').then(res => res.json())
+    ]);
+    ROSTER = Array.isArray(r) ? r : Object.values(r);
+    PREFS = p;
+  } catch (e) {
+    alert("Error loading data files. Check filenames and console.");
   }
-  return "";
 }
 
-function makeBid(base, seat){
-  const b = pickField(base);
-  const s = pickField(seat);
-  return `${b} ${s}`.trim();
-}
+function run() {
+  const senInput = document.getElementById("seniorityInput").value;
+  const tBase = document.getElementById("targetBaseSelect").value;
+  const tSeat = document.getElementById("targetSeatSelect").value;
+  const openings = parseInt(document.getElementById("openingsInput").value || 0);
 
-// Turns a preference entry into a bid string "SAN CA" if possible
-function prefToBid(pref) {
-  if (!pref) return "";
-  // Case 1: pref.bid is already "SAN CA"
-  const bidStr = normStr(pref.bid);
-  if (bidStr) return bidStr;
+  const user = ROSTER.find(p => String(p.sen) === senInput);
+  if (!user) { alert("Pilot not found in roster!"); return; }
 
-  // Case 2: pref.bid is object like {base:"SAN", seat:"CA"} or nested
-  if (typeof pref.bid === "object" && pref.bid) {
-    const b = pickField(pref.bid.base ?? pref.bid.domicile ?? pref.bid.station ?? pref.bid);
-    const s = pickField(pref.bid.seat ?? pref.bid.position ?? pref.bid.role ?? pref.bid);
-    const maybe = makeBid(b, s);
-    if (maybe) return maybe;
-  }
-
-  // Case 3: pref has base/seat fields directly
-  const b2 = pickField(pref.base ?? pref.domicile ?? pref.station);
-  const s2 = pickField(pref.seat ?? pref.position ?? pref.role);
-  const maybe2 = makeBid(b2, s2);
-  if (maybe2) return maybe2;
-
-  return "";
-}
-
-function isStayLike(bid) {
-  const b = normStr(bid).toUpperCase();
-  return b === "" || b === "STAY" || b === "HOLD" || b === "NO BID";
-}
-
-// Sort prefs by numeric order if present, otherwise keep original order
-function sortedPrefs(prefs) {
-  if (!Array.isArray(prefs)) return [];
-  const mapped = prefs.map((p, idx) => {
-    const order = toNum(p?.order, NaN);
-    const bid = prefToBid(p);
-    return { idx, order, bid };
-  }).filter(x => !isStayLike(x.bid)); // ignore blank/STAY/etc
-
-  mapped.sort((a,b) => {
-    const ao = Number.isFinite(a.order) ? a.order : a.idx;
-    const bo = Number.isFinite(b.order) ? b.order : b.idx;
-    return ao - bo;
-  });
-
-  return mapped;
-}
-
-async function loadJson(url) {
-  const res = await fetch(url, { cache: "no-store" });
-  if (!res.ok) throw new Error(`Failed to fetch ${url} (${res.status})`);
-  return await res.json();
-}
-
-function inferSen(p) {
-  return toNum(
-    p?.sen ?? p?.seniority ?? p?.sen_num ?? p?.seniority_number ?? p?.seniorityNumber ?? p?.rank ?? p?.senRank,
-    NaN
-  );
-}
-
-function normalizeRoster(raw) {
-  const arr = Array.isArray(raw) ? raw : Object.values(raw || {});
-  return arr.map((p, i) => {
-    let sen = inferSen(p);
-    if (!Number.isFinite(sen)) sen = i + 1;
-
-    let base = pickField(p.base ?? p.domicile ?? p.current_base ?? p.base_code ?? p.curBase);
-    let seat = pickField(p.seat ?? p.position ?? p.current_seat ?? p.seat_code ?? p.curSeat);
-
-    const current = p.current;
-
-    if ((!base || !seat) && typeof current === "string") {
-      const parts = current.trim().split(/\s+/).filter(Boolean);
-      if (parts.length >= 2) { base = parts[parts.length - 2]; seat = parts[parts.length - 1]; }
-    }
-    if ((!base || !seat) && typeof current === "object" && current) {
-      base = base || pickField(current.base ?? current.domicile ?? current.station ?? current);
-      seat = seat || pickField(current.seat ?? current.position ?? current.role ?? current);
-      const txt = pickField(current.text ?? current.value ?? current.name);
-      if ((!base || !seat) && txt) {
-        const parts = txt.trim().split(/\s+/).filter(Boolean);
-        if (parts.length >= 2) { base = base || parts[parts.length - 2]; seat = seat || parts[parts.length - 1]; }
-      }
-    }
-
-    return { ...p, sen, name: normStr(p.name) || pickField(p.name), base, seat };
-  });
-}
-
-function normalizePrefs(raw) {
-  const obj = raw && typeof raw === "object" ? raw : {};
-  const arr = Object.values(obj);
-  return arr.map((p, i) => {
-    let sen = inferSen(p);
-    if (!Number.isFinite(sen)) sen = i + 1;
-    return { sen, name: normStr(p?.name) || pickField(p?.name), preferences: Array.isArray(p?.preferences) ? p.preferences : [] };
-  });
-}
-
-function calcRange(arr) {
-  if (!arr.length) return "-";
-  const sens = arr.map(x => Number(x.sen)).filter(Number.isFinite).sort((a,b)=>a-b);
-  if (!sens.length) return "-";
-  return `${sens[0]}..${sens[sens.length - 1]}`;
-}
-
-function setText(el, txt){ if (el) el.textContent = txt; }
-function clearTable(){ elTableBody.innerHTML = ""; }
-function addRow({ sen, name, current, detail }) {
-  const tr = document.createElement("tr");
-  tr.innerHTML = `<td>${sen}</td><td>${name}</td><td>${current}</td><td>${detail}</td>`;
-  elTableBody.appendChild(tr);
-}
-
-let roster = null;
-let prefs = null;
-
-function rosterPilotBySen(sen){ return roster.find(p => Number(p.sen) === Number(sen)) || null; }
-function prefsPilotBySen(sen){ return prefs.find(p => Number(p.sen) === Number(sen)) || null; }
-function currentBidForSen(sen){
-  const r = rosterPilotBySen(sen);
-  return r ? makeBid(r.base, r.seat) : "";
-}
-
-// Senior pilot counts if target is ABOVE their current/stay in their preference ordering
-function countsAsCompetitor(prefList, targetBid, currentBid) {
-  const sp = sortedPrefs(prefList);
-
-  const targetIdx = sp.findIndex(p => p.bid === targetBid);
-  if (targetIdx === -1) return false;
-
-  const currentIdx = sp.findIndex(p => p.bid === currentBid);
-  const effectiveCurrentIdx = (currentIdx === -1) ? Infinity : currentIdx;
-
-  return targetIdx < effectiveCurrentIdx;
-}
-
-async function ensureLoaded() {
-  if (roster && prefs) return;
-
-  const [rRaw, pRaw] = await Promise.all([loadJson(ROSTER_URL), loadJson(PREFS_URL)]);
-  roster = normalizeRoster(rRaw);
-  prefs  = normalizePrefs(pRaw);
-
-  setText(elRosterCount, String(roster.length));
-  setText(elPrefsCount, String(prefs.length));
-  setText(elRosterRange, calcRange(roster));
-  setText(elPrefsRange, calcRange(prefs));
-
-  // base dropdown
-  const bases = Array.from(new Set(roster.map(p => pickField(p.base)).filter(Boolean))).sort();
-  elBase.innerHTML = bases.map(b => `<option value="${b}">${b}</option>`).join("");
-
-  // debug: how many pilots have at least 1 parsed bid
-  let pilotsWithBids = 0;
-  let totalBids = 0;
-  for (const p of prefs) {
-    const sp = sortedPrefs(p.preferences);
-    if (sp.length > 0) pilotsWithBids++;
-    totalBids += sp.length;
-  }
-  setText(elDbgPilotsWithBids, String(pilotsWithBids));
-  setText(elDbgAvgBids, prefs.length ? (totalBids / prefs.length).toFixed(2) : "0.00");
-}
-
-function render({ you, targetBid, openings, competitors, yourPosition, clear }) {
-  setText(elPilotName, you.name || "(you)");
-  setText(elPilotSeniority, `#${you.sen}`);
-  setText(elPilotCurrent, currentBidForSen(you.sen) || "-");
-  setText(elPilotTarget, targetBid);
-
-  setText(elCompetitorsCount, String(competitors.length));
-  setText(elYourPosition, String(yourPosition));
-  setText(elClearFlag, clear ? "YES" : "NO");
-  elClearFlag.className = clear ? "ok" : "no";
-
-  const shortBy = Math.max(0, yourPosition - openings);
-  setText(elResultsHeadline, `There are ${competitors.length + 1} in line for ${targetBid} (including you). With ${openings} openings, you’re short by ${shortBy}.`);
-
-  clearTable();
-  competitors.forEach(addRow);
-}
-
-async function run() {
-  clearError();
-  await ensureLoaded();
-
-  const youSen = toNum(elSen.value, NaN);
-  const targetBase = pickField(elBase.value);
-  const targetSeat = pickField(elSeat.value);
-  const openings = Math.max(0, toNum(elOpen.value, 0));
-  const targetBid = makeBid(targetBase, targetSeat);
-
-  if (!Number.isFinite(youSen)) return showError("Enter a valid seniority number.");
-  if (!targetBase || !targetSeat) return showError("Select a target base and seat.");
-
-  const youR = rosterPilotBySen(youSen);
-  const youP = prefsPilotBySen(youSen);
-  if (!youR) return showError(`Could not find you (#${youSen}) in roster.json`);
-  if (!youP) return showError(`Could not find you (#${youSen}) in preferences.json`);
-
-  const youName = (youP?.name || youR?.name || "").trim();
-
+  const uSen = parseInt(user.sen);
   const competitors = [];
 
-  for (const p of prefs) {
-    if (Number(p.sen) >= Number(youSen)) continue; // only senior pilots
+  ROSTER.forEach(pilot => {
+    const pSen = parseInt(pilot.sen);
+    if (pSen >= uSen) return; // Only competitors senior to you
 
-    const curBid = currentBidForSen(p.sen);
-    if (!curBid) continue;
+    // Cross-check: Look up this pilot in the preferences JSON
+    const pPrefObj = PREFS[`pil${pSen}`] || PREFS[pSen];
+    if (!pPrefObj || !pPrefObj.preferences) return;
 
-    // already holding target doesn't count as "in line"
-    if (curBid === targetBid) continue;
+    // Get current status from Roster
+    const curStatus = getRosterStatus(pilot);
 
-    if (countsAsCompetitor(p.preferences, targetBid, curBid)) {
-      const sp = sortedPrefs(p.preferences);
-      const tIdx = sp.findIndex(x => x.bid === targetBid);
-      const cIdx = sp.findIndex(x => x.bid === curBid);
-      const detail = (cIdx === -1) ? `Has target; current not listed (stay implied)` : `Target rank ${tIdx + 1} above current rank ${cIdx + 1}`;
-      competitors.push({ sen: p.sen, name: p.name, current: curBid, detail });
+    // Scan their bids in order
+    for (const p of pPrefObj.preferences) {
+      const bidStr = String(p.bid || "").trim();
+      const bidOrder = parseInt(p.order);
+
+      // STAY RULE: If Order 1 is current status or blank, they stay
+      if (bidOrder === 1 && (bidStr === "" || bidStr.includes(curStatus))) break;
+
+      // COMPETITOR RULE: If bid contains target base + seat
+      if (bidStr.includes(tBase) && bidStr.includes(tSeat)) {
+        if (!bidStr.includes(curStatus)) { // Only count if they are actually changing status
+          competitors.push({
+            sen: pSen,
+            name: pilot.name,
+            current: curStatus,
+            order: bidOrder,
+            fullBid: bidStr
+          });
+        }
+        break; // Stop looking after finding their first applicable bid
+      }
+
+      // STOP RULE: If they list their current position, they stop looking further down
+      if (bidStr.includes(curStatus)) break;
     }
-  }
+  });
 
-  competitors.sort((a,b) => Number(a.sen) - Number(b.sen));
+  // UI Updates
+  const pos = competitors.length + 1;
+  const needed = Math.max(0, pos - openings);
+  document.getElementById("yourPosition").textContent = pos;
+  document.getElementById("neededNum").textContent = needed;
+  
+  const msg = document.getElementById("statusMsg");
+  msg.innerHTML = needed === 0 ? `<span class="ok">Holdable (Pos ${pos})</span>` : `<span class="no">Not Holdable (Need ${needed} more)</span>`;
 
-  const yourPosition = competitors.length + 1;
-  const clear = openings >= yourPosition;
-
-  render({ you: { sen: youSen, name: youName }, targetBid, openings, competitors, yourPosition, clear });
+  document.getElementById("tableBody").innerHTML = competitors.sort((a,b) => a.sen - b.sen).map(c => `
+    <tr>
+      <td>${c.sen}</td>
+      <td>${c.name}</td>
+      <td>${c.current}</td>
+      <td>#${c.order}</td>
+      <td>${c.fullBid}</td>
+    </tr>
+  `).join("");
 }
 
-elRun.addEventListener("click", () => run().catch(e => showError(e.message)));
+document.getElementById("runBtn").addEventListener("click", run);
+init();
 </script>
 </body>
 </html>
