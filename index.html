@@ -1,656 +1,342 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>BaseBid - Who's In Line (What-If)</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BaseBid – In-Line Calculator</title>
   <style>
-    :root{
-      --bg-app:#0f172a; --bg-panel:#111c33; --bg-panel-2:#0b1220; --bg-input:#020617;
-      --border:#24324a; --text:#f1f5f9; --muted:#93a4bd;
-      --accent:#3b82f6; --good:#22c55e; --bad:#ef4444;
-    }
-    *{box-sizing:border-box}
-    html, body{height:100%}
-    body{
-      margin:0;
-      background:radial-gradient(1200px 700px at 20% 0%, rgba(59,130,246,.15), transparent 55%),
-                 radial-gradient(1000px 600px at 80% 20%, rgba(34,197,94,.08), transparent 55%),
-                 var(--bg-app);
-      color:var(--text);
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      display:flex;
-      height:100vh;
-      overflow:hidden; /* panels scroll */
-    }
-
-    /* Left panel */
-    .sidebar{
-      width:420px;
-      height:100vh;
-      overflow:auto;
-      background:linear-gradient(180deg, rgba(17,28,51,.95), rgba(11,18,32,.95));
-      border-right:1px solid var(--border);
-      padding:22px;
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-    }
-    .brand{
-      display:flex;
-      align-items:baseline;
-      gap:10px;
-    }
-    .brand .logo{
-      font-weight:900;
-      letter-spacing:-.02em;
-      color:var(--accent);
-      font-size:20px;
-    }
-    .brand .tag{
-      font-size:12px;
-      color:var(--muted);
-      font-family:"JetBrains Mono", monospace;
-    }
-    .desc{
-      font-size:13px;
-      line-height:1.55;
-      color:var(--muted);
-      border:1px solid var(--border);
-      background:rgba(2,6,23,.35);
-      padding:12px 12px;
-      border-radius:14px;
-    }
-    .desc b{color:#fff}
-    .group{display:flex; flex-direction:column; gap:8px}
-    label{
-      font-size:11px;
-      font-weight:900;
-      text-transform:uppercase;
-      letter-spacing:.10em;
-      color:var(--muted);
-    }
-    input, select{
-      width:100%;
-      background:rgba(2,6,23,.7);
-      border:1px solid var(--border);
-      color:#fff;
-      padding:12px 12px;
-      border-radius:12px;
-      font-size:14px;
-      outline:none;
-    }
-    input:focus, select:focus{border-color:rgba(59,130,246,.85)}
-    .row2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
-    .btn{
-      background:linear-gradient(180deg, rgba(59,130,246,1), rgba(37,99,235,1));
-      border:none;
-      color:#fff;
-      padding:13px 14px;
-      border-radius:14px;
-      font-weight:900;
-      cursor:pointer;
-      letter-spacing:.02em;
-      box-shadow:0 10px 30px rgba(59,130,246,.18);
-    }
-    .btn:hover{filter:brightness(1.05)}
-    .btn:active{transform:translateY(1px)}
-    .mini{
-      font-size:12px;
-      color:var(--muted);
-      border:1px dashed var(--border);
-      border-radius:14px;
-      padding:12px;
-      line-height:1.55;
-    }
-    .mini b{color:#fff}
-
-    /* Right panel */
-    .main{
-      flex:1;
-      height:100vh;
-      overflow:auto;
-      padding:22px;
-    }
-    .card{
-      width:min(1120px, 100%);
-      margin:0 auto 18px auto;
-      background:linear-gradient(180deg, rgba(17,28,51,.92), rgba(11,18,32,.92));
-      border:1px solid var(--border);
-      border-radius:18px;
-      padding:22px;
-      box-shadow:0 16px 60px rgba(0,0,0,.35);
-    }
-    .title{
-      font-size:12px;
-      text-transform:uppercase;
-      letter-spacing:.14em;
-      font-weight:900;
-      color:var(--muted);
-      margin:0 0 10px 0;
-    }
-    .headline{
-      margin:0;
-      font-size:26px;
-      line-height:1.35;
-      font-weight:650;
-    }
-    .headline b{color:var(--accent)}
-    .ok{color:var(--good); font-weight:900}
-    .no{color:var(--bad); font-weight:900; text-decoration:underline}
-
-    .meta{
-      margin-top:14px;
-      display:grid;
-      grid-template-columns:repeat(4, minmax(170px, 1fr));
-      gap:10px;
-    }
-    .box{
-      background:rgba(2,6,23,.35);
-      border:1px solid var(--border);
-      border-radius:14px;
-      padding:12px;
-    }
-    .k{
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.10em;
-      color:var(--muted);
-      font-weight:900;
-      margin-bottom:6px;
-    }
-    .v{
-      font-family:"JetBrains Mono", monospace;
-      color:#fff;
-      font-size:13px;
-    }
-
-    .tableHeader{
-      display:flex;
-      align-items:baseline;
-      justify-content:space-between;
-      gap:12px;
-      margin-top:18px;
-      padding-top:14px;
-      border-top:1px solid var(--border);
-    }
-    .pill{
-      font-family:"JetBrains Mono", monospace;
-      font-size:12px;
-      color:#cbd5e1;
-      border:1px solid var(--border);
-      background:rgba(2,6,23,.25);
-      padding:6px 10px;
-      border-radius:999px;
-      white-space:nowrap;
-    }
-    .scrollX{overflow-x:auto; padding-bottom:4px}
-    table{
-      width:100%;
-      min-width:880px;
-      border-collapse:separate;
-      border-spacing:0 10px;
-    }
-    thead th{
-      text-align:left;
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.10em;
-      color:var(--muted);
-      font-weight:900;
-      padding:0 12px;
-      white-space:nowrap;
-    }
-    tbody tr{background:rgba(2,6,23,.38)}
-    tbody td{
-      padding:12px;
-      border-top:1px solid var(--border);
-      border-bottom:1px solid var(--border);
-      color:#e2e8f0;
-      font-size:13px;
-      vertical-align:top;
-    }
-    tbody td:first-child{
-      border-left:1px solid var(--border);
-      border-top-left-radius:12px;
-      border-bottom-left-radius:12px;
-      font-family:"JetBrains Mono", monospace;
-      white-space:nowrap;
-    }
-    tbody td:last-child{
-      border-right:1px solid var(--border);
-      border-top-right-radius:12px;
-      border-bottom-right-radius:12px;
-    }
-    .nowrap{white-space:nowrap}
-    .muted{color:var(--muted)}
-    .mono{font-family:"JetBrains Mono", monospace}
-
-    /* Loading / error overlay */
-    .overlay{
-      position:fixed; inset:0;
-      background:rgba(2,6,23,.75);
-      backdrop-filter: blur(4px);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      z-index:999;
-      padding:20px;
-    }
-    .overlayBox{
-      width:min(980px, 100%);
-      background:#0b1220;
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:16px;
-      color:#cbd5e1;
-    }
-    .overlayTitle{
-      font-weight:900;
-      color:#fff;
-      margin-bottom:10px;
-    }
-    .errTitle{color:var(--bad)}
-    pre{
-      margin:0;
-      white-space:pre-wrap;
-      font-family:"JetBrains Mono", monospace;
-      font-size:12px;
-      line-height:1.45;
-      color:#cbd5e1;
-    }
-
-    @media (max-width: 980px){
-      body{flex-direction:column; overflow:auto; height:auto}
-      .sidebar{width:100%; height:auto; border-right:none; border-bottom:1px solid var(--border)}
-      .main{height:auto}
-      .meta{grid-template-columns:repeat(2, minmax(170px, 1fr))}
-      table{min-width:760px}
-    }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; background: #0b0f16; color: #e8eefc; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 22px; }
+    h1 { margin: 0 0 8px; font-size: 22px; }
+    .sub { opacity: .85; margin-bottom: 18px; }
+    .card { background: #121a27; border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 16px; }
+    .grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 14px; }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+    label { display: block; font-size: 12px; opacity: .9; margin: 0 0 6px; }
+    input, select, button { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,.12); background: #0d1420; color: #e8eefc; }
+    button { cursor: pointer; background: #2a66ff; border: none; font-weight: 700; }
+    button:hover { filter: brightness(1.05); }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .pill { display: inline-block; padding: 6px 10px; border-radius: 999px; background: rgba(255,255,255,.08); font-size: 12px; margin-right: 8px; }
+    .big { font-size: 16px; font-weight: 800; }
+    .muted { opacity: .8; }
+    .ok { color: #7dff9a; font-weight: 800; }
+    .no { color: #ff7d7d; font-weight: 800; }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; overflow: hidden; border-radius: 12px; }
+    th, td { padding: 10px 10px; border-bottom: 1px solid rgba(255,255,255,.07); font-size: 13px; }
+    th { text-align: left; opacity: .9; background: rgba(255,255,255,.04); }
+    tr:hover td { background: rgba(255,255,255,.03); }
+    .error { background: rgba(255, 80, 80, .12); border: 1px solid rgba(255,80,80,.25); padding: 10px 12px; border-radius: 12px; margin-top: 12px; display: none; }
+    .note { font-size: 12px; opacity: .8; margin-top: 10px; line-height: 1.35; }
+    code { background: rgba(255,255,255,.06); padding: 2px 6px; border-radius: 6px; }
   </style>
-
-  <script>
-    // GitHub Pages project-site trap: /repo vs /repo/
-    (function forceTrailingSlash(){
-      const p = location.pathname;
-      const last = p.split('/').pop() || '';
-      const looksLikeFile = last.includes('.');
-      if (!looksLikeFile && !p.endsWith('/')) location.replace(p + '/' + location.search + location.hash);
-    })();
-  </script>
 </head>
-
 <body>
-  <div id="overlay" class="overlay">
-    <div class="overlayBox">
-      <div class="overlayTitle">Loading roster.json + preferences.json…</div>
-      <div class="muted">If this hangs, your JSON filenames or paths are wrong.</div>
-    </div>
-  </div>
+  <div class="wrap">
+    <h1>BaseBid – In-Line Calculator</h1>
+    <div class="sub">Counts “in line” only if a senior pilot lists the target <b>above</b> their current base/seat (or current isn’t listed → treated as stay/last).</div>
 
-  <aside class="sidebar">
-    <div class="brand">
-      <div class="logo">BASEBID</div>
-      <div class="tag">what-if tool</div>
-    </div>
+    <div class="grid">
+      <div class="card">
+        <div class="row3">
+          <div>
+            <label>Your Seniority #</label>
+            <input id="seniorityInput" type="number" inputmode="numeric" placeholder="e.g. 501" />
+          </div>
+          <div>
+            <label>Target Base</label>
+            <select id="targetBaseSelect"></select>
+          </div>
+          <div>
+            <label>Target Seat</label>
+            <select id="targetSeatSelect">
+              <option value="CA">CA</option>
+              <option value="FO">FO</option>
+            </select>
+          </div>
+        </div>
 
-    <div class="desc">
-      <b>Current</b> base/seat comes from <b>roster.json</b>.<br>
-      <b>Preferences</b> come from <b>preferences.json</b> in the new format:
-      <span class="mono">{ order, bid }</span>.<br><br>
-      Rules:
-      <br>• <b>order = 0</b> or <b>blank bid</b> = <b>stay</b> (pilot counts for nothing)
-      <br>• A senior pilot counts “in line” if they list the <b>target base/seat</b> in any non-stay preference
-      <br>• Pilots already holding the target are <b>not</b> counted
-    </div>
+        <div class="row" style="margin-top:12px;">
+          <div>
+            <label>Openings (What-if)</label>
+            <input id="openingsInput" type="number" inputmode="numeric" value="0" />
+          </div>
+          <div style="display:flex;align-items:end;">
+            <button id="runBtn">Run</button>
+          </div>
+        </div>
 
-    <div class="group">
-      <label>Your seniority number</label>
-      <input id="senInput" type="text" placeholder="e.g. 2670">
-    </div>
+        <div id="errBox" class="error"></div>
 
-    <div class="row2">
-      <div class="group">
-        <label>Target base</label>
-        <select id="baseInput">
-          <option value="ANC">ANC</option>
-          <option value="LAX">LAX</option>
-          <option value="PDX">PDX</option>
-          <option value="SAN">SAN</option>
-          <option value="SEA">SEA</option>
-          <option value="SFO">SFO</option>
-        </select>
+        <div class="note">
+          Files required in same folder as <code>index.html</code>: <code>roster.json</code>, <code>preferences.json</code><br/>
+          GitHub Pages project sites should use a trailing slash: <code>.../basesbid/</code>
+        </div>
       </div>
 
-      <div class="group">
-        <label>Target seat</label>
-        <select id="seatInput">
-          <option value="CA">CA</option>
-          <option value="FO">FO</option>
-        </select>
-      </div>
-    </div>
+      <div class="card">
+        <div id="resultsHeadline" class="big">Enter inputs and click Run.</div>
+        <div style="margin-top:10px;">
+          <span class="pill">You: <span id="pilotName" class="muted">-</span> <span id="pilotSeniority" class="muted"></span></span>
+          <span class="pill">Current: <span id="pilotCurrent" class="muted">-</span></span>
+          <span class="pill">Target: <span id="pilotTarget" class="muted">-</span></span>
+        </div>
 
-    <div class="group">
-      <label>What-if openings</label>
-      <input id="openingsInput" type="number" min="0" value="0" placeholder="e.g. 20">
-    </div>
+        <div style="margin-top:12px;" class="row3">
+          <div class="pill">Competitors ahead: <span id="competitorsCount" class="big">-</span></div>
+          <div class="pill">Your position: <span id="yourPosition" class="big">-</span></div>
+          <div class="pill">Clear w/ openings? <span id="clearFlag" class="big">-</span></div>
+        </div>
 
-    <button class="btn" id="runBtn">Run</button>
-
-    <div class="mini">
-      <b>Output:</b><br>
-      • <b>Your position</b> = (# senior competitors) + 1 (you)<br>
-      • “Clear” if <b>openings ≥ position</b><br>
-      • List shows only <b>senior competitors</b> + their first matching bid
-    </div>
-  </aside>
-
-  <main class="main">
-    <section class="card" id="introCard">
-      <div class="title">Ready</div>
-      <p class="headline" style="color:var(--muted); font-size:20px;">
-        Enter your seniority number, pick a target base/seat, then hit <b>Run</b>.
-      </p>
-    </section>
-
-    <section class="card" id="resultsCard" style="display:none;">
-      <div class="title">Results</div>
-      <p class="headline" id="headline"></p>
-
-      <div class="meta">
-        <div class="box"><div class="k">Pilot</div><div class="v" id="mName">—</div></div>
-        <div class="box"><div class="k">Seniority</div><div class="v" id="mSen">—</div></div>
-        <div class="box"><div class="k">Current</div><div class="v" id="mCur">—</div></div>
-        <div class="box"><div class="k">Target</div><div class="v" id="mTgt">—</div></div>
-
-        <div class="box"><div class="k">Senior competitors</div><div class="v" id="mSeniors">—</div></div>
-        <div class="box"><div class="k">Your position</div><div class="v" id="mPos">—</div></div>
-        <div class="box"><div class="k">Openings</div><div class="v" id="mOpen">—</div></div>
-        <div class="box"><div class="k">Clear?</div><div class="v" id="mClear">—</div></div>
-      </div>
-
-      <div class="tableHeader">
-        <div class="title" style="margin:0;">Senior competitors ahead of you</div>
-        <div class="pill"><span id="listCount">0</span> shown</div>
-      </div>
-
-      <div class="scrollX">
         <table>
           <thead>
             <tr>
-              <th style="width:90px;">Sen</th>
-              <th style="width:270px;">Name</th>
-              <th style="width:200px;">Current</th>
-              <th style="width:120px;">Pref #</th>
-              <th>Matched bid</th>
+              <th>Sen</th>
+              <th>Name</th>
+              <th>Current</th>
+              <th>Target Rank vs Current</th>
             </tr>
           </thead>
-          <tbody id="tbody">
-            <tr><td colspan="5" class="muted">Run a query…</td></tr>
-          </tbody>
+          <tbody id="competitorsTableBody"></tbody>
         </table>
       </div>
-    </section>
-  </main>
+    </div>
+  </div>
 
-  <script>
-    // ----------------------------
-    // Helpers
-    // ----------------------------
-    function baseDirUrl(){
-      const u = new URL(location.href);
-      if (!u.pathname.endsWith('/')) u.pathname = u.pathname.replace(/\/[^/]*$/, '/');
-      return u.toString();
-    }
+<script>
+/* =========================
+   Inline JS so you only manage one file.
+   Rule:
+   A senior pilot counts if they bid the target AND the target is above their current bid
+   in their preference ordering (or current missing => treated as stay/last).
+   ========================= */
 
-    async function fetchJson(filename){
-      const url = new URL(filename, baseDirUrl()).toString();
-      const res = await fetch(url, { cache: 'no-store' });
-      if (!res.ok){
-        const body = await res.text().catch(()=> '');
-        throw new Error(`HTTP ${res.status} loading ${filename}\nURL: ${url}\n${body ? `Body:\n${body.slice(0,300)}` : ''}`);
-      }
-      const txt = await res.text();
-      try { return JSON.parse(txt); }
-      catch(e){ throw new Error(`Invalid JSON in ${filename}\nURL: ${url}\n${e.message}\nFirst 300 chars:\n${txt.slice(0,300)}`); }
-    }
+const ROSTER_URL = "./roster.json";
+const PREFS_URL  = "./preferences.json";
 
-    function escapeHtml(s){
-      return String(s)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;");
-    }
+const elSen   = document.getElementById("seniorityInput");
+const elBase  = document.getElementById("targetBaseSelect");
+const elSeat  = document.getElementById("targetSeatSelect");
+const elOpen  = document.getElementById("openingsInput");
+const elRun   = document.getElementById("runBtn");
+const errBox  = document.getElementById("errBox");
 
-    function fmtCurrent(p){
-      const c = p.current || {};
-      const eq = c.equip ? (String(c.equip) + ' ') : '';
-      return `${eq}${c.base || '?'} ${c.seat || '?'}`.trim();
-    }
+const elResultsHeadline  = document.getElementById("resultsHeadline");
+const elPilotName        = document.getElementById("pilotName");
+const elPilotSeniority   = document.getElementById("pilotSeniority");
+const elPilotCurrent     = document.getElementById("pilotCurrent");
+const elPilotTarget      = document.getElementById("pilotTarget");
+const elCompetitorsCount = document.getElementById("competitorsCount");
+const elYourPosition     = document.getElementById("yourPosition");
+const elClearFlag        = document.getElementById("clearFlag");
+const elTableBody        = document.getElementById("competitorsTableBody");
 
-    // Accept "73G SAN CA" or "737 SAN CA" or "SAN CA"
-    function parseBidToBaseSeat(bidStr){
-      const parts = String(bidStr || '').trim().split(/\s+/);
-      if (parts.length === 3) return { base: parts[1], seat: parts[2] };
-      if (parts.length === 2) return { base: parts[0], seat: parts[1] };
-      return { base: null, seat: null };
-    }
+function showError(msg) {
+  errBox.style.display = "block";
+  errBox.textContent = msg;
+}
+function clearError() {
+  errBox.style.display = "none";
+  errBox.textContent = "";
+}
 
-    // ----------------------------
-    // Preferences (NEW FORMAT)
-    // prefs[pilotId].preferences = [{order:0,bid:"",...},{order:1,bid:"73G SAN CA",...}]
-    // STAY rows: order==0 OR bid blank
-    // Also supports older formats as a fallback.
-    // Returns array of {order:number, bid:string}
-    // ----------------------------
-    function normalizePrefList(prefEntry){
-      if (!prefEntry) return [];
+function normStr(x){ return (x ?? "").toString().trim(); }
+function toNum(x, fb=NaN){ const n = Number(x); return Number.isFinite(n) ? n : fb; }
+function makeBid(base, seat){ return `${normStr(base)} ${normStr(seat)}`.trim(); }
 
-      // New format
-      if (Array.isArray(prefEntry.preferences) && prefEntry.preferences.length && typeof prefEntry.preferences[0] === 'object'){
-        return prefEntry.preferences
-          .map(x => ({
-            order: Number(x.order ?? 0),
-            bid: (typeof x.bid === 'string' ? x.bid.trim() : '')
-          }))
-          .sort((a,b)=> a.order - b.order);
-      }
+async function loadJson(url) {
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) throw new Error(`Failed to fetch ${url} (${res.status})`);
+  return await res.json();
+}
 
-      // Old format fallback: preferences is array of strings
-      if (Array.isArray(prefEntry.preferences)){
-        return prefEntry.preferences.map((bid, i) => ({ order: i+1, bid: String(bid||'').trim() }));
-      }
+// Normalize roster to array of { sen, name, base, seat }
+function normalizeRoster(raw) {
+  const arr = Array.isArray(raw) ? raw : Object.values(raw || {});
+  return arr.map(p => {
+    const sen = toNum(p.sen ?? p.seniority ?? p.sen_num, NaN);
+    const name = normStr(p.name);
+    let base = normStr(p.base);
+    let seat = normStr(p.seat);
 
-      // Old nested fallback: preferences.preferences is array of strings
-      if (prefEntry.preferences && Array.isArray(prefEntry.preferences.preferences)){
-        return prefEntry.preferences.preferences.map((bid, i) => ({ order: i+1, bid: String(bid||'').trim() }));
-      }
-
-      return [];
-    }
-
-    // Returns list of non-stay bids, ordered, with base/seat parsed
-    function getActiveBids(prefEntry){
-      const lst = normalizePrefList(prefEntry);
-
-      // Filter out stay: order==0 OR bid blank
-      const active = lst.filter(x => x.order > 0 && x.bid.length > 0);
-
-      // De-dupe by base|seat while preserving first occurrence (prevents repeated bids)
-      const out = [];
-      const seen = new Set();
-      for (const x of active){
-        const bs = parseBidToBaseSeat(x.bid);
-        if (!bs.base || !bs.seat) continue;
-        const key = `${bs.base}|${bs.seat}`;
-        if (seen.has(key)) continue;
-        seen.add(key);
-        out.push({ order: x.order, bid: x.bid, base: bs.base, seat: bs.seat });
-      }
-      return out;
-    }
-
-    // ----------------------------
-    // App state
-    // ----------------------------
-    let ROSTER = [];
-    let PREFS = {};
-
-    function setOverlayError(err){
-      const el = document.getElementById('overlay');
-      el.innerHTML = `
-        <div class="overlayBox">
-          <div class="overlayTitle errTitle">Error loading JSON</div>
-          <pre>${escapeHtml(String(err))}</pre>
-          <div class="muted" style="margin-top:10px; font-size:13px; line-height:1.5;">
-            Checklist:
-            <br>• Files must be in the same folder as <span class="mono">index.html</span>
-            <br>• Filenames must be exactly <span class="mono">roster.json</span> and <span class="mono">preferences.json</span>
-            <br>• GitHub Pages project sites must use a trailing slash: <span class="mono">.../basesbid/</span>
-          </div>
-        </div>
-      `;
-    }
-
-    function hideOverlay(){
-      document.getElementById('overlay').style.display = 'none';
-    }
-
-    function showResults(){
-      document.getElementById('introCard').style.display = 'none';
-      document.getElementById('resultsCard').style.display = 'block';
-      document.querySelector('.main').scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function setText(id, val){ document.getElementById(id).textContent = val; }
-
-    function renderTable(rows){
-      const tbody = document.getElementById('tbody');
-      const countEl = document.getElementById('listCount');
-      countEl.textContent = String(rows.length);
-
-      if (!rows.length){
-        tbody.innerHTML = `<tr><td colspan="5" class="muted">No senior competitors found for this target.</td></tr>`;
-        return;
-      }
-
-      const html = rows.map(r => `
-        <tr>
-          <td>${escapeHtml(r.sen)}</td>
-          <td>${escapeHtml(r.name)}</td>
-          <td class="mono nowrap">${escapeHtml(r.current)}</td>
-          <td class="mono">${escapeHtml(r.prefOrder)}</td>
-          <td class="mono">${escapeHtml(r.matchedBid)}</td>
-        </tr>
-      `).join('');
-      tbody.innerHTML = html;
-    }
-
-    function run(){
-      const senStr = document.getElementById('senInput').value.trim();
-      const tBase = document.getElementById('baseInput').value;
-      const tSeat = document.getElementById('seatInput').value;
-      const openings = Math.max(0, Number(document.getElementById('openingsInput').value || 0));
-
-      if (!senStr){ alert('Enter your seniority number.'); return; }
-
-      const user = ROSTER.find(p => String(p.sen) === senStr);
-      if (!user){ alert('Seniority number not found in roster.json.'); return; }
-
-      showResults();
-
-      const userSen = Number(user.sen);
-      const userName = (String(user.name||'').split(',')[0] || String(user.name||'') || '—').trim();
-
-      setText('mName', userName);
-      setText('mSen', `#${user.sen}`);
-      setText('mCur', fmtCurrent(user));
-      setText('mTgt', `${tBase} ${tSeat}`);
-      setText('mOpen', String(openings));
-
-      // If you already hold target, we don't compute a "line"
-      if (user.current?.base === tBase && user.current?.seat === tSeat){
-        setText('mSeniors', '—');
-        setText('mPos', '—');
-        setText('mClear', '—');
-        document.getElementById('headline').innerHTML =
-          `You already hold <b>${tBase} ${tSeat}</b>.<br><span class="ok">This tool is for people trying to move into a target.</span>`;
-        renderTable([]);
-        return;
-      }
-
-      const competitors = [];
-
-      for (const p of ROSTER){
-        if (Number(p.sen) >= userSen) continue; // only senior to user
-
-        // If pilot already in target, they don't count
-        if (p.current?.base === tBase && p.current?.seat === tSeat) continue;
-
-        const activeBids = getActiveBids(PREFS[p.id]);
-
-        // STAY = no active bids
-        if (activeBids.length === 0) continue;
-
-        // Find first matching bid for target
-        const match = activeBids.find(x => x.base === tBase && x.seat === tSeat);
-        if (!match) continue;
-
-        competitors.push({
-          sen: p.sen,
-          name: p.name || '',
-          current: fmtCurrent(p),
-          prefOrder: match.order,
-          matchedBid: match.bid
-        });
-      }
-
-      competitors.sort((a,b) => Number(a.sen) - Number(b.sen));
-
-      const seniors = competitors.length;
-      const position = seniors + 1;
-      const clears = openings >= position;
-
-      setText('mSeniors', String(seniors));
-      setText('mPos', String(position));
-      setText('mClear', clears ? 'YES' : 'NO');
-
-      renderTable(competitors);
-
-      if (clears){
-        document.getElementById('headline').innerHTML =
-          `There are <b>${position}</b> in line for <b>${tBase} ${tSeat}</b> (including you).<br>` +
-          `<span class="ok">With ${openings} openings, you clear.</span>`;
-      } else {
-        const shortBy = position - openings;
-        document.getElementById('headline').innerHTML =
-          `There are <b>${position}</b> in line for <b>${tBase} ${tSeat}</b> (including you).<br>` +
-          `With ${openings} openings, you’re short by <span class="no">${shortBy}</span>.`;
+    const current = normStr(p.current);
+    if ((!base || !seat) && current) {
+      const parts = current.split(/\s+/).filter(Boolean);
+      if (parts.length >= 2) {
+        base = parts[parts.length - 2];
+        seat = parts[parts.length - 1];
       }
     }
+    return { ...p, sen, name, base, seat };
+  }).filter(p => Number.isFinite(p.sen));
+}
 
-    async function init(){
-      try{
-        const [r, p] = await Promise.all([
-          fetchJson('roster.json'),
-          fetchJson('preferences.json')
-        ]);
-        ROSTER = Array.isArray(r) ? r : [];
-        PREFS = (p && typeof p === 'object') ? p : {};
-        hideOverlay();
-      } catch (err){
-        setOverlayError(err);
-      }
+// Normalize preferences to array of { sen, name, preferences: [...] }
+function normalizePrefs(raw) {
+  const obj = raw && typeof raw === "object" ? raw : {};
+  return Object.values(obj)
+    .map(p => ({
+      sen: toNum(p?.sen, NaN),
+      name: normStr(p?.name),
+      preferences: Array.isArray(p?.preferences) ? p.preferences : []
+    }))
+    .filter(p => Number.isFinite(p.sen));
+}
+
+function isNonStayPref(p) {
+  const order = toNum(p?.order, 0);
+  const bid = normStr(p?.bid);
+  return order > 0 && bid !== "";
+}
+
+function sortedPrefs(prefs) {
+  if (!Array.isArray(prefs)) return [];
+  return prefs
+    .map(p => ({ order: toNum(p?.order, 0), bid: normStr(p?.bid) }))
+    .filter(isNonStayPref)
+    .sort((a,b) => a.order - b.order);
+}
+
+function countsAsCompetitor(prefList, targetBid, currentBid) {
+  const sp = sortedPrefs(prefList);
+
+  const targetIdx = sp.findIndex(p => p.bid === targetBid);
+  if (targetIdx === -1) return false; // not bidding target
+
+  const currentIdx = sp.findIndex(p => p.bid === currentBid);
+  const effectiveCurrentIdx = (currentIdx === -1) ? Infinity : currentIdx;
+
+  // target must be above current/stay
+  return targetIdx < effectiveCurrentIdx;
+}
+
+function setText(el, txt){ if (el) el.textContent = txt; }
+function clearTable(){ elTableBody.innerHTML = ""; }
+
+function addRow({ sen, name, current, detail }) {
+  const tr = document.createElement("tr");
+  const tdSen = document.createElement("td"); tdSen.textContent = sen;
+  const tdName = document.createElement("td"); tdName.textContent = name;
+  const tdCur = document.createElement("td"); tdCur.textContent = current;
+  const tdDet = document.createElement("td"); tdDet.textContent = detail;
+  tr.append(tdSen, tdName, tdCur, tdDet);
+  elTableBody.appendChild(tr);
+}
+
+let roster = null;
+let prefs = null;
+
+async function ensureLoaded() {
+  if (roster && prefs) return;
+  const [rRaw, pRaw] = await Promise.all([loadJson(ROSTER_URL), loadJson(PREFS_URL)]);
+  roster = normalizeRoster(rRaw);
+  prefs = normalizePrefs(pRaw);
+
+  // populate base dropdown from roster
+  const bases = Array.from(new Set(roster.map(p => normStr(p.base)).filter(Boolean))).sort();
+  elBase.innerHTML = bases.map(b => `<option value="${b}">${b}</option>`).join("");
+}
+
+function rosterPilotBySen(sen) {
+  return roster.find(p => Number(p.sen) === Number(sen)) || null;
+}
+function prefsPilotBySen(sen) {
+  return prefs.find(p => Number(p.sen) === Number(sen)) || null;
+}
+function currentBidForSen(sen) {
+  const r = rosterPilotBySen(sen);
+  return r ? makeBid(r.base, r.seat) : "";
+}
+
+function render({ you, targetBid, openings, competitors, yourPosition, clear }) {
+  setText(elPilotName, you.name || "(you)");
+  setText(elPilotSeniority, `#${you.sen}`);
+  setText(elPilotCurrent, currentBidForSen(you.sen) || "-");
+  setText(elPilotTarget, targetBid);
+
+  setText(elCompetitorsCount, String(competitors.length));
+  setText(elYourPosition, String(yourPosition));
+  setText(elClearFlag, clear ? "YES" : "NO");
+  elClearFlag.className = clear ? "ok" : "no";
+
+  const shortBy = Math.max(0, yourPosition - openings);
+  setText(elResultsHeadline,
+    `There are ${competitors.length + 1} in line for ${targetBid} (including you). With ${openings} openings, you’re short by ${shortBy}.`
+  );
+
+  clearTable();
+  competitors.forEach(c => addRow(c));
+}
+
+async function run() {
+  clearError();
+  await ensureLoaded();
+
+  const youSen = toNum(elSen.value, NaN);
+  const targetBase = normStr(elBase.value);
+  const targetSeat = normStr(elSeat.value);
+  const openings = Math.max(0, toNum(elOpen.value, 0));
+  const targetBid = makeBid(targetBase, targetSeat);
+
+  if (!Number.isFinite(youSen)) return showError("Enter a valid seniority number.");
+  if (!targetBase || !targetSeat) return showError("Select a target base and seat.");
+
+  const youRoster = rosterPilotBySen(youSen);
+  const youPrefs = prefsPilotBySen(youSen);
+  const youName = (youPrefs?.name || youRoster?.name || "").trim();
+
+  if (!youRoster) return showError(`Could not find you (#${youSen}) in roster.json`);
+  if (!youPrefs) return showError(`Could not find you (#${youSen}) in preferences.json`);
+
+  // Build competitor list
+  const competitors = [];
+
+  for (const p of prefs) {
+    // only senior to you
+    if (p.sen >= youSen) continue;
+
+    const curBid = currentBidForSen(p.sen);
+    if (!curBid) continue;
+
+    // if already holding target, don't count as "in line"
+    if (curBid === targetBid) continue;
+
+    if (countsAsCompetitor(p.preferences, targetBid, curBid)) {
+      const sp = sortedPrefs(p.preferences);
+      const tIdx = sp.findIndex(x => x.bid === targetBid);
+      const cIdx = sp.findIndex(x => x.bid === curBid);
+      const detail = (cIdx === -1)
+        ? `Target ranked above implicit stay`
+        : `Target rank ${tIdx + 1} is above current rank ${cIdx + 1}`;
+
+      competitors.push({
+        sen: p.sen,
+        name: p.name,
+        current: curBid,
+        detail
+      });
     }
+  }
 
-    document.getElementById('runBtn').addEventListener('click', run);
-    document.getElementById('senInput').addEventListener('keydown', (e)=>{ if (e.key === 'Enter') run(); });
+  // Sort competitors by seniority (lowest number first = more senior)
+  competitors.sort((a,b) => a.sen - b.sen);
 
-    init();
-  </script>
+  // Your position is competitors ahead + 1 (you)
+  const yourPosition = competitors.length + 1;
+  const clear = openings >= yourPosition;
+
+  render({
+    you: { sen: youSen, name: youName },
+    targetBid,
+    openings,
+    competitors,
+    yourPosition,
+    clear
+  });
+}
+
+elRun.addEventListener("click", () => run().catch(e => showError(e.message)));
+</script>
 </body>
 </html>
