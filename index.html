@@ -3,30 +3,35 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ProTrace Seniority Calculator</title>
+  <title>ProTrace Home Base</title>
   <style>
     :root {
       --bg: #0b0f16; --card: #121a27; --accent: #2a66ff;
       --text: #e8eefc; --border: rgba(255,255,255,.1);
+      --success: #7dff9a; --danger: #ff7d7d; --warning: #ffb86c;
     }
     body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
-    .container { max-width: 1100px; margin: 0 auto; }
+    .container { max-width: 1200px; margin: 0 auto; }
     .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+    
     label { display: block; font-size: 11px; font-weight: 700; opacity: .6; text-transform: uppercase; margin-bottom: 8px; }
-    input, select, button { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,.1); background: #0d1420; color: white; }
+    input, select, button { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,.1); background: #0d1420; color: white; box-sizing: border-box; }
     button { background: var(--accent); border: none; font-weight: 800; cursor: pointer; margin-top: 10px; }
-    .big-num { font-size: 36px; font-weight: 900; color: var(--accent); }
+    
+    .big-num { font-size: 32px; font-weight: 900; color: var(--accent); }
     table { width: 100%; border-collapse: collapse; margin-top: 20px; }
     th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); font-size: 13px; }
     th { color: var(--accent); text-transform: uppercase; font-size: 11px; }
-    .status-pill { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; background: rgba(42, 102, 255, 0.2); }
+    
+    .bpl-warning { display: inline-block; padding: 2px 8px; background: rgba(255, 125, 125, 0.2); border: 1px solid var(--danger); border-radius: 4px; color: var(--danger); font-weight: 800; font-size: 10px; margin-left: 8px; }
+    .ok { color: var(--success); } .no { color: var(--danger); }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="card">
-      <h2>ProTrace Analytics</h2>
+      <h2>ProTrace BPL Analytics</h2>
       <div class="grid">
         <div>
           <label>Your Seniority #</label>
@@ -48,26 +53,30 @@
           </select>
         </div>
       </div>
-      <button id="calcBtn">Run Standing Analysis</button>
+      <button id="calcBtn">Analyze Standing</button>
     </div>
 
     <div class="grid">
       <div class="card" style="text-align:center;">
-        <label>Numbers Away (Delta)</label>
-        <div id="deltaResult" class="big-num">-</div>
-      </div>
-      <div class="card" style="text-align:center;">
         <label>Total In Line</label>
         <div id="lineResult" class="big-num">-</div>
       </div>
+      <div class="card" style="text-align:center; border: 1px solid var(--danger);">
+        <label>BPL Competitors</label>
+        <div id="bplResult" class="big-num" style="color:var(--danger);">-</div>
+      </div>
       <div class="card" style="text-align:center;">
-        <label>Base Capacity Delta</label>
+        <label>Base Capacity</label>
         <div id="capResult" class="big-num">-</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <label>Delta (Needed)</label>
+        <div id="deltaResult" class="big-num">-</div>
       </div>
     </div>
 
     <div class="card">
-      <label>Senior Competitors (Who is cutting you?)</label>
+      <label>Senior Competitor Detail</label>
       <table>
         <thead>
           <tr>
@@ -75,6 +84,7 @@
             <th>Name</th>
             <th>Current Status</th>
             <th>Bid Rank</th>
+            <th>BPL Limit</th>
             <th>Full Preference</th>
           </tr>
         </thead>
@@ -86,24 +96,38 @@
 <script>
 let ROSTER = [], PREFS = {}, CAPACITIES = [];
 
+function pick(val) {
+  if (!val) return "";
+  if (typeof val === 'string') return val.trim();
+  if (typeof val === 'object') return val.base || val.code || val.text || val.current || "";
+  return String(val);
+}
+
 async function loadData() {
-  [ROSTER, PREFS, CAPACITIES] = await Promise.all([
-    fetch('./roster.json').then(res => res.json()),
-    fetch('./preferences.json').then(res => res.json()),
-    fetch('./capacities.json').then(res => res.json())
-  ]);
+  try {
+    const [r, p, c] = await Promise.all([
+      fetch('./roster.json').then(res => res.json()),
+      fetch('./preferences.json').then(res => res.json()),
+      fetch('./capacities.json').then(res => res.json())
+    ]);
+    ROSTER = Array.isArray(r) ? r : Object.values(r);
+    PREFS = p;
+    CAPACITIES = c;
+  } catch (e) { console.error("Data load failed."); }
 }
 
 function runAnalysis() {
   const mySen = parseInt(document.getElementById("senInput").value);
   const tBase = document.getElementById("baseSelect").value;
   const tSeat = document.getElementById("seatSelect").value;
-  const target = `${tBase} ${tSeat}`;
+  const targetTag = `${tBase} ${tSeat}`;
 
   const user = ROSTER.find(p => parseInt(p.sen) === mySen);
-  if (!user) return alert("Pilot not found!");
+  if (!user) return alert("Pilot not found.");
 
   const competitors = [];
+  let bplCompetitorsCount = 0;
+
   ROSTER.forEach(p => {
     const pSen = parseInt(p.sen);
     if (pSen >= mySen) return;
@@ -111,44 +135,56 @@ function runAnalysis() {
     const pPref = PREFS[`pil${pSen}`] || PREFS[pSen];
     if (!pPref || !pPref.preferences) return;
 
-    const curBase = p.base || (p.current ? p.current.base : "");
-    const curSeat = p.seat || (p.current ? p.current.seat : "");
-    const curStatus = `${curBase} ${curSeat}`.trim();
+    const curBase = pick(p.base || (p.current ? p.current.base : ""));
+    const curSeat = pick(p.seat || (p.current ? p.current.seat : ""));
+    const curStatus = `${curBase} ${curSeat}`;
 
-    for (const bid of pPref.preferences) {
-      const bidStr = String(bid.bid || "");
-      const bidOrder = parseInt(bid.order);
+    for (const bidEntry of pPref.preferences) {
+      const bidStr = pick(bidEntry.bid);
+      const bidOrder = parseInt(bidEntry.order);
+      const bplLimit = parseInt(bidEntry.bpl_min || 0);
 
-      // Rule: If Order 1 is stay or empty, ignore pilot
-      if (bidOrder === 1 && (bidStr === "" || bidStr.includes(curStatus))) break;
+      if (bidOrder === 1 && (!bidStr || bidStr === "" || bidStr === curStatus)) break;
       
-      // Rule: If bid matches target and they don't already hold it
       if (bidStr.includes(tBase) && bidStr.includes(tSeat)) {
-        if (!bidStr.includes(curStatus)) {
-          competitors.push({ sen: pSen, name: p.name, current: curStatus, order: bidOrder, full: bidStr });
+        if (curStatus !== bidStr) {
+          if (bplLimit > 0) bplCompetitorsCount++;
+          
+          competitors.push({
+            sen: pSen,
+            name: p.name,
+            current: curStatus,
+            order: bidOrder,
+            bpl: bplLimit,
+            full: bidStr
+          });
         }
         break;
       }
-      
-      // Rule: Stop if they hit their current position in their list
-      if (bidStr.includes(curStatus)) break;
+      if (bidStr === curStatus) break;
     }
   });
 
-  const capacity = CAPACITIES.find(c => c.base === tBase && c.seat === tSeat)?.delta || 0;
+  const cap = CAPACITIES.find(c => c.base === tBase && c.seat === tSeat)?.delta || 0;
   const totalInLine = competitors.length + 1;
-  const deltaAway = Math.max(0, totalInLine - capacity);
+  const delta = Math.max(0, totalInLine - cap);
 
   document.getElementById("lineResult").textContent = totalInLine;
-  document.getElementById("capResult").textContent = capacity;
-  document.getElementById("deltaResult").textContent = deltaAway;
+  document.getElementById("bplResult").textContent = bplCompetitorsCount;
+  document.getElementById("capResult").textContent = cap;
+  document.getElementById("deltaResult").textContent = delta;
+  document.getElementById("deltaResult").className = delta === 0 ? "big-num ok" : "big-num no";
 
   document.getElementById("competitorTable").innerHTML = competitors.sort((a,b) => a.sen - b.sen).map(c => `
     <tr>
       <td>${c.sen}</td>
-      <td>${c.name}</td>
-      <td><span class="status-pill">${c.current}</span></td>
+      <td>
+        ${c.name} 
+        ${c.bpl > 0 ? `<span class="bpl-warning">BPL ${c.bpl}</span>` : ''}
+      </td>
+      <td>${c.current}</td>
       <td>#${c.order}</td>
+      <td>${c.bpl}</td>
       <td>${c.full}</td>
     </tr>
   `).join("");
