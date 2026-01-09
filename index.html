@@ -1,3 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+  <title>ProTrace - Real Queue Engine</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root { 
+      --bg-app: #0f172a; --bg-panel: #1e293b; --bg-input: #020617; 
+      --border: #334155; --text-main: #f1f5f9; --text-muted: #94a3b8; 
+      --accent: #3b82f6; --warning: #f59e0b;
+    }
+    body { margin: 0; background: var(--bg-app); color: var(--text-main); font-family: 'Inter', sans-serif; display: flex; height: 100vh; overflow: hidden; }
+    .sidebar { width: 360px; background: var(--bg-panel); border-right: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; gap: 15px; overflow-y: auto; }
+    .main { flex-grow: 1; padding: 20px; display: flex; flex-direction: column; gap: 15px; overflow: hidden; }
+    .panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 8px; padding: 15px; }
+    input, select { background: var(--bg-input); border: 1px solid var(--border); color: white; padding: 12px; border-radius: 6px; width: 100%; margin-bottom: 10px; font-size: 14px; }
+    button { padding: 14px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; width: 100%; background: var(--accent); color: white; font-size: 16px; }
+    .queue-card { background: var(--bg-input); border-left: 4px solid var(--warning); padding: 15px; border-radius: 4px; }
+    .queue-val { font-size: 32px; font-weight: 800; color: var(--warning); font-family: 'JetBrains Mono'; }
+    @media (max-width: 768px) { body { flex-direction: column; overflow-y: auto; } .sidebar { width: 100%; } }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div style="font-size: 22px; font-weight: 800; margin-bottom: 10px;">PRO<span style="color:var(--accent)">TRACE</span></div>
+  <div class="panel">
+    <div style="font-size:11px; color:var(--text-muted); margin-bottom:8px;">YOUR SENIORITY</div>
+    <input id="userSen" type="number" value="2302">
+  </div>
+  <div class="panel">
+    <div style="font-size:11px; color:var(--text-muted); margin-bottom:8px;">TARGET AWARD</div>
+    <select id="targetBase"><option>ANC</option><option>LAX</option><option>PDX</option><option>SAN</option><option>SEA</option><option selected>SFO</option></select>
+    <select id="targetSeat"><option selected>CA</option><option>FO</option></select>
+  </div>
+  <button onclick="calculateQueue()">ANALYZE ACTUAL QUEUE</button>
+  <div id="status" style="text-align:center; font-size:11px; color:var(--text-muted); margin-top:10px;">Syncing Data...</div>
+</div>
+
+<div class="main">
+  <div id="results" style="display:none;">
+    <div class="panel" style="border-color: var(--warning); background: rgba(245, 158, 11, 0.05);">
+      <div id="queueOutput"></div>
+    </div>
+  </div>
+  <div class="panel" style="flex-grow: 1; display: flex; flex-direction: column;">
+    <div style="font-size:11px; color:var(--text-muted); margin-bottom:8px;">ACTUAL SENIOR COMPETITORS</div>
+    <div id="seniorList" style="flex-grow: 1; overflow-y: auto; font-family: 'JetBrains Mono'; font-size: 13px; color: var(--text-muted); background: var(--bg-input); padding: 15px; border-radius: 6px;"></div>
+  </div>
+</div>
+
+<script>
+let roster = [], preferences = {};
+
+async function loadData() {
+  try {
+    const [rRes, pRes] = await Promise.all([fetch('roster.json'), fetch('preferences.json')]);
+    roster = await rRes.json(); preferences = await pRes.json();
+    document.getElementById('status').textContent = "Data Synced";
+  } catch(e) { document.getElementById('status').textContent = "File Error"; }
+}
+
 function calculateQueue() {
   const mySen = Number(document.getElementById('userSen').value);
   const tBase = document.getElementById('targetBase').value.toUpperCase();
@@ -6,7 +70,7 @@ function calculateQueue() {
   let realCompetitors = 0;
   let listHtml = "";
 
-  // 1. Only look at pilots senior to you
+  // 1. Filter for senior pilots
   const seniors = roster.filter(p => Number(p.sen) < mySen).sort((a,b) => Number(a.sen) - Number(b.sen));
 
   seniors.forEach(p => {
@@ -14,50 +78,49 @@ function calculateQueue() {
     const pPrefsData = preferences[pId] || preferences[p.sen] || preferences[String(p.sen)];
     const pPrefsList = pPrefsData?.preferences || [];
     
-    // Identify their current seat from the Roster (Master Source)
-    const currentBase = String(p.current.base).toUpperCase();
-    const currentSeat = String(p.current.seat).toUpperCase();
+    // Get their current seat from the Roster
+    const curBase = String(p.current.base).toUpperCase();
+    const curSeat = String(p.current.seat).toUpperCase();
 
-    let countingAsCompetitor = false;
+    let isCompetitor = false;
 
-    // 2. Step through their bids in ORDER (#1, #2, #3...)
+    // 2. Step through bids in order of priority
     for (const bid of pPrefsList) {
-      const bidBase = String(bid.base).toUpperCase();
-      const bidSeat = String(bid.seat).toUpperCase();
+      const bBase = String(bid.base).toUpperCase();
+      const bSeat = String(bid.seat).toUpperCase();
 
-      // IF THEY HIT YOUR TARGET FIRST: They are a real competitor
-      if (bidBase === tBase && bidSeat === tSeat) {
-        countingAsCompetitor = true;
-        break; 
+      // IF THEY HIT TARGET FIRST: They want your seat more than staying put.
+      if (bBase === tBase && bSeat === tSeat) {
+        isCompetitor = true;
+        break;
       }
 
-      // IF THEY HIT THEIR CURRENT SEAT FIRST: They stay put. Stop looking.
-      // Because they are senior, they are guaranteed to "hold" their current spot if they want it.
-      if (bidBase === currentBase && bidSeat === currentSeat) {
-        countingAsCompetitor = false;
-        break; 
+      // IF THEY HIT CURRENT SEAT FIRST: They hold their current spot and stop bidding.
+      if (bBase === curBase && bSeat === curSeat) {
+        isCompetitor = false;
+        break;
       }
     }
 
-    if (countingAsCompetitor) {
+    if (isCompetitor) {
       realCompetitors++;
-      listHtml += `<div style="padding:6px 0; border-bottom: 1px solid #1e293b;">
-        <b style="color:var(--accent)">#${p.sen}</b> - ${p.name.split(',')[0]}
-      </div>`;
+      listHtml += `<div style="padding:4px 0;">#${p.sen} - ${p.name.split(',')[0]}</div>`;
     }
   });
 
-  // 3. Render the "Real" Queue Position
   document.getElementById('results').style.display = 'block';
   document.getElementById('queueOutput').innerHTML = `
     <div class="queue-card">
-      <div style="font-size:12px; color:var(--text-muted); margin-bottom:5px;">REAL COMPETITORS AHEAD OF YOU</div>
+      <div style="font-size:12px; color:var(--text-muted);">TRUE SENIOR BIDDERS AHEAD</div>
       <div class="queue-val">${realCompetitors}</div>
-      <div style="font-size:14px; margin-top:10px; line-height:1.6;">
-        You are <b style="color:white">#${realCompetitors + 1}</b> in the actual queue.<br>
-        You need <b style="color:var(--warning)">${realCompetitors + 1}</b> vacancies/attrition to hold.
+      <div style="font-size:14px; margin-top:10px;">
+        Real Line Position: <b style="color:white">#${realCompetitors + 1}</b><br>
+        You need <b style="color:var(--warning)">${realCompetitors + 1}</b> spots to hold <b>${tBase} ${tSeat}</b>.
       </div>
     </div>`;
-  
-  document.getElementById('seniorList').innerHTML = listHtml || "You are currently #1 in line!";
+  document.getElementById('seniorList').innerHTML = listHtml || "No active senior bidders.";
 }
+loadData();
+</script>
+</body>
+</html>
