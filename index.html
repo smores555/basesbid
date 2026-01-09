@@ -14,8 +14,8 @@
       --accent:#3b82f6; --danger:#ef4444; --success:#22c55e;
     }
     *{box-sizing:border-box}
-
     html, body { height: 100%; }
+
     body{
       margin:0;
       background:var(--bg-app);
@@ -23,7 +23,7 @@
       font-family:Inter,sans-serif;
       display:flex;
       height:100vh;
-      overflow:hidden; /* body doesn't scroll; panels do */
+      overflow:hidden; /* panels scroll, body doesn't */
     }
 
     .sidebar{
@@ -42,7 +42,7 @@
     }
 
     .logo{font-weight:900;font-size:22px;color:var(--accent);letter-spacing:-1px}
-    .sub{font-size:13px;color:var(--text-muted);line-height:1.45;margin-top:-6px}
+    .sub{font-size:13px;color:var(--text-muted);line-height:1.5;margin-top:-6px}
     .sub b{color:#fff}
 
     .input-group{display:flex;flex-direction:column;gap:8px}
@@ -57,7 +57,6 @@
       outline:none;
     }
     input:focus,select:focus{border-color:var(--accent)}
-
     button{
       background:var(--accent);
       color:#fff;
@@ -70,18 +69,17 @@
     }
     button:hover{filter:brightness(1.06)}
     button:active{transform:translateY(1px)}
-
     .mini{
       font-size:12px;
       color:var(--text-muted);
       border:1px dashed var(--border);
       border-radius:14px;
       padding:12px;
-      line-height:1.5
+      line-height:1.55
     }
     .mini b{color:#fff}
 
-    /* MAIN SCROLL FIX (desktop-friendly) */
+    /* Desktop scroll fix: main scrolls, not centered */
     .main{
       flex:1;
       height:100vh;
@@ -97,7 +95,7 @@
       border:1px solid var(--border);
       border-radius:18px;
       padding:28px;
-      width:min(1020px,100%);
+      width:min(1040px,100%);
       text-align:center;
       box-shadow:0 10px 40px rgba(0,0,0,.5);
       margin:0 auto 26px auto;
@@ -111,6 +109,7 @@
       font-weight:900;
       margin-bottom:10px
     }
+
     .queue-msg{font-size:26px;font-weight:650;line-height:1.5;margin:0}
     .queue-msg b{color:var(--accent)}
     .highlight-red{color:var(--danger);font-weight:900;text-decoration:underline}
@@ -143,6 +142,7 @@
     }
     .meta b{color:#fff;font-family:"JetBrains Mono",monospace;font-size:13px}
 
+    /* Table: clean, readable, no vertical wrapping */
     .listWrap{
       margin-top:18px;
       text-align:left;
@@ -151,7 +151,7 @@
     }
     .listHeader{
       display:flex;
-      align-items:center;
+      align-items:baseline;
       justify-content:space-between;
       gap:12px;
       margin-bottom:10px
@@ -163,8 +163,27 @@
       color:var(--text-muted);
       font-weight:900
     }
+    .countPill{
+      font-size:12px;
+      color:#cbd5e1;
+      border:1px solid var(--border);
+      background:rgba(2,6,23,.35);
+      padding:6px 10px;
+      border-radius:999px;
+      font-family:"JetBrains Mono",monospace;
+    }
 
-    table{width:100%;border-collapse:separate;border-spacing:0 10px;table-layout:fixed}
+    .tableScroll{
+      overflow-x:auto;
+      padding-bottom:4px;
+    }
+
+    table{
+      width:100%;
+      min-width: 760px; /* prevents weird squishing on desktop */
+      border-collapse:separate;
+      border-spacing:0 10px;
+    }
     thead th{
       font-size:11px;
       text-transform:uppercase;
@@ -172,30 +191,35 @@
       color:var(--text-muted);
       font-weight:900;
       text-align:left;
-      padding:0 10px
+      padding:0 12px;
+      white-space:nowrap;
     }
     tbody tr{background:rgba(2,6,23,.45)}
     tbody td{
-      padding:10px;
+      padding:12px;
       border-top:1px solid var(--border);
       border-bottom:1px solid var(--border);
       color:#e2e8f0;
       font-size:13px;
-      word-wrap:break-word
+      vertical-align:top;
     }
     tbody tr td:first-child{
       border-left:1px solid var(--border);
       border-top-left-radius:12px;
       border-bottom-left-radius:12px;
-      font-family:"JetBrains Mono",monospace
+      font-family:"JetBrains Mono",monospace;
+      white-space:nowrap;
     }
     tbody tr td:last-child{
       border-right:1px solid var(--border);
       border-top-right-radius:12px;
       border-bottom-right-radius:12px
     }
-    .muted{color:var(--text-muted)}
+
     .mono{font-family:"JetBrains Mono",monospace}
+    .nowrap{white-space:nowrap}
+    .reason{color:#cbd5e1}
+    .muted{color:var(--text-muted)}
 
     .loader{
       position:fixed;inset:0;
@@ -208,7 +232,7 @@
       text-align:center
     }
     .errbox{
-      width:min(1020px,100%);
+      width:min(1040px,100%);
       background:#0b1220;
       border:1px solid #334155;
       border-radius:16px;
@@ -231,6 +255,7 @@
       .sidebar{width:100%;border-right:none;border-bottom:1px solid var(--border);height:auto}
       .main{height:auto;overflow:visible;padding:16px}
       .meta{grid-template-columns:repeat(2,minmax(160px,1fr))}
+      table{min-width: 720px;}
     }
   </style>
 
@@ -253,12 +278,11 @@
   <div class="sidebar">
     <div class="logo">PROTRACE</div>
     <div class="sub">
-      This is a <b>wish-list</b> model:<br>
-      • <b>Current</b> base/seat comes only from <b>roster.json</b>.<br>
-      • <b>preferences.json</b> is “things I want” (ranked), and current is an <b>implicit fallback</b> below them.<br>
-      • A senior pilot counts ahead of you if they list the <b>target base/seat</b> anywhere in preferences
-        (and they aren’t already in the target).<br>
-      • If a pilot’s <b>only</b> preference is their <b>current</b> base/seat, they’re ignored.
+      Uses <b>current base/seat</b> from <b>roster.json</b>.<br>
+      Uses <b>ordered preferences</b> from <b>preferences.json</b>.<br><br>
+      Senior pilot counts ahead of you only if the <b>target appears before their current</b> in their preference order
+      (or if their current is not listed, we treat it as implicit fallback).<br>
+      If a pilot’s <b>only</b> preference is their <b>current</b>, they’re ignored.
     </div>
 
     <div class="input-group">
@@ -297,7 +321,7 @@
       <b>Interpretation:</b><br>
       • <b>Your position</b> = (# senior competitors) + 1 (you).<br>
       • You “clear” if <b>openings ≥ your position</b>.<br>
-      • The list below shows <b>only senior competitors</b> (no skipped rows).
+      • List shows <b>only senior competitors</b>.
     </div>
   </div>
 
@@ -345,21 +369,24 @@
       <div class="listWrap">
         <div class="listHeader">
           <div class="h">Senior competitors ahead of you</div>
+          <div class="countPill"><span id="listCount">0</span> shown</div>
         </div>
 
-        <table>
-          <thead>
-            <tr>
-              <th style="width:90px;">Sen</th>
-              <th style="width:220px;">Name</th>
-              <th>Current</th>
-              <th style="width:320px;">Reason</th>
-            </tr>
-          </thead>
-          <tbody id="competitorRows">
-            <tr><td colspan="4" class="muted">Run a query to see names…</td></tr>
-          </tbody>
-        </table>
+        <div class="tableScroll">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:90px;">Sen</th>
+                <th style="width:260px;">Name</th>
+                <th style="width:190px;">Current</th>
+                <th>Reason</th>
+              </tr>
+            </thead>
+            <tbody id="competitorRows">
+              <tr><td colspan="4" class="muted">Run a query to see names…</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -454,7 +481,6 @@
     function showResults(){
       document.getElementById('intro').style.display = 'none';
       document.getElementById('results').style.display = 'block';
-      // ensure top of results is visible after a run
       document.querySelector('.main').scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -462,48 +488,69 @@
       document.getElementById(id).textContent = value;
     }
 
-    // Collapse prefs down to unique base|seat pairs (ignore equipment)
-    function uniqueBaseSeatPairs(prefList){
-      const set = new Set();
+    // Build ordered list of base|seat from preferences (deduped, preserving first-seen order)
+    function orderedPairs(prefList){
+      const out = [];
+      const seen = new Set();
       for (const bid of prefList){
         const b = parseBidString(bid);
         if (!b.base || !b.seat) continue;
-        set.add(`${b.base}|${b.seat}`);
+        const key = `${b.base}|${b.seat}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        out.push(key);
       }
-      return set;
+      return out;
     }
 
-    // WISHLIST MODEL:
-    // Senior competitor if:
-    //  - not already in target
-    //  - has prefs
-    //  - not "only preference is current"
-    //  - target appears in prefs (anywhere)
-    function isCompetitorWishlist(p, tBase, tSeat){
+    // Decide if pilot competes for target with "stop at current if ranked above target"
+    function competitorDecision(p, tBase, tSeat){
       const curBase = p.current?.base;
       const curSeat = p.current?.seat;
+      const curKey  = `${curBase}|${curSeat}`;
+      const tgtKey  = `${tBase}|${tSeat}`;
 
-      if (curBase === tBase && curSeat === tSeat) return { ok:false, reason:"Already holds target" };
+      // Already holds target => not competing for it
+      if (curBase === tBase && curSeat === tSeat){
+        return { ok:false, reason:"Already holds target" };
+      }
 
       const prefList = normalizePrefsEntry(PREFS[p.id]);
-      if (!prefList || prefList.length === 0) return { ok:false, reason:"No preferences" };
+      if (!prefList || prefList.length === 0){
+        return { ok:false, reason:"No preferences" };
+      }
 
-      const pairs = uniqueBaseSeatPairs(prefList);
+      const pairs = orderedPairs(prefList);
 
-      if (pairs.size === 1 && pairs.has(`${curBase}|${curSeat}`)) {
+      // Only preference is current => ignore
+      if (pairs.length === 1 && pairs[0] === curKey){
         return { ok:false, reason:"Only preference is current" };
       }
 
-      if (pairs.has(`${tBase}|${tSeat}`)) {
-        return { ok:true, reason:"Target appears in preferences" };
+      const idxTarget = pairs.indexOf(tgtKey);
+      if (idxTarget === -1){
+        return { ok:false, reason:"Target not in preferences" };
       }
 
-      return { ok:false, reason:"Target not in preferences" };
+      const idxCurrent = pairs.indexOf(curKey);
+
+      // If current is listed AND appears before target => they stop at current, so not a competitor
+      if (idxCurrent !== -1 && idxCurrent < idxTarget){
+        return { ok:false, reason:"Current ranked above target (would stop at current)" };
+      }
+
+      // Otherwise target is above current (or current not listed => implicit fallback)
+      if (idxCurrent === -1){
+        return { ok:true, reason:"Target in preferences (current not listed → implicit fallback)" };
+      }
+      return { ok:true, reason:"Target ranked above current" };
     }
 
     function renderCompetitorTable(competitors){
       const tbody = document.getElementById('competitorRows');
       tbody.innerHTML = "";
+
+      document.getElementById('listCount').textContent = String(competitors.length);
 
       if (competitors.length === 0){
         const tr = document.createElement('tr');
@@ -517,8 +564,8 @@
         tr.innerHTML = `
           <td class="mono">${escapeHtml(r.sen)}</td>
           <td>${escapeHtml(r.name)}</td>
-          <td class="mono">${escapeHtml(r.current)}</td>
-          <td>${escapeHtml(r.reason)}</td>
+          <td class="mono nowrap">${escapeHtml(r.current)}</td>
+          <td class="reason">${escapeHtml(r.reason)}</td>
         `;
         tbody.appendChild(tr);
       }
@@ -557,13 +604,13 @@
         return;
       }
 
-      // Build competitor list: ONLY senior people who count (no skipped rows shown)
+      // ONLY senior competitors in the list
       const competitors = [];
 
       for (const p of ROSTER){
         if (Number(p.sen) >= userSen) continue; // only senior to the user
 
-        const d = isCompetitorWishlist(p, tBase, tSeat);
+        const d = competitorDecision(p, tBase, tSeat);
         if (!d.ok) continue;
 
         competitors.push({
@@ -574,7 +621,6 @@
         });
       }
 
-      // Most senior first
       competitors.sort((a,b) => Number(a.sen) - Number(b.sen));
 
       const seniorCompetitors = competitors.length;
