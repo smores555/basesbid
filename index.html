@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
-  <title>ProTrace - Seniority Queue</title>
+  <title>ProTrace - Master Roster Engine</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
   <style>
     :root { 
@@ -16,7 +16,6 @@
     .sidebar { background: var(--bg-panel); border-right: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; gap: 15px; overflow-y: auto; }
     .main { padding: 20px; display: flex; flex-direction: column; gap: 15px; overflow: hidden; }
     .panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 8px; padding: 15px; }
-    .panel-title { font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px; }
     input, select { background: var(--bg-input); border: 1px solid var(--border); color: white; padding: 12px; border-radius: 6px; width: 100%; margin-bottom: 10px; font-size: 14px; }
     button { padding: 14px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; width: 100%; background: var(--accent); color: white; font-size: 16px; }
     .queue-card { background: var(--bg-input); border-left: 4px solid var(--warning); padding: 15px; border-radius: 4px; }
@@ -29,34 +28,28 @@
 <div class="app-grid">
   <div class="sidebar">
     <div style="font-size: 22px; font-weight: 800;">PRO<span style="color:var(--accent)">TRACE</span></div>
-    
     <div class="panel">
-      <div class="panel-title">Your Seniority</div>
-      <input id="userSen" type="number" placeholder="e.g. 2302" value="2302">
+      <div style="font-size:11px; color:var(--text-muted); margin-bottom:8px;">YOUR SENIORITY</div>
+      <input id="userSen" type="number" value="2302">
     </div>
-
     <div class="panel">
-      <div class="panel-title">Target Base & Seat</div>
+      <div style="font-size:11px; color:var(--text-muted); margin-bottom:8px;">TARGET BASE & SEAT</div>
       <select id="targetBase"><option>ANC</option><option>LAX</option><option>PDX</option><option>SAN</option><option>SEA</option><option selected>SFO</option></select>
       <select id="targetSeat"><option selected>CA</option><option>FO</option></select>
     </div>
-
-    <button onclick="calculateQueue()">ANALYZE QUEUE</button>
-    <div id="status" style="text-align:center; font-size:11px; color:var(--text-muted); margin-top:10px;">Awaiting Data...</div>
+    <button onclick="calculateQueue()">ANALYZE MASTER QUEUE</button>
+    <div id="status" style="text-align:center; font-size:11px; color:var(--text-muted); margin-top:10px;">Loading Files...</div>
   </div>
 
   <div class="main">
     <div id="results" style="display:none;">
       <div class="panel" style="border-color: var(--warning); background: rgba(245, 158, 11, 0.05);">
-        <div class="panel-title" style="color:var(--warning)">Queue Analysis</div>
         <div id="queueOutput"></div>
       </div>
     </div>
     <div class="panel" style="flex-grow: 1; display: flex; flex-direction: column;">
-      <div class="panel-title">Senior Bidders Ahead</div>
-      <div id="seniorList" style="flex-grow: 1; overflow-y: auto; font-family: 'JetBrains Mono'; font-size: 13px; color: var(--text-muted); background: var(--bg-input); padding: 15px; border-radius: 6px;">
-        The list of pilots more senior than you who want this seat will appear here.
-      </div>
+      <div style="font-size:11px; color:var(--text-muted); margin-bottom:8px;">SENIOR BIDDERS (MATCHED FROM MASTER ROSTER)</div>
+      <div id="seniorList" style="flex-grow: 1; overflow-y: auto; font-family: 'JetBrains Mono'; font-size: 13px; color: var(--text-muted); background: var(--bg-input); padding: 15px; border-radius: 6px;"></div>
     </div>
   </div>
 </div>
@@ -64,17 +57,13 @@
 <script>
 let roster = [], preferences = {};
 
-// Load data strictly from your uploaded files
 async function loadData() {
   try {
-    const r = await fetch('roster.json'); 
-    const p = await fetch('preferences.json');
-    roster = await r.json();
-    preferences = await p.json();
-    document.getElementById('status').textContent = "Data Loaded Successfully";
-  } catch(e) { 
-    document.getElementById('status').textContent = "Error: Check JSON file paths"; 
-  }
+    const [rRes, pRes] = await Promise.all([fetch('roster.json'), fetch('preferences.json')]);
+    roster = await rRes.json();
+    preferences = await pRes.json();
+    document.getElementById('status').textContent = "Master Data Ready";
+  } catch(e) { document.getElementById('status').textContent = "Load Error"; }
 }
 
 function calculateQueue() {
@@ -82,47 +71,46 @@ function calculateQueue() {
   const tBase = document.getElementById('targetBase').value.toUpperCase();
   const tSeat = document.getElementById('targetSeat').value.toUpperCase();
   
-  let seniorBidders = 0;
+  let countAhead = 0;
   let listHtml = "";
 
-  // 1. Process roster to find everyone more senior than you
-  // In airline seniority, a smaller number (e.g., 593) is senior to a larger number (e.g., 2302).
-  roster.forEach(pilot => {
-    const pSen = Number(pilot.sen);
+  // 1. Filter Roster for senior pilots
+  const seniors = roster.filter(p => Number(p.sen) < mySen).sort((a,b) => Number(a.sen) - Number(b.sen));
+
+  seniors.forEach(p => {
+    const pSen = Number(p.sen);
+    const pId = p.id || String(pSen);
     
-    if (pSen < mySen) {
-      // 2. Look up this senior pilot's bid from your preferences.json
-      const pData = preferences[pSen] || preferences[String(pSen)];
-      const pPrefs = pData?.preferences || [];
-      
-      // 3. Check if they have the target seat in their bid log
-      const hasBidForTarget = pPrefs.some(bid => 
-        String(bid.base).toUpperCase() === tBase && 
-        String(bid.seat).toUpperCase() === tSeat
-      );
-      
-      if (hasBidForTarget) {
-        seniorBidders++;
-        listHtml += `<div style="padding:6px 0; border-bottom: 1px solid #1e293b;">
-          <b style="color:var(--accent)">#${pSen}</b> - ${pilot.name.split(',')[0]}
-        </div>`;
-      }
+    // 2. Match name/id to Preferences
+    const pPrefsData = preferences[pId] || preferences[pSen] || preferences[String(pSen)];
+    const pPrefsList = pPrefsData?.preferences || [];
+    
+    // 3. Match Target from Preferences
+    const wantsTarget = pPrefsList.some(bid => 
+      String(bid.base).toUpperCase() === tBase && 
+      String(bid.seat).toUpperCase() === tSeat
+    );
+    
+    if (wantsTarget) {
+      countAhead++;
+      listHtml += `<div style="padding:6px 0; border-bottom: 1px solid #1e293b;">
+        <b style="color:var(--accent)">#${pSen}</b> - ${p.name}
+      </div>`;
     }
   });
 
-  // 4. Update the UI with the final count
   document.getElementById('results').style.display = 'block';
   document.getElementById('queueOutput').innerHTML = `
     <div class="queue-card">
       <div style="font-size:12px; color:var(--text-muted); margin-bottom:5px;">SENIOR PILOTS BIDDING ${tBase} ${tSeat}</div>
-      <div class="queue-val">${seniorBidders}</div>
+      <div class="queue-val">${countAhead}</div>
       <div style="font-size:14px; margin-top:10px; line-height:1.6;">
-        You are <b style="color:white">#${seniorBidders + 1}</b> in the seniority queue.<br>
-        You need <b style="color:var(--warning)">${seniorBidders + 1}</b> vacancies to open up or people to move to hold it.
+        Current Line Position: <b style="color:white">#${countAhead + 1}</b><br>
+        Required moves to hold: <b style="color:var(--warning)">${countAhead + 1}</b>
       </div>
     </div>`;
   
-  document.getElementById('seniorList').innerHTML = listHtml || "No senior pilots found bidding this seat.";
+  document.getElementById('seniorList').innerHTML = listHtml || "No senior bidders found matching your target.";
 }
 
 loadData();
