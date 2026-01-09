@@ -3,63 +3,55 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>ProTrace - Base Queue Tracker</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <title>ProTrace - Seniority Queue</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg-app: #0f172a; --bg-panel: #1e293b; --bg-input: #020617;
-      --border: #334155; --text-main: #f1f5f9; --text-muted: #94a3b8;
-      --accent: #3b82f6; --success: #22c55e; --danger: #ef4444;
+    :root { 
+      --bg-app: #0f172a; --bg-panel: #1e293b; --bg-input: #020617; 
+      --border: #334155; --text-main: #f1f5f9; --text-muted: #94a3b8; 
+      --accent: #3b82f6; --danger: #ef4444; --success: #22c55e;
     }
     body { margin: 0; background: var(--bg-app); color: var(--text-main); font-family: 'Inter', sans-serif; display: flex; height: 100vh; overflow: hidden; }
     
-    /* Sidebar Styling */
-    .sidebar { width: 350px; background: var(--bg-panel); border-right: 1px solid var(--border); padding: 24px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
-    .logo { font-weight: 800; font-size: 20px; color: var(--accent); margin-bottom: 10px; }
-    
-    .file-input-wrapper { background: rgba(59, 130, 246, 0.1); border: 2px dashed var(--accent); padding: 15px; border-radius: 8px; text-align: center; cursor: pointer; }
-    .file-input-wrapper:hover { background: rgba(59, 130, 246, 0.2); }
+    .sidebar { width: 340px; background: var(--bg-panel); border-right: 1px solid var(--border); padding: 24px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
+    .logo { font-weight: 800; font-size: 22px; color: var(--accent); letter-spacing: -1px; margin-bottom: 10px; }
     
     .input-group { display: flex; flex-direction: column; gap: 8px; }
-    label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    input, select { background: var(--bg-input); border: 1px solid var(--border); color: white; padding: 12px; border-radius: 6px; font-size: 14px; outline: none; }
+    label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+    input, select { background: var(--bg-input); border: 1px solid var(--border); color: white; padding: 12px; border-radius: 6px; font-size: 14px; outline: none; transition: border 0.2s; }
+    input:focus { border-color: var(--accent); }
     
-    button.analyze-btn { background: var(--accent); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 700; cursor: pointer; margin-top: 10px; transition: 0.2s; }
-    button.analyze-btn:disabled { background: #334155; cursor: not-allowed; opacity: 0.5; }
+    button { background: var(--accent); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; cursor: pointer; margin-top: 10px; }
+    button:hover { filter: brightness(1.1); }
 
-    /* Main Area Styling */
     .main { flex: 1; padding: 40px; display: flex; align-items: center; justify-content: center; }
-    .card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 12px; padding: 40px; width: 100%; max-width: 650px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); text-align: center; }
+    .card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 16px; padding: 40px; max-width: 650px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
     
-    .queue-msg { font-size: 26px; font-weight: 600; line-height: 1.4; color: var(--text-main); }
+    .queue-msg { font-size: 26px; font-weight: 600; line-height: 1.5; color: var(--text-main); }
     .queue-msg b { color: var(--accent); }
     .highlight-red { color: var(--danger); font-weight: 800; text-decoration: underline; }
     .highlight-green { color: var(--success); font-weight: 800; }
 
-    .sub-data { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: space-around; font-size: 13px; color: var(--text-muted); }
-    .sub-data b { color: white; }
+    .meta { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: center; gap: 40px; font-size: 13px; color: var(--text-muted); }
+    .meta b { color: white; font-family: 'JetBrains Mono'; }
+
+    .loader { position: fixed; inset: 0; background: var(--bg-app); display: flex; align-items: center; justify-content: center; z-index: 100; font-weight: 600; }
   </style>
 </head>
 <body>
 
+  <div id="loadingScreen" class="loader">Fetching Roster & Preferences...</div>
+
   <div class="sidebar">
-    <div class="logo">PROTRACE v2</div>
+    <div class="logo">PROTRACE</div>
     
     <div class="input-group">
-      <label>1. Setup Data</label>
-      <div class="file-input-wrapper" onclick="document.getElementById('fileInput').click()">
-        <span id="fileStatus">Click to select 3 JSON files<br><small>(Roster, Preferences, Capacities)</small></span>
-        <input type="file" id="fileInput" multiple accept=".json" style="display:none" onchange="handleFiles(this.files)">
-      </div>
+      <label>Pilot Seniority #</label>
+      <input type="text" id="pilotSearch" placeholder="Ex: 3388" value="3388">
     </div>
 
     <div class="input-group">
-      <label>2. Find Pilot (Seniority #)</label>
-      <input type="text" id="pilotSearch" placeholder="Ex: 3388" autocomplete="off">
-    </div>
-
-    <div class="input-group">
-      <label>3. Target Base</label>
+      <label>Target Base</label>
       <select id="targetBase">
         <option value="ANC">ANC</option>
         <option value="LAX">LAX</option>
@@ -71,63 +63,54 @@
     </div>
 
     <div class="input-group">
-      <label>4. Target Seat</label>
+      <label>Target Seat</label>
       <select id="targetSeat">
         <option value="CA">Captain (CA)</option>
         <option value="FO">First Officer (FO)</option>
       </select>
     </div>
 
-    <button id="analyzeBtn" class="analyze-btn" onclick="runAnalysis()" disabled>Load Files First</button>
+    <button onclick="runAnalysis()">Run Base Analysis</button>
   </div>
 
   <div class="main">
     <div id="results" class="card" style="display:none;">
-      <div id="pilotHeader" style="font-size: 12px; color: var(--accent); font-weight: 800; letter-spacing: 1px; margin-bottom: 15px; text-transform: uppercase;">ANALYSIS COMPLETE</div>
-      <div id="queueMessage" class="queue-msg">
-        </div>
+      <div id="statusOutput" class="queue-msg"></div>
       
-      <div class="sub-data">
-        <div>Search Pilot: <b id="resName">-</b></div>
-        <div>Seniority: <b id="resSen">-</b></div>
-        <div>New Openings: <b id="resDelta">-</b></div>
+      <div class="meta">
+        <div>Pilot: <b id="resName">-</b></div>
+        <div>Sen: <b id="resSen">-</b></div>
+        <div>Base Delta: <b id="resDelta">-</b></div>
       </div>
     </div>
-
-    <div id="placeholder" style="color: var(--text-muted); text-align: center;">
-      <h3>Awaiting Data</h3>
-      <p>Please load your JSON files in the sidebar to begin.</p>
-    </div>
+    
+    <div id="intro" style="color:var(--text-muted);">Enter a Seniority number to see your position.</div>
   </div>
 
   <script>
-    let ROSTER = null;
-    let PREFS = null;
-    let CAPACITIES = null;
+    let ROSTER = [];
+    let PREFS = {};
+    let CAPACITIES = [];
 
-    // This handles the user selecting their 3 files
-    function handleFiles(files) {
-      if (files.length < 3) {
-        alert("Please select all 3 files: roster.json, preferences.json, and capacities.json.");
-        return;
+    // Automatically fetch files from your directory
+    async function init() {
+      try {
+        const [r, p, c] = await Promise.all([
+          fetch('roster.json').then(res => res.json()),
+          fetch('preferences.json').then(res => res.json()),
+          fetch('capacities.json').then(res => res.json())
+        ]);
+        ROSTER = r;
+        PREFS = p;
+        CAPACITIES = c;
+        document.getElementById('loadingScreen').style.display = 'none';
+      } catch (err) {
+        document.getElementById('loadingScreen').innerHTML = 
+          `<div style="text-align:center; color:var(--danger);">
+            <b>Error loading data files.</b><br>
+            Ensure roster.json, preferences.json, and capacities.json are in this folder.
+          </div>`;
       }
-
-      Array.from(files).forEach(file => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const data = JSON.parse(e.target.result);
-          if (Array.isArray(data) && data[0].sen) ROSTER = data;
-          else if (Array.isArray(data) && data[0].delta !== undefined) CAPACITIES = data;
-          else if (typeof data === 'object') PREFS = data;
-
-          if (ROSTER && PREFS && CAPACITIES) {
-            document.getElementById('fileStatus').innerHTML = "<span style='color:var(--success)'>✓ All Files Loaded</span>";
-            document.getElementById('analyzeBtn').disabled = false;
-            document.getElementById('analyzeBtn').innerText = "Update Base Analysis";
-          }
-        };
-        reader.readAsText(file);
-      });
     }
 
     function runAnalysis() {
@@ -135,59 +118,58 @@
       const tBase = document.getElementById('targetBase').value;
       const tSeat = document.getElementById('targetSeat').value;
 
-      if (!query) { alert("Please enter a seniority number."); return; }
-
-      // 1. Find the target pilot in roster.json
+      // 1. Find the target pilot
       const user = ROSTER.find(p => p.sen.toString() === query);
-      if (!user) { alert("Pilot not found in roster."); return; }
+      if (!user) { alert("Pilot not found."); return; }
 
-      // 2. Filter for senior pilots (lower sen number)
-      const seniorPilots = ROSTER.filter(p => p.sen < user.sen);
-
+      // 2. Count senior pilots who prefer target over current seat
       let seniorCompetitors = 0;
-      seniorPilots.forEach(p => {
-        const prefData = PREFS[p.id];
-        if (!prefData || !prefData.preferences) return;
+      ROSTER.forEach(p => {
+        if (p.sen < user.sen) {
+          const prefData = PREFS[p.id];
+          if (!prefData || !prefData.preferences) return;
 
-        const curBase = p.current.base;
-        const curSeat = p.current.seat;
+          const curBase = p.current.base;
+          const curSeat = p.current.seat;
 
-        // Check if they want target base more than their current one
-        for (let pref of prefData.preferences) {
-          const parts = pref.split(' ');
-          const pBase = parts[1];
-          const pSeat = parts[2];
+          for (let bid of prefData.preferences) {
+            // preferences.json format: "73G SEA CA"
+            const parts = bid.split(' '); 
+            const bBase = parts[1];
+            const bSeat = parts[2];
 
-          if (pBase === tBase && pSeat === tSeat) {
-            seniorCompetitors++;
-            break;
+            if (bBase === tBase && bSeat === tSeat) {
+              seniorCompetitors++;
+              break;
+            }
+            // If they hit their current assignment first, they stay there
+            if (bBase === curBase && bSeat === curSeat) break;
           }
-          if (pBase === curBase && pSeat === curSeat) break;
         }
       });
 
-      // 3. Get Capacity openings (delta)
-      const capInfo = CAPACITIES.find(c => c.base === tBase && c.seat === tSeat) || { delta: 0 };
-      const delta = capInfo.delta;
+      // 3. Get capacity delta from capacities.json
+      const cap = CAPACITIES.find(c => c.base === tBase && c.seat === tSeat) || { delta: 0 };
+      
+      const totalInLine = seniorCompetitors + 1; // Senior pilots + the searched pilot
+      const diff = totalInLine - cap.delta;
 
-      // 4. Calculate logic requested: Total in line vs openings needed
-      const totalInLine = seniorCompetitors + 1; // Senior pilots + the pilot themselves
-      const needed = totalInLine - delta;
-
-      // 5. Update UI
-      document.getElementById('placeholder').style.display = 'none';
+      // 4. Update UI
+      document.getElementById('intro').style.display = 'none';
       document.getElementById('results').style.display = 'block';
       document.getElementById('resName').textContent = user.name.split(',')[0];
       document.getElementById('resSen').textContent = "#" + user.sen;
-      document.getElementById('resDelta').textContent = delta;
+      document.getElementById('resDelta').textContent = cap.delta;
 
-      const msgEl = document.getElementById('queueMessage');
-      if (needed <= 0) {
-        msgEl.innerHTML = `There are <b>${totalInLine}</b> people in line for that base.<br><span class="highlight-green">You are projected to get in!</span>`;
+      const output = document.getElementById('statusOutput');
+      if (diff <= 0) {
+        output.innerHTML = `There are <b>${totalInLine}</b> people in line for that base.<br><span class="highlight-green">You are projected to get in!</span>`;
       } else {
-        msgEl.innerHTML = `There are <b>${totalInLine}</b> people in line for that base. You'll need <span class="highlight-red">${needed} more openings</span> or <span class="highlight-red">${needed} people to leave</span>.`;
+        output.innerHTML = `There are <b>${totalInLine}</b> people in line for that base. You'll need <span class="highlight-red">${diff} more openings</span> or <span class="highlight-red">${diff} people to leave</span>.`;
       }
     }
+
+    init();
   </script>
 </body>
 </html>
