@@ -8,202 +8,130 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
 
   <style>
-    :root {
-      --bg-app: #0f172a; --bg-panel: #1e293b; --bg-input: #020617;
-      --border: #334155; --text-main: #f1f5f9; --text-muted: #94a3b8;
-      --accent: #3b82f6; --danger: #ef4444; --success: #22c55e;
+    :root{
+      --bg-app:#0f172a; --bg-panel:#1e293b; --bg-input:#020617;
+      --border:#334155; --text-main:#f1f5f9; --text-muted:#94a3b8;
+      --accent:#3b82f6; --danger:#ef4444; --success:#22c55e;
     }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: var(--bg-app);
-      color: var(--text-main);
-      font-family: 'Inter', sans-serif;
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
-    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg-app);color:var(--text-main);font-family:Inter,sans-serif;display:flex;height:100vh;overflow:hidden}
+    .sidebar{width:400px;background:var(--bg-panel);border-right:1px solid var(--border);padding:24px;display:flex;flex-direction:column;gap:16px;overflow-y:auto}
+    .logo{font-weight:900;font-size:22px;color:var(--accent);letter-spacing:-1px}
+    .sub{font-size:13px;color:var(--text-muted);line-height:1.45;margin-top:-6px}
+    .sub b{color:#fff}
+    .input-group{display:flex;flex-direction:column;gap:8px}
+    label{font-size:11px;font-weight:900;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em}
+    input,select{background:var(--bg-input);border:1px solid var(--border);color:#fff;padding:12px;border-radius:12px;font-size:14px;outline:none}
+    input:focus,select:focus{border-color:var(--accent)}
+    button{background:var(--accent);color:#fff;border:none;padding:14px;border-radius:14px;font-weight:900;cursor:pointer;letter-spacing:.02em}
+    button:hover{filter:brightness(1.06)}
+    button:active{transform:translateY(1px)}
+    .mini{font-size:12px;color:var(--text-muted);border:1px dashed var(--border);border-radius:14px;padding:12px;line-height:1.5}
+    .mini b{color:#fff}
 
-    .sidebar {
-      width: 380px;
-      background: var(--bg-panel);
-      border-right: 1px solid var(--border);
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      overflow-y: auto;
-    }
-    .logo {
-      font-weight: 900;
-      font-size: 22px;
-      color: var(--accent);
-      letter-spacing: -1px;
-      margin-bottom: 2px;
-    }
-    .sub {
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.45;
-      margin-top: -8px;
-    }
-    .sub b { color: white; }
+    .main{flex:1;padding:28px;display:flex;align-items:center;justify-content:center}
+    .card{background:var(--bg-panel);border:1px solid var(--border);border-radius:18px;padding:28px;width:min(980px,100%);text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+    .title{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);font-weight:900;margin-bottom:10px}
+    .queue-msg{font-size:26px;font-weight:650;line-height:1.5;margin:0}
+    .queue-msg b{color:var(--accent)}
+    .highlight-red{color:var(--danger);font-weight:900;text-decoration:underline}
+    .highlight-green{color:var(--success);font-weight:900}
 
-    .input-group { display: flex; flex-direction: column; gap: 8px; }
-    label { font-size: 11px; font-weight: 900; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; }
-    input, select {
-      background: var(--bg-input);
-      border: 1px solid var(--border);
-      color: white;
-      padding: 12px;
-      border-radius: 12px;
-      font-size: 14px;
-      outline: none;
-      transition: border 0.15s, transform 0.05s;
+    .meta{
+      margin-top:18px;padding-top:16px;border-top:1px solid var(--border);
+      display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:12px;
+      font-size:13px;color:var(--text-muted);text-align:left
     }
-    input:focus, select:focus { border-color: var(--accent); }
+    .meta .box{background:rgba(2,6,23,.45);border:1px solid var(--border);border-radius:14px;padding:12px}
+    .meta .k{font-size:11px;text-transform:uppercase;letter-spacing:.10em;margin-bottom:6px;color:var(--text-muted);font-weight:900}
+    .meta b{color:#fff;font-family:"JetBrains Mono",monospace;font-size:13px}
 
-    button {
-      background: var(--accent);
-      color: white;
-      border: none;
-      padding: 14px;
-      border-radius: 14px;
-      font-weight: 900;
-      cursor: pointer;
-      letter-spacing: .02em;
-      margin-top: 6px;
+    .listWrap{
+      margin-top:18px;
+      text-align:left;
+      border-top:1px solid var(--border);
+      padding-top:16px;
     }
-    button:hover { filter: brightness(1.06); }
-    button:active { transform: translateY(1px); }
+    .listHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:10px;
+    }
+    .listHeader .h{
+      font-size:12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--text-muted);
+      font-weight:900;
+    }
+    .toggle{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:var(--text-muted);
+      font-size:13px;
+      user-select:none;
+    }
+    .toggle input{width:16px;height:16px}
+    table{width:100%;border-collapse:separate;border-spacing:0 10px}
+    thead th{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.10em;
+      color:var(--text-muted);
+      font-weight:900;
+      text-align:left;
+      padding:0 10px;
+    }
+    tbody tr{
+      background:rgba(2,6,23,.45);
+      border:1px solid var(--border);
+    }
+    tbody td{
+      padding:10px;
+      border-top:1px solid var(--border);
+      border-bottom:1px solid var(--border);
+      color:#e2e8f0;
+      font-size:13px;
+    }
+    tbody tr td:first-child{
+      border-left:1px solid var(--border);
+      border-top-left-radius:12px;
+      border-bottom-left-radius:12px;
+      font-family:"JetBrains Mono",monospace;
+    }
+    tbody tr td:last-child{
+      border-right:1px solid var(--border);
+      border-top-right-radius:12px;
+      border-bottom-right-radius:12px;
+    }
+    .muted{color:var(--text-muted)}
+    .mono{font-family:"JetBrains Mono",monospace}
 
-    .mini {
-      font-size: 12px;
-      color: var(--text-muted);
-      border: 1px dashed var(--border);
-      border-radius: 14px;
-      padding: 12px;
-      line-height: 1.5;
-    }
-    .mini b { color: white; }
+    .loader{position:fixed;inset:0;background:var(--bg-app);display:flex;align-items:center;justify-content:center;z-index:100;padding:24px;text-align:center}
+    .errbox{width:min(980px,100%);background:#0b1220;border:1px solid #334155;border-radius:16px;padding:18px;text-align:left}
+    .errtitle{color:var(--danger);font-weight:900;margin-bottom:10px}
+    .errmono{font-family:"JetBrains Mono",monospace;font-size:12px;color:#cbd5e1;white-space:pre-wrap;line-height:1.45}
+    .hint{margin-top:12px;color:var(--text-muted);font-size:13px}
+    .hint code{font-family:"JetBrains Mono",monospace;color:#e2e8f0;font-size:12px}
 
-    .main {
-      flex: 1;
-      padding: 34px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .card {
-      background: var(--bg-panel);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 34px;
-      width: min(920px, 100%);
-      text-align: center;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-    }
-
-    .title {
-      font-size: 12px;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      font-weight: 900;
-      margin-bottom: 10px;
-    }
-
-    .queue-msg {
-      font-size: 26px;
-      font-weight: 650;
-      line-height: 1.5;
-      color: var(--text-main);
-      margin: 0;
-    }
-    .queue-msg b { color: var(--accent); }
-    .highlight-red { color: var(--danger); font-weight: 900; text-decoration: underline; }
-    .highlight-green { color: var(--success); font-weight: 900; }
-
-    .meta {
-      margin-top: 22px;
-      padding-top: 18px;
-      border-top: 1px solid var(--border);
-      display: grid;
-      grid-template-columns: repeat(4, minmax(140px, 1fr));
-      gap: 14px;
-      font-size: 13px;
-      color: var(--text-muted);
-      text-align: left;
-    }
-    .meta .box {
-      background: rgba(2,6,23,.45);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 12px;
-    }
-    .meta b {
-      color: white;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      word-break: break-word;
-    }
-    .meta .k {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .10em;
-      margin-bottom: 6px;
-      color: var(--text-muted);
-      font-weight: 900;
-    }
-
-    .loader {
-      position: fixed; inset: 0;
-      background: var(--bg-app);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      padding: 24px;
-      text-align: center;
-    }
-    .errbox {
-      width: min(920px, 100%);
-      background: #0b1220;
-      border: 1px solid #334155;
-      border-radius: 16px;
-      padding: 18px;
-      text-align: left;
-    }
-    .errtitle { color: var(--danger); font-weight: 900; margin-bottom: 10px; }
-    .errmono {
-      font-family: 'JetBrains+Mono', monospace;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: #cbd5e1;
-      white-space: pre-wrap;
-      line-height: 1.45;
-    }
-    .hint { margin-top: 12px; color: var(--text-muted); font-size: 13px; }
-    .hint code { font-family: 'JetBrains Mono', monospace; color: #e2e8f0; font-size: 12px; }
-
-    @media (max-width: 980px) {
-      body { flex-direction: column; height: auto; overflow: auto; }
-      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
-      .main { padding: 18px; }
-      .meta { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
+    @media (max-width: 980px){
+      body{flex-direction:column;height:auto;overflow:auto}
+      .sidebar{width:100%;border-right:none;border-bottom:1px solid var(--border)}
+      .main{padding:16px}
+      .meta{grid-template-columns:repeat(2,minmax(150px,1fr))}
     }
   </style>
 
   <script>
-    // GitHub Pages project-site trap fix:
-    // If you open /repo (no trailing slash), relative fetch('roster.json') resolves to /roster.json instead of /repo/roster.json.
-    (function forceTrailingSlash() {
+    // GitHub Pages project-site trap fix: /repo vs /repo/
+    (function forceTrailingSlash(){
       const p = location.pathname;
       const last = p.split('/').pop() || '';
       const looksLikeFile = last.includes('.');
-      if (!looksLikeFile && !p.endsWith('/')) {
-        location.replace(p + '/' + location.search + location.hash);
-      }
+      if (!looksLikeFile && !p.endsWith('/')) location.replace(p + '/' + location.search + location.hash);
     })();
   </script>
 </head>
@@ -216,15 +144,15 @@
   <div class="sidebar">
     <div class="logo">PROTRACE</div>
     <div class="sub">
-      This is a <b>what-if</b> tool for pilots <b>outside</b> their desired base/seat.<br>
-      It computes the “moving line” ahead of you based on bid order rules:
-      a senior pilot counts only if they hit <b>Target</b> before their <b>Current</b>.
+      “In line” = senior pilots who would <b>actually move</b> to the target based on bid order:
+      they hit <b>Target</b> before <b>Current</b>.<br>
+      Also: if a pilot’s <b>only preference</b> is their <b>current base/seat</b>, they are ignored.
       Pilots already holding the target are <b>not counted</b>.
     </div>
 
     <div class="input-group">
       <label>Pilot Seniority #</label>
-      <input type="text" id="pilotSearch" placeholder="Ex: 2670">
+      <input type="text" id="pilotSearch" placeholder="Ex: 257">
     </div>
 
     <div class="input-group">
@@ -258,7 +186,7 @@
       <b>Interpretation:</b><br>
       • <b>Your position</b> = (# senior competitors) + 1 (you).<br>
       • You “clear” if <b>openings ≥ your position</b>.<br>
-      • If you already hold the target, we say so and stop.
+      • Names list shows <b>who</b> is counted ahead of you.
     </div>
   </div>
 
@@ -302,6 +230,30 @@
           <div><b id="resClear">-</b></div>
         </div>
       </div>
+
+      <div class="listWrap">
+        <div class="listHeader">
+          <div class="h">Who’s ahead of you in the moving line</div>
+          <label class="toggle">
+            <input type="checkbox" id="showAllRows">
+            Show non-competitors (debug)
+          </label>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Sen</th>
+              <th>Name</th>
+              <th>Current</th>
+              <th>Why counted / skipped</th>
+            </tr>
+          </thead>
+          <tbody id="competitorRows">
+            <tr><td colspan="4" class="muted">Run a query to see names…</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div id="intro" class="card" style="background: transparent; border: 1px dashed var(--border); box-shadow: none;">
@@ -313,45 +265,34 @@
   </div>
 
   <script>
-    // Data
     let ROSTER = [];
     let PREFS = {};
 
-    // Resolve JSON relative to the directory containing this page (GitHub Pages-safe)
-    function dirBaseUrl() {
+    function dirBaseUrl(){
       const u = new URL(location.href);
       if (!u.pathname.endsWith('/')) u.pathname = u.pathname.replace(/\/[^/]*$/, '/');
       return u.toString();
     }
 
-    async function fetchJsonStrict(filename) {
+    async function fetchJsonStrict(filename){
       const url = new URL(filename, dirBaseUrl()).toString();
       const res = await fetch(url, { cache: "no-store" });
-
-      if (!res.ok) {
-        const body = await res.text().catch(() => "");
-        throw new Error(
-          `HTTP ${res.status} while loading ${filename}\nURL: ${url}\n` +
-          (body ? `Body (first 300 chars):\n${body.slice(0, 300)}` : "")
-        );
+      if (!res.ok){
+        const body = await res.text().catch(()=> "");
+        throw new Error(`HTTP ${res.status} while loading ${filename}\nURL: ${url}\n` + (body ? `Body (first 300 chars):\n${body.slice(0,300)}` : ""));
       }
-
       const raw = await res.text();
-      try {
-        return JSON.parse(raw);
-      } catch (e) {
-        throw new Error(
-          `Invalid JSON in ${filename}\nURL: ${url}\nParse error: ${e.message}\n` +
-          `First 300 chars:\n${raw.slice(0, 300)}`
-        );
+      try { return JSON.parse(raw); }
+      catch(e){
+        throw new Error(`Invalid JSON in ${filename}\nURL: ${url}\nParse error: ${e.message}\nFirst 300 chars:\n${raw.slice(0,300)}`);
       }
     }
 
-    function escapeHtml(s) {
-      return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    function escapeHtml(s){
+      return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
     }
 
-    function showError(err) {
+    function showError(err){
       const loading = document.getElementById('loadingScreen');
       loading.innerHTML = `
         <div class="errbox">
@@ -372,121 +313,169 @@
     // preferences.json can be either:
     //  - { "pil123": { "preferences": [...] } }
     //  - { "pil123": { "preferences": { "preferences": [...] } } }
-    function normalizePrefsEntry(prefEntry) {
+    function normalizePrefsEntry(prefEntry){
       if (!prefEntry) return null;
       if (Array.isArray(prefEntry.preferences)) return prefEntry.preferences;
       if (prefEntry.preferences && Array.isArray(prefEntry.preferences.preferences)) return prefEntry.preferences.preferences;
       return null;
     }
 
-    // Accept "73G SEA CA" or "737 SEA CA"
-    function parseBidString(bid) {
+    // Accept "73G SEA CA" or "737 SEA CA" or "SEA CA"
+    function parseBidString(bid){
       const parts = String(bid || "").trim().split(/\s+/);
       if (parts.length === 3) return { equip: parts[0], base: parts[1], seat: parts[2] };
       if (parts.length === 2) return { equip: null, base: parts[0], seat: parts[1] };
       return { equip: null, base: null, seat: null };
     }
 
-    function fmtCur(p) {
+    function fmtCur(p){
       const c = p.current || {};
       const eq = c.equip ? String(c.equip) + " " : "";
       return `${eq}${c.base || "?"} ${c.seat || "?"}`.trim();
     }
 
-    function setText(id, value) {
-      document.getElementById(id).textContent = value;
-    }
-
-    function showResults() {
+    function showResults(){
       document.getElementById('intro').style.display = 'none';
       document.getElementById('results').style.display = 'block';
     }
 
-    // CORE COMPETITOR LOGIC:
-    // Count a senior pilot as a competitor ONLY if:
-    //   1) They are senior to the user
-    //   2) They do NOT already hold the target base/seat
-    //   3) Their preference list hits TARGET base+seat BEFORE their CURRENT base+seat
-    //      (If they hit current first, they "stick" and should NOT be counted for anything below)
-    function countSeniorCompetitors(userSen, tBase, tSeat) {
-      let count = 0;
-
-      for (const p of ROSTER) {
-        if (Number(p.sen) >= userSen) continue;
-
-        // Key rule you asked for:
-        // If they're already in the target, they are not competing for it.
-        if (p.current?.base === tBase && p.current?.seat === tSeat) continue;
-
-        const prefList = normalizePrefsEntry(PREFS[p.id]);
-        if (!prefList) continue;
-
-        const curBase = p.current?.base;
-        const curSeat = p.current?.seat;
-
-        let isCompetitor = false;
-
-        for (const bid of prefList) {
-          const b = parseBidString(bid);
-          if (!b.base || !b.seat) continue;
-
-          // Stop at current: they hold it and won't go below it
-          if (b.base === curBase && b.seat === curSeat) {
-            isCompetitor = false;
-            break;
-          }
-
-          // Target before current => true competitor
-          if (b.base === tBase && b.seat === tSeat) {
-            isCompetitor = true;
-            break;
-          }
-        }
-
-        if (isCompetitor) count++;
-      }
-
-      return count;
+    function setText(id, value){
+      document.getElementById(id).textContent = value;
     }
 
-    function runAnalysis() {
+    // NEW: collapse prefs down to unique base+seat pairs (ignore equipment)
+    function uniqueBaseSeatPairs(prefList){
+      const set = new Set();
+      for (const bid of prefList){
+        const b = parseBidString(bid);
+        if (!b.base || !b.seat) continue;
+        set.add(`${b.base}|${b.seat}`);
+      }
+      return set;
+    }
+
+    // Decide if a given pilot is a competitor for target given your rules.
+    // Returns { isCompetitor: boolean, reason: string }
+    function competitorDecision(p, tBase, tSeat){
+      const curBase = p.current?.base;
+      const curSeat = p.current?.seat;
+
+      // Rule: already holding target => not competing for it
+      if (curBase === tBase && curSeat === tSeat){
+        return { isCompetitor: false, reason: "SKIP: already holds target" };
+      }
+
+      const prefList = normalizePrefsEntry(PREFS[p.id]);
+      if (!prefList || prefList.length === 0){
+        return { isCompetitor: false, reason: "SKIP: no preferences" };
+      }
+
+      // Rule you asked for:
+      // If their ONLY preference (unique base/seat) is their CURRENT base/seat, ignore them.
+      const pairs = uniqueBaseSeatPairs(prefList);
+      if (pairs.size === 1 && pairs.has(`${curBase}|${curSeat}`)){
+        return { isCompetitor: false, reason: "SKIP: only preference is current" };
+      }
+
+      // Movement logic:
+      // Count only if TARGET appears BEFORE CURRENT in their preference order.
+      for (const bid of prefList){
+        const b = parseBidString(bid);
+        if (!b.base || !b.seat) continue;
+
+        if (b.base === curBase && b.seat === curSeat){
+          return { isCompetitor: false, reason: "SKIP: hits current before target" };
+        }
+        if (b.base === tBase && b.seat === tSeat){
+          return { isCompetitor: true, reason: "COUNT: hits target before current" };
+        }
+      }
+
+      // If neither current nor target appear, we treat as non-competitor
+      return { isCompetitor: false, reason: "SKIP: target not found (or current missing)" };
+    }
+
+    function renderCompetitorTable(rows, showAll){
+      const tbody = document.getElementById('competitorRows');
+      tbody.innerHTML = "";
+
+      const filtered = showAll ? rows : rows.filter(r => r.isCompetitor);
+
+      if (filtered.length === 0){
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td colspan="4" class="muted">No competitors found under current rules.</td>`;
+        tbody.appendChild(tr);
+        return;
+      }
+
+      for (const r of filtered){
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="mono">${r.sen}</td>
+          <td>${escapeHtml(r.name)}</td>
+          <td class="mono">${escapeHtml(r.current)}</td>
+          <td class="${r.isCompetitor ? '' : 'muted'}">${escapeHtml(r.reason)}</td>
+        `;
+        tbody.appendChild(tr);
+      }
+    }
+
+    function runAnalysis(){
       const query = document.getElementById('pilotSearch').value.trim();
       const tBase = document.getElementById('targetBase').value;
       const tSeat = document.getElementById('targetSeat').value;
-
       const openings = Math.max(0, Number(document.getElementById('openings').value || 0));
+      const showAll = document.getElementById('showAllRows').checked;
 
-      if (!query) { alert("Enter a seniority number."); return; }
-
+      if (!query){ alert("Enter a seniority number."); return; }
       const user = ROSTER.find(p => String(p.sen) === query);
-      if (!user) { alert("Pilot not found in roster.json."); return; }
+      if (!user){ alert("Pilot not found in roster.json."); return; }
 
       const userSen = Number(user.sen);
 
       showResults();
-
-      // Header fields
       setText('resName', (String(user.name || "").split(',')[0] || "-"));
       setText('resSen', "#" + user.sen);
       setText('resCur', fmtCur(user));
       setText('resTgt', `${tBase} ${tSeat}`);
 
-      // This tool is for pilots OUTSIDE their desired base/seat.
-      if (user.current?.base === tBase && user.current?.seat === tSeat) {
+      // If user already holds target, this tool isn't applicable (as discussed)
+      if (user.current?.base === tBase && user.current?.seat === tSeat){
         setText('resSeniors', "—");
         setText('resPos', "—");
         setText('resOpen', String(openings));
         setText('resClear', "—");
-
         document.getElementById('statusOutput').innerHTML =
           `You already hold <b>${tBase} ${tSeat}</b>.<br>` +
-          `<span class="highlight-green">This tool is intended for “getting into” a new base/seat.</span>`;
-
+          `<span class="highlight-green">This tool is for “getting into” a new base/seat.</span>`;
+        document.getElementById('competitorRows').innerHTML =
+          `<tr><td colspan="4" class="muted">No moving line because you already hold the target.</td></tr>`;
         return;
       }
 
-      const seniorCompetitors = countSeniorCompetitors(userSen, tBase, tSeat);
-      const position = seniorCompetitors + 1; // seniors + you
+      // Build competitor decisions for all senior pilots
+      const rows = [];
+      let seniorCompetitors = 0;
+
+      for (const p of ROSTER){
+        if (Number(p.sen) >= userSen) continue;
+
+        const d = competitorDecision(p, tBase, tSeat);
+        if (d.isCompetitor) seniorCompetitors++;
+
+        rows.push({
+          sen: p.sen,
+          name: p.name || "",
+          current: fmtCur(p),
+          isCompetitor: d.isCompetitor,
+          reason: d.reason
+        });
+      }
+
+      // Sort rows by seniority (lowest number = most senior) for readability
+      rows.sort((a,b) => Number(a.sen) - Number(b.sen));
+
+      const position = seniorCompetitors + 1;
       const clears = openings >= position;
 
       setText('resSeniors', String(seniorCompetitors));
@@ -494,7 +483,9 @@
       setText('resOpen', String(openings));
       setText('resClear', clears ? "YES" : "NO");
 
-      if (clears) {
+      renderCompetitorTable(rows, showAll);
+
+      if (clears){
         document.getElementById('statusOutput').innerHTML =
           `There are <b>${position}</b> in the moving line for <b>${tBase} ${tSeat}</b> (including you).<br>` +
           `<span class="highlight-green">With ${openings} openings, you clear.</span>`;
@@ -506,26 +497,25 @@
       }
     }
 
-    async function init() {
-      try {
+    async function init(){
+      try{
         const [r, p] = await Promise.all([
           fetchJsonStrict('roster.json'),
           fetchJsonStrict('preferences.json')
         ]);
-
         ROSTER = Array.isArray(r) ? r : [];
         PREFS = (p && typeof p === "object") ? p : {};
-
         document.getElementById('loadingScreen').style.display = 'none';
-      } catch (err) {
+      } catch(err){
         showError(err);
       }
     }
 
-    // Wiring
     document.getElementById('runBtn').addEventListener('click', runAnalysis);
-    document.getElementById('pilotSearch').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') runAnalysis();
+    document.getElementById('pilotSearch').addEventListener('keydown', (e)=>{ if (e.key === 'Enter') runAnalysis(); });
+    document.getElementById('showAllRows').addEventListener('change', ()=> {
+      // re-run to refresh table view without making user click Run
+      if (document.getElementById('results').style.display === 'block') runAnalysis();
     });
 
     init();
