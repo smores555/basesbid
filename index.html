@@ -3,200 +3,159 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ProTrace – Seniority Queue</title>
+  <title>ProTrace Seniority Calculator</title>
   <style>
     :root {
-      --bg-app: #0b0f16; --bg-card: #121a27; --bg-input: #0d1420;
-      --border: rgba(255,255,255,.1); --accent: #2a66ff;
-      --text: #e8eefc; --success: #7dff9a; --danger: #ff7d7d;
+      --bg: #0b0f16; --card: #121a27; --accent: #2a66ff;
+      --text: #e8eefc; --border: rgba(255,255,255,.1);
     }
-    body { font-family: system-ui, sans-serif; margin: 0; background: var(--bg-app); color: var(--text); line-height: 1.5; }
-    .wrap { max-width: 1000px; margin: 0 auto; padding: 20px; }
-    .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
-    
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
-    
+    body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
     label { display: block; font-size: 11px; font-weight: 700; opacity: .6; text-transform: uppercase; margin-bottom: 8px; }
-    input, select, button { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,.15); background: var(--bg-input); color: white; font-size: 14px; }
-    button { cursor: pointer; background: var(--accent); border: none; font-weight: 800; margin-top: 10px; }
-
-    .stat-box { text-align: center; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 10px; border: 1px solid var(--border); }
-    .big-num { font-size: 32px; font-weight: 900; color: var(--accent); display: block; }
-    
+    input, select, button { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,.1); background: #0d1420; color: white; }
+    button { background: var(--accent); border: none; font-weight: 800; cursor: pointer; margin-top: 10px; }
+    .big-num { font-size: 36px; font-weight: 900; color: var(--accent); }
     table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 13px; text-align: left; }
-    th { background: rgba(255,255,255,0.05); color: var(--accent); text-transform: uppercase; font-size: 11px; }
-    
-    .ok { color: var(--success); font-weight: 700; }
-    .no { color: var(--danger); font-weight: 700; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); font-size: 13px; }
+    th { color: var(--accent); text-transform: uppercase; font-size: 11px; }
+    .status-pill { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; background: rgba(42, 102, 255, 0.2); }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div style="margin-bottom: 20px;">
-      <h1 style="margin:0;">ProTrace Base Analysis</h1>
-      <p style="margin:0; opacity:0.6;">Cross-referencing Roster (Current) with Preferences (Bids)</p>
+  <div class="container">
+    <div class="card">
+      <h2>ProTrace Analytics</h2>
+      <div class="grid">
+        <div>
+          <label>Your Seniority #</label>
+          <input id="senInput" type="number" placeholder="e.g. 2670">
+        </div>
+        <div>
+          <label>Target Base</label>
+          <select id="baseSelect">
+            <option value="ANC">ANC</option><option value="LAX">LAX</option>
+            <option value="PDX">PDX</option><option value="SAN">SAN</option>
+            <option value="SEA">SEA</option><option value="SFO">SFO</option>
+          </select>
+        </div>
+        <div>
+          <label>Target Seat</label>
+          <select id="seatSelect">
+            <option value="CA">Captain (CA)</option>
+            <option value="FO">First Officer (FO)</option>
+          </select>
+        </div>
+      </div>
+      <button id="calcBtn">Run Standing Analysis</button>
     </div>
 
     <div class="grid">
-      <div class="card">
-        <label>Your Seniority #</label>
-        <input id="seniorityInput" type="number" placeholder="e.g. 2670" style="margin-bottom:15px;">
-        
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
-          <div>
-            <label>Target Base</label>
-            <select id="targetBaseSelect">
-              <option value="ANC">ANC</option><option value="LAX">LAX</option>
-              <option value="PDX">PDX</option><option value="SAN">SAN</option>
-              <option value="SEA">SEA</option><option value="SFO">SFO</option>
-            </select>
-          </div>
-          <div>
-            <label>Target Seat</label>
-            <select id="targetSeatSelect">
-              <option value="CA">Captain (CA)</option>
-              <option value="FO">First Officer (FO)</option>
-            </select>
-          </div>
-        </div>
-        
-        <label>Openings</label>
-        <input id="openingsInput" type="number" value="0">
-        <button id="runBtn">Run Cross-Check</button>
+      <div class="card" style="text-align:center;">
+        <label>Numbers Away (Delta)</label>
+        <div id="deltaResult" class="big-num">-</div>
       </div>
-
-      <div class="card" style="display:flex; flex-direction:column; justify-content:center; gap:15px;">
-        <div class="grid" style="grid-template-columns: 1fr 1fr;">
-          <div class="stat-box">
-            <label>Position In Line</label>
-            <span id="yourPosition" class="big-num">-</span>
-          </div>
-          <div class="stat-box">
-            <label>Openings Required</label>
-            <span id="neededNum" class="big-num">-</span>
-          </div>
-        </div>
-        <div id="statusMsg" style="text-align:center; font-weight:600;"></div>
+      <div class="card" style="text-align:center;">
+        <label>Total In Line</label>
+        <div id="lineResult" class="big-num">-</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <label>Base Capacity Delta</label>
+        <div id="capResult" class="big-num">-</div>
       </div>
     </div>
 
     <div class="card">
-      <label>Queue Breakdown (Senior Competitors Only)</label>
+      <label>Senior Competitors (Who is cutting you?)</label>
       <table>
         <thead>
           <tr>
             <th>Sen</th>
             <th>Name</th>
-            <th>Roster Status</th>
+            <th>Current Status</th>
             <th>Bid Rank</th>
-            <th>Target Bid</th>
+            <th>Full Preference</th>
           </tr>
         </thead>
-        <tbody id="tableBody"></tbody>
+        <tbody id="competitorTable"></tbody>
       </table>
     </div>
   </div>
 
 <script>
-let ROSTER = [];
-let PREFS = {};
+let ROSTER = [], PREFS = {}, CAPACITIES = [];
 
-// Extracts current info from roster.json
-function getRosterStatus(p) {
-  if (!p) return "";
-  // Check common roster keys: base/seat or current.base/current.seat
-  const base = p.base || (p.current ? p.current.base : "");
-  const seat = p.seat || (p.current ? p.current.seat : "");
-  return `${String(base).trim()} ${String(seat).trim()}`;
+async function loadData() {
+  [ROSTER, PREFS, CAPACITIES] = await Promise.all([
+    fetch('./roster.json').then(res => res.json()),
+    fetch('./preferences.json').then(res => res.json()),
+    fetch('./capacities.json').then(res => res.json())
+  ]);
 }
 
-async function init() {
-  try {
-    const [r, p] = await Promise.all([
-      fetch('./roster.json').then(res => res.json()),
-      fetch('./preferences.json').then(res => res.json())
-    ]);
-    ROSTER = Array.isArray(r) ? r : Object.values(r);
-    PREFS = p;
-  } catch (e) {
-    alert("Error loading data files. Check filenames and console.");
-  }
-}
+function runAnalysis() {
+  const mySen = parseInt(document.getElementById("senInput").value);
+  const tBase = document.getElementById("baseSelect").value;
+  const tSeat = document.getElementById("seatSelect").value;
+  const target = `${tBase} ${tSeat}`;
 
-function run() {
-  const senInput = document.getElementById("seniorityInput").value;
-  const tBase = document.getElementById("targetBaseSelect").value;
-  const tSeat = document.getElementById("targetSeatSelect").value;
-  const openings = parseInt(document.getElementById("openingsInput").value || 0);
+  const user = ROSTER.find(p => parseInt(p.sen) === mySen);
+  if (!user) return alert("Pilot not found!");
 
-  const user = ROSTER.find(p => String(p.sen) === senInput);
-  if (!user) { alert("Pilot not found in roster!"); return; }
-
-  const uSen = parseInt(user.sen);
   const competitors = [];
+  ROSTER.forEach(p => {
+    const pSen = parseInt(p.sen);
+    if (pSen >= mySen) return;
 
-  ROSTER.forEach(pilot => {
-    const pSen = parseInt(pilot.sen);
-    if (pSen >= uSen) return; // Only competitors senior to you
+    const pPref = PREFS[`pil${pSen}`] || PREFS[pSen];
+    if (!pPref || !pPref.preferences) return;
 
-    // Cross-check: Look up this pilot in the preferences JSON
-    const pPrefObj = PREFS[`pil${pSen}`] || PREFS[pSen];
-    if (!pPrefObj || !pPrefObj.preferences) return;
+    const curBase = p.base || (p.current ? p.current.base : "");
+    const curSeat = p.seat || (p.current ? p.current.seat : "");
+    const curStatus = `${curBase} ${curSeat}`.trim();
 
-    // Get current status from Roster
-    const curStatus = getRosterStatus(pilot);
+    for (const bid of pPref.preferences) {
+      const bidStr = String(bid.bid || "");
+      const bidOrder = parseInt(bid.order);
 
-    // Scan their bids in order
-    for (const p of pPrefObj.preferences) {
-      const bidStr = String(p.bid || "").trim();
-      const bidOrder = parseInt(p.order);
-
-      // STAY RULE: If Order 1 is current status or blank, they stay
+      // Rule: If Order 1 is stay or empty, ignore pilot
       if (bidOrder === 1 && (bidStr === "" || bidStr.includes(curStatus))) break;
-
-      // COMPETITOR RULE: If bid contains target base + seat
+      
+      // Rule: If bid matches target and they don't already hold it
       if (bidStr.includes(tBase) && bidStr.includes(tSeat)) {
-        if (!bidStr.includes(curStatus)) { // Only count if they are actually changing status
-          competitors.push({
-            sen: pSen,
-            name: pilot.name,
-            current: curStatus,
-            order: bidOrder,
-            fullBid: bidStr
-          });
+        if (!bidStr.includes(curStatus)) {
+          competitors.push({ sen: pSen, name: p.name, current: curStatus, order: bidOrder, full: bidStr });
         }
-        break; // Stop looking after finding their first applicable bid
+        break;
       }
-
-      // STOP RULE: If they list their current position, they stop looking further down
+      
+      // Rule: Stop if they hit their current position in their list
       if (bidStr.includes(curStatus)) break;
     }
   });
 
-  // UI Updates
-  const pos = competitors.length + 1;
-  const needed = Math.max(0, pos - openings);
-  document.getElementById("yourPosition").textContent = pos;
-  document.getElementById("neededNum").textContent = needed;
-  
-  const msg = document.getElementById("statusMsg");
-  msg.innerHTML = needed === 0 ? `<span class="ok">Holdable (Pos ${pos})</span>` : `<span class="no">Not Holdable (Need ${needed} more)</span>`;
+  const capacity = CAPACITIES.find(c => c.base === tBase && c.seat === tSeat)?.delta || 0;
+  const totalInLine = competitors.length + 1;
+  const deltaAway = Math.max(0, totalInLine - capacity);
 
-  document.getElementById("tableBody").innerHTML = competitors.sort((a,b) => a.sen - b.sen).map(c => `
+  document.getElementById("lineResult").textContent = totalInLine;
+  document.getElementById("capResult").textContent = capacity;
+  document.getElementById("deltaResult").textContent = deltaAway;
+
+  document.getElementById("competitorTable").innerHTML = competitors.sort((a,b) => a.sen - b.sen).map(c => `
     <tr>
       <td>${c.sen}</td>
       <td>${c.name}</td>
-      <td>${c.current}</td>
+      <td><span class="status-pill">${c.current}</span></td>
       <td>#${c.order}</td>
-      <td>${c.fullBid}</td>
+      <td>${c.full}</td>
     </tr>
   `).join("");
 }
 
-document.getElementById("runBtn").addEventListener("click", run);
-init();
+document.getElementById("calcBtn").addEventListener("click", runAnalysis);
+loadData();
 </script>
 </body>
 </html>
