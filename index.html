@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>ProTrace - Seniority Queue</title>
+  <title>ProTrace - Moving Line (What-If)</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
 
@@ -25,7 +25,7 @@
     }
 
     .sidebar {
-      width: 360px;
+      width: 380px;
       background: var(--bg-panel);
       border-right: 1px solid var(--border);
       padding: 24px;
@@ -35,42 +35,44 @@
       overflow-y: auto;
     }
     .logo {
-      font-weight: 800;
+      font-weight: 900;
       font-size: 22px;
       color: var(--accent);
       letter-spacing: -1px;
-      margin-bottom: 6px;
+      margin-bottom: 2px;
     }
     .sub {
       font-size: 13px;
       color: var(--text-muted);
-      line-height: 1.4;
+      line-height: 1.45;
       margin-top: -8px;
     }
+    .sub b { color: white; }
 
     .input-group { display: flex; flex-direction: column; gap: 8px; }
-    label { font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; }
+    label { font-size: 11px; font-weight: 900; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; }
     input, select {
       background: var(--bg-input);
       border: 1px solid var(--border);
       color: white;
       padding: 12px;
-      border-radius: 10px;
+      border-radius: 12px;
       font-size: 14px;
       outline: none;
       transition: border 0.15s, transform 0.05s;
     }
     input:focus, select:focus { border-color: var(--accent); }
+
     button {
       background: var(--accent);
       color: white;
       border: none;
       padding: 14px;
-      border-radius: 12px;
+      border-radius: 14px;
       font-weight: 900;
       cursor: pointer;
-      margin-top: 6px;
       letter-spacing: .02em;
+      margin-top: 6px;
     }
     button:hover { filter: brightness(1.06); }
     button:active { transform: translateY(1px); }
@@ -79,9 +81,9 @@
       font-size: 12px;
       color: var(--text-muted);
       border: 1px dashed var(--border);
-      border-radius: 12px;
+      border-radius: 14px;
       padding: 12px;
-      line-height: 1.45;
+      line-height: 1.5;
     }
     .mini b { color: white; }
 
@@ -97,18 +99,18 @@
       border: 1px solid var(--border);
       border-radius: 18px;
       padding: 34px;
-      width: min(860px, 100%);
+      width: min(920px, 100%);
       text-align: center;
       box-shadow: 0 10px 40px rgba(0,0,0,0.5);
     }
 
     .title {
-      font-size: 14px;
-      letter-spacing: .12em;
+      font-size: 12px;
+      letter-spacing: .14em;
       text-transform: uppercase;
       color: var(--text-muted);
-      font-weight: 800;
-      margin-bottom: 8px;
+      font-weight: 900;
+      margin-bottom: 10px;
     }
 
     .queue-msg {
@@ -127,7 +129,7 @@
       padding-top: 18px;
       border-top: 1px solid var(--border);
       display: grid;
-      grid-template-columns: repeat(4, minmax(120px, 1fr));
+      grid-template-columns: repeat(4, minmax(140px, 1fr));
       gap: 14px;
       font-size: 13px;
       color: var(--text-muted);
@@ -139,8 +141,20 @@
       border-radius: 14px;
       padding: 12px;
     }
-    .meta b { color: white; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
-    .meta .k { font-size: 11px; text-transform: uppercase; letter-spacing: .10em; margin-bottom: 6px; color: var(--text-muted); font-weight: 800; }
+    .meta b {
+      color: white;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      word-break: break-word;
+    }
+    .meta .k {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .10em;
+      margin-bottom: 6px;
+      color: var(--text-muted);
+      font-weight: 900;
+    }
 
     .loader {
       position: fixed; inset: 0;
@@ -153,7 +167,7 @@
       text-align: center;
     }
     .errbox {
-      width: min(860px, 100%);
+      width: min(920px, 100%);
       background: #0b1220;
       border: 1px solid #334155;
       border-radius: 16px;
@@ -162,6 +176,7 @@
     }
     .errtitle { color: var(--danger); font-weight: 900; margin-bottom: 10px; }
     .errmono {
+      font-family: 'JetBrains+Mono', monospace;
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
       color: #cbd5e1;
@@ -175,13 +190,13 @@
       body { flex-direction: column; height: auto; overflow: auto; }
       .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
       .main { padding: 18px; }
-      .meta { grid-template-columns: repeat(2, minmax(120px, 1fr)); }
+      .meta { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
     }
   </style>
 
   <script>
     // GitHub Pages project-site trap fix:
-    // If you open /repo (no slash), relative fetch('roster.json') resolves to /roster.json instead of /repo/roster.json.
+    // If you open /repo (no trailing slash), relative fetch('roster.json') resolves to /roster.json instead of /repo/roster.json.
     (function forceTrailingSlash() {
       const p = location.pathname;
       const last = p.split('/').pop() || '';
@@ -195,14 +210,16 @@
 
 <body>
   <div id="loadingScreen" class="loader">
-    <div>Fetching roster + preferences + capacities…</div>
+    <div>Loading roster + preferences…</div>
   </div>
 
   <div class="sidebar">
     <div class="logo">PROTRACE</div>
     <div class="sub">
-      “In line” = senior pilots whose bid list hits the <b>target base/seat</b>
-      <b>before</b> their <b>current base/seat</b>.
+      This is a <b>what-if</b> tool for pilots <b>outside</b> their desired base/seat.<br>
+      It computes the “moving line” ahead of you based on bid order rules:
+      a senior pilot counts only if they hit <b>Target</b> before their <b>Current</b>.
+      Pilots already holding the target are <b>not counted</b>.
     </div>
 
     <div class="input-group">
@@ -230,11 +247,18 @@
       </select>
     </div>
 
-    <button id="runBtn">Run Base Analysis</button>
+    <div class="input-group">
+      <label>Hypothetical Openings (What-If)</label>
+      <input type="number" id="openings" min="0" value="0" placeholder="Ex: 20">
+    </div>
+
+    <button id="runBtn">Run What-If</button>
 
     <div class="mini">
-      <b>Important:</b> If you already hold the target base/seat,
-      the tool will say “you’re already in” (no “line”).
+      <b>Interpretation:</b><br>
+      • <b>Your position</b> = (# senior competitors) + 1 (you).<br>
+      • You “clear” if <b>openings ≥ your position</b>.<br>
+      • If you already hold the target, we say so and stop.
     </div>
   </div>
 
@@ -266,16 +290,16 @@
           <div><b id="resSeniors">-</b></div>
         </div>
         <div class="box">
-          <div class="k">Total in line</div>
-          <div><b id="resLine">-</b></div>
+          <div class="k">Your position</div>
+          <div><b id="resPos">-</b></div>
         </div>
         <div class="box">
-          <div class="k">Capacity delta</div>
-          <div><b id="resDelta">-</b></div>
+          <div class="k">Openings (what-if)</div>
+          <div><b id="resOpen">-</b></div>
         </div>
         <div class="box">
-          <div class="k">Needed openings</div>
-          <div><b id="resNeed">-</b></div>
+          <div class="k">Clear?</div>
+          <div><b id="resClear">-</b></div>
         </div>
       </div>
     </div>
@@ -283,17 +307,17 @@
     <div id="intro" class="card" style="background: transparent; border: 1px dashed var(--border); box-shadow: none;">
       <div class="title">ProTrace</div>
       <p class="queue-msg" style="font-size:20px; color: var(--text-muted);">
-        Enter a seniority number and choose a target base/seat.
+        Enter a seniority number, choose a target base/seat, and set a what-if openings count.
       </p>
     </div>
   </div>
 
   <script>
+    // Data
     let ROSTER = [];
     let PREFS = {};
-    let CAPACITIES = [];
 
-    // Always resolve JSON relative to the directory that contains this page.
+    // Resolve JSON relative to the directory containing this page (GitHub Pages-safe)
     function dirBaseUrl() {
       const u = new URL(location.href);
       if (!u.pathname.endsWith('/')) u.pathname = u.pathname.replace(/\/[^/]*$/, '/');
@@ -323,6 +347,10 @@
       }
     }
 
+    function escapeHtml(s) {
+      return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
     function showError(err) {
       const loading = document.getElementById('loadingScreen');
       loading.innerHTML = `
@@ -332,17 +360,13 @@
           <div class="hint">
             Fix checklist:
             <ul>
-              <li>Confirm these exist next to <code>index.html</code>: <code>roster.json</code>, <code>preferences.json</code>, <code>capacities.json</code></li>
-              <li>Open site with trailing slash: <code>.../basesbid/</code></li>
+              <li>Confirm these exist next to <code>index.html</code>: <code>roster.json</code>, <code>preferences.json</code></li>
+              <li>Open the site with trailing slash: <code>.../basesbid/</code></li>
               <li>Try opening each JSON in the browser to confirm no 404</li>
             </ul>
           </div>
         </div>
       `;
-    }
-
-    function escapeHtml(s) {
-      return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
     // preferences.json can be either:
@@ -363,11 +387,6 @@
       return { equip: null, base: null, seat: null };
     }
 
-    function safeDelta(val) {
-      const n = Number(val);
-      return Number.isFinite(n) ? n : 0;
-    }
-
     function fmtCur(p) {
       const c = p.current || {};
       const eq = c.equip ? String(c.equip) + " " : "";
@@ -383,33 +402,21 @@
       document.getElementById('results').style.display = 'block';
     }
 
-    async function init() {
-      try {
-        const [r, p, c] = await Promise.all([
-          fetchJsonStrict('roster.json'),
-          fetchJsonStrict('preferences.json'),
-          fetchJsonStrict('capacities.json')
-        ]);
-
-        ROSTER = Array.isArray(r) ? r : [];
-        PREFS = (p && typeof p === "object") ? p : {};
-        CAPACITIES = Array.isArray(c) ? c : [];
-
-        document.getElementById('loadingScreen').style.display = 'none';
-      } catch (err) {
-        showError(err);
-      }
-    }
-
-    // CORE LOGIC:
+    // CORE COMPETITOR LOGIC:
     // Count a senior pilot as a competitor ONLY if:
-    //  - Their preference list hits TARGET base+seat BEFORE their CURRENT base+seat.
-    //  - If they hit current first, they "stick" and should not be counted for anything below.
+    //   1) They are senior to the user
+    //   2) They do NOT already hold the target base/seat
+    //   3) Their preference list hits TARGET base+seat BEFORE their CURRENT base+seat
+    //      (If they hit current first, they "stick" and should NOT be counted for anything below)
     function countSeniorCompetitors(userSen, tBase, tSeat) {
       let count = 0;
 
       for (const p of ROSTER) {
         if (Number(p.sen) >= userSen) continue;
+
+        // Key rule you asked for:
+        // If they're already in the target, they are not competing for it.
+        if (p.current?.base === tBase && p.current?.seat === tSeat) continue;
 
         const prefList = normalizePrefsEntry(PREFS[p.id]);
         if (!prefList) continue;
@@ -423,13 +430,13 @@
           const b = parseBidString(bid);
           if (!b.base || !b.seat) continue;
 
-          // stop at current: they hold it, so nothing below matters
+          // Stop at current: they hold it and won't go below it
           if (b.base === curBase && b.seat === curSeat) {
             isCompetitor = false;
             break;
           }
 
-          // target before current => true competitor
+          // Target before current => true competitor
           if (b.base === tBase && b.seat === tSeat) {
             isCompetitor = true;
             break;
@@ -442,15 +449,12 @@
       return count;
     }
 
-    function getCapacityDelta(tBase, tSeat) {
-      const cap = CAPACITIES.find(x => x.base === tBase && x.seat === tSeat);
-      return safeDelta(cap?.delta);
-    }
-
     function runAnalysis() {
       const query = document.getElementById('pilotSearch').value.trim();
       const tBase = document.getElementById('targetBase').value;
       const tSeat = document.getElementById('targetSeat').value;
+
+      const openings = Math.max(0, Number(document.getElementById('openings').value || 0));
 
       if (!query) { alert("Enter a seniority number."); return; }
 
@@ -458,56 +462,67 @@
       if (!user) { alert("Pilot not found in roster.json."); return; }
 
       const userSen = Number(user.sen);
-      const userCurBase = user.current?.base;
-      const userCurSeat = user.current?.seat;
+
+      showResults();
 
       // Header fields
-      showResults();
       setText('resName', (String(user.name || "").split(',')[0] || "-"));
       setText('resSen', "#" + user.sen);
       setText('resCur', fmtCur(user));
       setText('resTgt', `${tBase} ${tSeat}`);
 
-      // IMPORTANT FIX:
-      // If you already hold the target base/seat, there is no "line to get in."
-      if (userCurBase === tBase && userCurSeat === tSeat) {
+      // This tool is for pilots OUTSIDE their desired base/seat.
+      if (user.current?.base === tBase && user.current?.seat === tSeat) {
         setText('resSeniors', "—");
-        setText('resLine', "—");
-        setText('resDelta', "—");
-        setText('resNeed', "0");
+        setText('resPos', "—");
+        setText('resOpen', String(openings));
+        setText('resClear', "—");
 
         document.getElementById('statusOutput').innerHTML =
           `You already hold <b>${tBase} ${tSeat}</b>.<br>` +
-          `<span class="highlight-green">No line to “get in” (you’re already there).</span>`;
+          `<span class="highlight-green">This tool is intended for “getting into” a new base/seat.</span>`;
 
         return;
       }
 
-      // Competitors + delta
       const seniorCompetitors = countSeniorCompetitors(userSen, tBase, tSeat);
-      const totalInLine = seniorCompetitors + 1; // seniors + you
-      const delta = getCapacityDelta(tBase, tSeat);
-
-      // Needed openings (simple model)
-      // If delta is "openings / growth slots", then you need totalInLine <= delta to "get in"
-      const needed = Math.max(0, totalInLine - delta);
+      const position = seniorCompetitors + 1; // seniors + you
+      const clears = openings >= position;
 
       setText('resSeniors', String(seniorCompetitors));
-      setText('resLine', String(totalInLine));
-      setText('resDelta', String(delta));
-      setText('resNeed', String(needed));
+      setText('resPos', String(position));
+      setText('resOpen', String(openings));
+      setText('resClear', clears ? "YES" : "NO");
 
-      if (needed === 0) {
+      if (clears) {
         document.getElementById('statusOutput').innerHTML =
-          `There are <b>${totalInLine}</b> in line for <b>${tBase} ${tSeat}</b>.<br>` +
-          `<span class="highlight-green">Projected to get in (based on bids + delta).</span>`;
+          `There are <b>${position}</b> in the moving line for <b>${tBase} ${tSeat}</b> (including you).<br>` +
+          `<span class="highlight-green">With ${openings} openings, you clear.</span>`;
       } else {
+        const need = position - openings;
         document.getElementById('statusOutput').innerHTML =
-          `There are <b>${totalInLine}</b> in line for <b>${tBase} ${tSeat}</b>.<br>` +
-          `You’ll need <span class="highlight-red">${needed} more openings</span> to clear.`;
+          `There are <b>${position}</b> in the moving line for <b>${tBase} ${tSeat}</b> (including you).<br>` +
+          `With ${openings} openings, you’re short by <span class="highlight-red">${need}</span>.`;
       }
     }
 
+    async function init() {
+      try {
+        const [r, p] = await Promise.all([
+          fetchJsonStrict('roster.json'),
+          fetchJsonStrict('preferences.json')
+        ]);
+
+        ROSTER = Array.isArray(r) ? r : [];
+        PREFS = (p && typeof p === "object") ? p : {};
+
+        document.getElementById('loadingScreen').style.display = 'none';
+      } catch (err) {
+        showError(err);
+      }
+    }
+
+    // Wiring
     document.getElementById('runBtn').addEventListener('click', runAnalysis);
     document.getElementById('pilotSearch').addEventListener('keydown', (e) => {
       if (e.key === 'Enter') runAnalysis();
