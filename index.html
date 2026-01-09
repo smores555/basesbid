@@ -2,153 +2,192 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ProTrace - Seniority Queue</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>ProTrace - Base Queue Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0f172a; --card: #1e293b; --input: #020617;
-      --text: #f1f5f9; --muted: #94a3b8; --accent: #3b82f6; --danger: #ef4444;
+      --bg-app: #0f172a; --bg-panel: #1e293b; --bg-input: #020617;
+      --border: #334155; --text-main: #f1f5f9; --text-muted: #94a3b8;
+      --accent: #3b82f6; --success: #22c55e; --danger: #ef4444;
     }
-    body { 
-      background: var(--bg); color: var(--text); font-family: sans-serif; 
-      margin: 0; display: flex; height: 100vh; 
-    }
-    .sidebar { 
-      width: 320px; background: var(--card); border-right: 1px solid #334155; 
-      padding: 20px; display: flex; flex-direction: column; gap: 15px; 
-    }
-    .main { flex: 1; padding: 40px; display: flex; justify-content: center; align-items: flex-start; }
+    body { margin: 0; background: var(--bg-app); color: var(--text-main); font-family: 'Inter', sans-serif; display: flex; height: 100vh; overflow: hidden; }
     
-    input, select, button { 
-      background: var(--input); color: white; border: 1px solid #334155; 
-      padding: 12px; border-radius: 6px; font-size: 14px; 
-    }
-    button { background: var(--accent); font-weight: bold; cursor: pointer; border: none; margin-top: 10px; }
+    /* Sidebar Styling */
+    .sidebar { width: 350px; background: var(--bg-panel); border-right: 1px solid var(--border); padding: 24px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
+    .logo { font-weight: 800; font-size: 20px; color: var(--accent); margin-bottom: 10px; }
     
-    .result-card { 
-      background: var(--card); border: 1px solid #334155; padding: 30px; 
-      border-radius: 12px; width: 100%; max-width: 600px; text-align: center;
-    }
-    .queue-msg { font-size: 24px; line-height: 1.5; font-weight: 600; }
-    .highlight { color: var(--accent); }
-    .needed { color: var(--danger); text-decoration: underline; }
+    .file-input-wrapper { background: rgba(59, 130, 246, 0.1); border: 2px dashed var(--accent); padding: 15px; border-radius: 8px; text-align: center; cursor: pointer; }
+    .file-input-wrapper:hover { background: rgba(59, 130, 246, 0.2); }
     
-    .loading-overlay {
-      position: fixed; inset: 0; background: var(--bg);
-      display: flex; align-items: center; justify-content: center; z-index: 100;
-    }
+    .input-group { display: flex; flex-direction: column; gap: 8px; }
+    label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    input, select { background: var(--bg-input); border: 1px solid var(--border); color: white; padding: 12px; border-radius: 6px; font-size: 14px; outline: none; }
+    
+    button.analyze-btn { background: var(--accent); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 700; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+    button.analyze-btn:disabled { background: #334155; cursor: not-allowed; opacity: 0.5; }
+
+    /* Main Area Styling */
+    .main { flex: 1; padding: 40px; display: flex; align-items: center; justify-content: center; }
+    .card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 12px; padding: 40px; width: 100%; max-width: 650px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); text-align: center; }
+    
+    .queue-msg { font-size: 26px; font-weight: 600; line-height: 1.4; color: var(--text-main); }
+    .queue-msg b { color: var(--accent); }
+    .highlight-red { color: var(--danger); font-weight: 800; text-decoration: underline; }
+    .highlight-green { color: var(--success); font-weight: 800; }
+
+    .sub-data { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: space-around; font-size: 13px; color: var(--text-muted); }
+    .sub-data b { color: white; }
   </style>
 </head>
 <body>
 
-  <div id="loading" class="loading-overlay">Loading Roster & Preferences...</div>
-
   <div class="sidebar">
-    <h2 style="color: var(--accent); margin-top:0;">ProTrace</h2>
-    <label>Search Seniority #</label>
-    <input type="text" id="pilotSearch" placeholder="Ex: 3388">
+    <div class="logo">PROTRACE v2</div>
     
-    <label>Target Base</label>
-    <select id="targetBase">
-      <option value="ANC">ANC</option>
-      <option value="LAX">LAX</option>
-      <option value="PDX">PDX</option>
-      <option value="SAN">SAN</option>
-      <option value="SEA">SEA</option>
-      <option value="SFO">SFO</option>
-    </select>
+    <div class="input-group">
+      <label>1. Setup Data</label>
+      <div class="file-input-wrapper" onclick="document.getElementById('fileInput').click()">
+        <span id="fileStatus">Click to select 3 JSON files<br><small>(Roster, Preferences, Capacities)</small></span>
+        <input type="file" id="fileInput" multiple accept=".json" style="display:none" onchange="handleFiles(this.files)">
+      </div>
+    </div>
 
-    <label>Target Seat</label>
-    <select id="targetSeat">
-      <option value="CA">Captain (CA)</option>
-      <option value="FO">First Officer (FO)</option>
-    </select>
+    <div class="input-group">
+      <label>2. Find Pilot (Seniority #)</label>
+      <input type="text" id="pilotSearch" placeholder="Ex: 3388" autocomplete="off">
+    </div>
 
-    <button onclick="runAnalysis()">Update Analysis</button>
+    <div class="input-group">
+      <label>3. Target Base</label>
+      <select id="targetBase">
+        <option value="ANC">ANC</option>
+        <option value="LAX">LAX</option>
+        <option value="PDX">PDX</option>
+        <option value="SAN">SAN</option>
+        <option value="SEA">SEA</option>
+        <option value="SFO">SFO</option>
+      </select>
+    </div>
+
+    <div class="input-group">
+      <label>4. Target Seat</label>
+      <select id="targetSeat">
+        <option value="CA">Captain (CA)</option>
+        <option value="FO">First Officer (FO)</option>
+      </select>
+    </div>
+
+    <button id="analyzeBtn" class="analyze-btn" onclick="runAnalysis()" disabled>Load Files First</button>
   </div>
 
   <div class="main">
-    <div id="results" class="result-card" style="display:none;">
-      <div id="msgOutput" class="queue-msg"></div>
+    <div id="results" class="card" style="display:none;">
+      <div id="pilotHeader" style="font-size: 12px; color: var(--accent); font-weight: 800; letter-spacing: 1px; margin-bottom: 15px; text-transform: uppercase;">ANALYSIS COMPLETE</div>
+      <div id="queueMessage" class="queue-msg">
+        </div>
+      
+      <div class="sub-data">
+        <div>Search Pilot: <b id="resName">-</b></div>
+        <div>Seniority: <b id="resSen">-</b></div>
+        <div>New Openings: <b id="resDelta">-</b></div>
+      </div>
+    </div>
+
+    <div id="placeholder" style="color: var(--text-muted); text-align: center;">
+      <h3>Awaiting Data</h3>
+      <p>Please load your JSON files in the sidebar to begin.</p>
     </div>
   </div>
 
   <script>
-    let ROSTER = [];
-    let PREFS = {};
-    let CAPACITIES = [];
+    let ROSTER = null;
+    let PREFS = null;
+    let CAPACITIES = null;
 
-    async function init() {
-      try {
-        const [r, p, c] = await Promise.all([
-          fetch('roster.json').then(res => res.json()),
-          fetch('preferences.json').then(res => res.json()),
-          fetch('capacities.json').then(res => res.json())
-        ]);
-        ROSTER = r;
-        PREFS = p;
-        CAPACITIES = c;
-        document.getElementById('loading').style.display = 'none';
-      } catch (e) {
-        document.getElementById('loading').innerText = "Error loading JSON files. Make sure they are in the same folder.";
+    // This handles the user selecting their 3 files
+    function handleFiles(files) {
+      if (files.length < 3) {
+        alert("Please select all 3 files: roster.json, preferences.json, and capacities.json.");
+        return;
       }
+
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const data = JSON.parse(e.target.result);
+          if (Array.isArray(data) && data[0].sen) ROSTER = data;
+          else if (Array.isArray(data) && data[0].delta !== undefined) CAPACITIES = data;
+          else if (typeof data === 'object') PREFS = data;
+
+          if (ROSTER && PREFS && CAPACITIES) {
+            document.getElementById('fileStatus').innerHTML = "<span style='color:var(--success)'>✓ All Files Loaded</span>";
+            document.getElementById('analyzeBtn').disabled = false;
+            document.getElementById('analyzeBtn').innerText = "Update Base Analysis";
+          }
+        };
+        reader.readAsText(file);
+      });
     }
 
     function runAnalysis() {
-      const searchVal = document.getElementById('pilotSearch').value.trim();
+      const query = document.getElementById('pilotSearch').value.trim();
       const tBase = document.getElementById('targetBase').value;
       const tSeat = document.getElementById('targetSeat').value;
 
-      // 1. Find User
-      const user = ROSTER.find(p => p.sen.toString() === searchVal);
-      if (!user) { alert("Pilot seniority number not found."); return; }
+      if (!query) { alert("Please enter a seniority number."); return; }
 
-      // 2. Count everyone senior to you who wants this base
-      let competitors = 0;
-      ROSTER.forEach(p => {
-        if (p.sen < user.sen) {
-          const prefData = PREFS[p.id];
-          if (!prefData || !prefData.preferences) return;
+      // 1. Find the target pilot in roster.json
+      const user = ROSTER.find(p => p.sen.toString() === query);
+      if (!user) { alert("Pilot not found in roster."); return; }
 
-          const curBase = p.current.base;
-          const curSeat = p.current.seat;
+      // 2. Filter for senior pilots (lower sen number)
+      const seniorPilots = ROSTER.filter(p => p.sen < user.sen);
 
-          for (let bid of prefData.preferences) {
-            // Bid format: "73G SEA FO"
-            const parts = bid.split(' ');
-            const bBase = parts[1];
-            const bSeat = parts[2];
+      let seniorCompetitors = 0;
+      seniorPilots.forEach(p => {
+        const prefData = PREFS[p.id];
+        if (!prefData || !prefData.preferences) return;
 
-            if (bBase === tBase && bSeat === tSeat) {
-              competitors++;
-              break;
-            }
-            // If they hit their current seat first, they aren't moving
-            if (bBase === curBase && bSeat === curSeat) break;
+        const curBase = p.current.base;
+        const curSeat = p.current.seat;
+
+        // Check if they want target base more than their current one
+        for (let pref of prefData.preferences) {
+          const parts = pref.split(' ');
+          const pBase = parts[1];
+          const pSeat = parts[2];
+
+          if (pBase === tBase && pSeat === tSeat) {
+            seniorCompetitors++;
+            break;
           }
+          if (pBase === curBase && pSeat === curSeat) break;
         }
       });
 
-      // 3. Get Capacity Delta
-      const cap = CAPACITIES.find(c => c.base === tBase && c.seat === tSeat) || { delta: 0 };
-      const delta = cap.delta;
+      // 3. Get Capacity openings (delta)
+      const capInfo = CAPACITIES.find(c => c.base === tBase && c.seat === tSeat) || { delta: 0 };
+      const delta = capInfo.delta;
 
-      // 4. Final Count
-      const totalInLine = competitors + 1; // Senior people + You
-      const diff = totalInLine - delta;
+      // 4. Calculate logic requested: Total in line vs openings needed
+      const totalInLine = seniorCompetitors + 1; // Senior pilots + the pilot themselves
+      const needed = totalInLine - delta;
 
-      // 5. Output
-      const output = document.getElementById('msgOutput');
+      // 5. Update UI
+      document.getElementById('placeholder').style.display = 'none';
       document.getElementById('results').style.display = 'block';
+      document.getElementById('resName').textContent = user.name.split(',')[0];
+      document.getElementById('resSen').textContent = "#" + user.sen;
+      document.getElementById('resDelta').textContent = delta;
 
-      if (diff <= 0) {
-        output.innerHTML = `There are <span class="highlight">${totalInLine}</span> people in line for that base.<br><span style="color:#22c55e">You are projected to get in!</span>`;
+      const msgEl = document.getElementById('queueMessage');
+      if (needed <= 0) {
+        msgEl.innerHTML = `There are <b>${totalInLine}</b> people in line for that base.<br><span class="highlight-green">You are projected to get in!</span>`;
       } else {
-        output.innerHTML = `There are <span class="highlight">${totalInLine}</span> people in line for that base. You'll need <span class="needed">${diff} more openings</span> or <span class="needed">${diff} people to leave</span>.`;
+        msgEl.innerHTML = `There are <b>${totalInLine}</b> people in line for that base. You'll need <span class="highlight-red">${needed} more openings</span> or <span class="highlight-red">${needed} people to leave</span>.`;
       }
     }
-
-    init();
   </script>
 </body>
 </html>
