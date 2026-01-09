@@ -33,13 +33,13 @@
     "base": "PDX",
     "seat": "FO",
     "startCapacity": 228,
-    "delta": 15
+    "delta": 0
   },
   {
     "base": "SEA",
     "seat": "CA",
     "startCapacity": 770,
-    "delta": 20
+    "delta": 0
   },
   {
     "base": "SEA",
