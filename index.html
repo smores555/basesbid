@@ -3,53 +3,60 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
-  <title>ProTrace Queue - Seniority Analysis</title>
+  <title>ProTrace - Seniority Queue</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
   <style>
     :root { 
       --bg-app: #0f172a; --bg-panel: #1e293b; --bg-input: #020617; 
       --border: #334155; --text-main: #f1f5f9; --text-muted: #94a3b8; 
-      --accent: #3b82f6; --warning: #f59e0b; --danger: #ef4444;
+      --accent: #3b82f6; --warning: #f59e0b;
     }
     body { margin: 0; background: var(--bg-app); color: var(--text-main); font-family: 'Inter', sans-serif; display: flex; flex-direction: column; height: 100vh; }
     .app-grid { display: grid; grid-template-columns: 360px 1fr; height: 100%; overflow: hidden; }
     .sidebar { background: var(--bg-panel); border-right: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; gap: 15px; overflow-y: auto; }
     .main { padding: 20px; display: flex; flex-direction: column; gap: 15px; overflow: hidden; }
     .panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 8px; padding: 15px; }
-    input, select { background: var(--bg-input); border: 1px solid var(--border); color: white; padding: 12px; border-radius: 6px; width: 100%; margin-bottom: 10px; }
-    button { padding: 14px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; width: 100%; background: var(--accent); color: white; }
-    .queue-card { background: var(--bg-input); border: 1px solid var(--border); padding: 15px; border-radius: 8px; margin-bottom: 10px; }
-    .queue-val { font-size: 24px; font-weight: 800; color: var(--warning); font-family: 'JetBrains Mono'; }
-    @media (max-width: 768px) { .app-grid { grid-template-columns: 1fr; overflow-y: auto; } .sidebar { width: 100%; } }
+    .panel-title { font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px; }
+    input, select { background: var(--bg-input); border: 1px solid var(--border); color: white; padding: 12px; border-radius: 6px; width: 100%; margin-bottom: 10px; font-size: 14px; }
+    button { padding: 14px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; width: 100%; background: var(--accent); color: white; font-size: 16px; }
+    .queue-card { background: var(--bg-input); border-left: 4px solid var(--warning); padding: 15px; border-radius: 4px; }
+    .queue-val { font-size: 32px; font-weight: 800; color: var(--warning); font-family: 'JetBrains Mono'; }
+    @media (max-width: 768px) { .app-grid { grid-template-columns: 1fr; overflow-y: auto; } .sidebar { width: 100%; } .main { height: auto; } }
   </style>
 </head>
 <body>
 
 <div class="app-grid">
   <div class="sidebar">
-    <div style="font-size: 20px; font-weight: 800;">PRO<span style="color:var(--accent)">TRACE</span> QUEUE</div>
+    <div style="font-size: 22px; font-weight: 800;">PRO<span style="color:var(--accent)">TRACE</span></div>
+    
     <div class="panel">
-      <div style="font-size:11px; color:var(--text-muted); margin-bottom:8px;">YOUR SENIORITY</div>
-      <input id="userSen" type="number" value="2302">
+      <div class="panel-title">Your Seniority</div>
+      <input id="userSen" type="number" placeholder="e.g. 2302" value="2302">
     </div>
+
     <div class="panel">
-      <div style="font-size:11px; color:var(--text-muted); margin-bottom:8px;">TARGET BASE & SEAT</div>
-      <select id="targetBase"><option>ANC</option><option>PDX</option><option>SAN</option><option>SEA</option><option selected>SFO</option></select>
+      <div class="panel-title">Target Base & Seat</div>
+      <select id="targetBase"><option>ANC</option><option>LAX</option><option>PDX</option><option>SAN</option><option>SEA</option><option selected>SFO</option></select>
       <select id="targetSeat"><option selected>CA</option><option>FO</option></select>
     </div>
+
     <button onclick="calculateQueue()">ANALYZE QUEUE</button>
+    <div id="status" style="text-align:center; font-size:11px; color:var(--text-muted); margin-top:10px;">Awaiting Data...</div>
   </div>
 
   <div class="main">
     <div id="results" style="display:none;">
       <div class="panel" style="border-color: var(--warning); background: rgba(245, 158, 11, 0.05);">
-        <div style="font-weight:800; color:var(--warning); margin-bottom:15px;">QUEUE POSITION ANALYSIS</div>
+        <div class="panel-title" style="color:var(--warning)">Queue Analysis</div>
         <div id="queueOutput"></div>
       </div>
     </div>
-    <div class="panel">
-      <div style="font-size:11px; color:var(--text-muted); margin-bottom:8px;">SENIOR BIDDERS AHEAD OF YOU</div>
-      <div id="seniorBidders" style="height: 400px; overflow-y: auto; font-family: 'JetBrains Mono'; font-size: 12px;"></div>
+    <div class="panel" style="flex-grow: 1; display: flex; flex-direction: column;">
+      <div class="panel-title">Senior Bidders Ahead</div>
+      <div id="seniorList" style="flex-grow: 1; overflow-y: auto; font-family: 'JetBrains Mono'; font-size: 13px; color: var(--text-muted); background: var(--bg-input); padding: 15px; border-radius: 6px;">
+        The list of pilots more senior than you who want this seat will appear here.
+      </div>
     </div>
   </div>
 </div>
@@ -57,51 +64,68 @@
 <script>
 let roster = [], preferences = {};
 
-async function init() {
-    try {
-        const r = await fetch('roster.json'); roster = await r.json();
-        const p = await fetch('preferences.json'); preferences = await p.json();
-    } catch(e) { console.error("Data Load Failed"); }
+// Load data strictly from your uploaded files
+async function loadData() {
+  try {
+    const r = await fetch('roster.json'); 
+    const p = await fetch('preferences.json');
+    roster = await r.json();
+    preferences = await p.json();
+    document.getElementById('status').textContent = "Data Loaded Successfully";
+  } catch(e) { 
+    document.getElementById('status').textContent = "Error: Check JSON file paths"; 
+  }
 }
 
 function calculateQueue() {
-    const mySen = Number(document.getElementById('userSen').value);
-    const tBase = document.getElementById('targetBase').value;
-    const tSeat = document.getElementById('targetSeat').value;
+  const mySen = Number(document.getElementById('userSen').value);
+  const tBase = document.getElementById('targetBase').value.toUpperCase();
+  const tSeat = document.getElementById('targetSeat').value.toUpperCase();
+  
+  let seniorBidders = 0;
+  let listHtml = "";
+
+  // 1. Process roster to find everyone more senior than you
+  // In airline seniority, a smaller number (e.g., 593) is senior to a larger number (e.g., 2302).
+  roster.forEach(pilot => {
+    const pSen = Number(pilot.sen);
     
-    let seniorBiddersCount = 0;
-    let biddersList = [];
-
-    // Filter roster for pilots more senior than you
-    const seniors = roster.filter(p => Number(p.sen) < mySen).sort((a,b) => Number(a.sen) - Number(b.sen));
-
-    seniors.forEach(p => {
-        const pSen = Number(p.sen);
-        const pPrefs = preferences[pSen]?.preferences || [];
-        
-        // Check if this senior pilot has your target base/seat in their bid log
-        const hasBid = pPrefs.some(b => b.base === tBase && b.seat === tSeat);
-        
-        if (hasBid) {
-            seniorBiddersCount++;
-            biddersList.push(`SEN ${pSen}: ${p.name.split(',')[0]} has ${tBase} ${tSeat} in bid`);
-        }
-    });
-
-    document.getElementById('results').style.display = 'block';
-    document.getElementById('queueOutput').innerHTML = `
-        <div class="queue-card">
-            <div style="font-size:12px; color:var(--text-muted);">SENIOR PILOTS BIDDING ${tBase} ${tSeat}</div>
-            <div class="queue-val">${seniorBiddersCount}</div>
-            <div style="font-size:13px; margin-top:10px;">
-                You need <b style="color:white">${seniorBiddersCount + 1}</b> total positions to open in <b>${tBase} ${tSeat}</b> to hold it.
-            </div>
+    if (pSen < mySen) {
+      // 2. Look up this senior pilot's bid from your preferences.json
+      const pData = preferences[pSen] || preferences[String(pSen)];
+      const pPrefs = pData?.preferences || [];
+      
+      // 3. Check if they have the target seat in their bid log
+      const hasBidForTarget = pPrefs.some(bid => 
+        String(bid.base).toUpperCase() === tBase && 
+        String(bid.seat).toUpperCase() === tSeat
+      );
+      
+      if (hasBidForTarget) {
+        seniorBidders++;
+        listHtml += `<div style="padding:6px 0; border-bottom: 1px solid #1e293b;">
+          <b style="color:var(--accent)">#${pSen}</b> - ${pilot.name.split(',')[0]}
         </div>`;
-    
-    document.getElementById('seniorBidders').innerHTML = biddersList.length > 0 ? 
-        biddersList.join('<br>') : "No senior pilots have this seat in their preferences.";
+      }
+    }
+  });
+
+  // 4. Update the UI with the final count
+  document.getElementById('results').style.display = 'block';
+  document.getElementById('queueOutput').innerHTML = `
+    <div class="queue-card">
+      <div style="font-size:12px; color:var(--text-muted); margin-bottom:5px;">SENIOR PILOTS BIDDING ${tBase} ${tSeat}</div>
+      <div class="queue-val">${seniorBidders}</div>
+      <div style="font-size:14px; margin-top:10px; line-height:1.6;">
+        You are <b style="color:white">#${seniorBidders + 1}</b> in the seniority queue.<br>
+        You need <b style="color:var(--warning)">${seniorBidders + 1}</b> vacancies to open up or people to move to hold it.
+      </div>
+    </div>`;
+  
+  document.getElementById('seniorList').innerHTML = listHtml || "No senior pilots found bidding this seat.";
 }
-init();
+
+loadData();
 </script>
 </body>
 </html>
