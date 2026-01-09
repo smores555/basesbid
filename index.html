@@ -1,185 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
-  <title>ProTrace Mobile - Bid Rebuild</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
-  <style>
-    :root { 
-      --bg-app: #0f172a; --bg-panel: #1e293b; --bg-input: #020617; 
-      --border: #334155; --text-main: #f1f5f9; --text-muted: #94a3b8; 
-      --accent: #3b82f6; --success: #10b981; --danger: #ef4444;
-    }
-    * { box-sizing: border-box; }
-    body { 
-      margin: 0; background: var(--bg-app); color: var(--text-main); 
-      font-family: 'Inter', sans-serif; display: flex; flex-direction: column; height: 100vh; 
-    }
-    .app-grid { display: grid; grid-template-columns: 380px 1fr; height: 100%; overflow: hidden; }
-    
-    /* Sidebar / UI Controls */
-    .sidebar { background: var(--bg-panel); border-right: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; gap: 15px; overflow-y: auto; }
-    .panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 8px; padding: 15px; }
-    .panel-title { font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px; }
-    
-    input, select { background: var(--bg-input); border: 1px solid var(--border); color: white; padding: 10px; border-radius: 6px; width: 100%; margin-bottom: 10px; font-size: 14px; }
-    button { padding: 12px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; transition: 0.2s; width: 100%; }
-    .btn-run { background: var(--accent); color: white; font-size: 16px; margin-top: 10px; }
-    
-    /* Preference UI */
-    .pref-row { display: flex; gap: 5px; margin-bottom: 8px; align-items: center; }
-    .pref-num { width: 25px; font-size: 12px; color: var(--accent); font-weight: bold; }
-    
-    /* Main Content */
-    .main { padding: 20px; display: flex; flex-direction: column; gap: 15px; overflow: hidden; }
-    .status-banner { background: rgba(59, 130, 246, 0.1); border: 1px solid var(--accent); border-radius: 8px; padding: 15px; display: none; }
-    .tab-content { background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; flex-grow: 1; overflow-y: auto; padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
-
-    @media (max-width: 768px) {
-      .app-grid { grid-template-columns: 1fr; overflow-y: auto; }
-      .sidebar { width: 100%; border-right: none; }
-      .main { height: auto; }
-    }
-  </style>
-</head>
-<body>
-
-<div class="app-grid">
-  <div class="sidebar">
-    <div style="font-size: 20px; font-weight: 800;">PRO<span style="color:var(--accent)">TRACE</span> REBUILT</div>
-    
-    <div class="panel">
-      <div class="panel-title">Your Info</div>
-      <input id="userSen" type="number" placeholder="Seniority Number (e.g. 2302)" value="2302">
-    </div>
-
-    <div class="panel">
-      <div class="panel-title">Your Preferences (Choice #1 to #3)</div>
-      <div id="prefContainer">
-        <div class="pref-row"><span class="pref-num">1</span>
-          <select id="p1-base"><option>SAN</option><option selected>SFO</option><option>ANC</option><option>SEA</option><option>PDX</option><option>LAX</option></select>
-          <select id="p1-seat"><option selected>CA</option><option>FO</option></select>
-        </div>
-        <div class="pref-row"><span class="pref-num">2</span>
-          <select id="p2-base"><option selected>SAN</option><option>SFO</option><option>ANC</option><option>SEA</option></select>
-          <select id="p2-seat"><option selected>CA</option><option>FO</option></select>
-        </div>
-        <div class="pref-row"><span class="pref-num">3</span>
-          <select id="p3-base"><option>SAN</option><option>SFO</option><option selected>ANC</option><option>SEA</option></select>
-          <select id="p3-seat"><option selected>CA</option><option>FO</option></select>
-        </div>
+<div class="main">
+  <div id="cutoffDashboard" class="panel" style="display:none; border:1px solid var(--success); background:rgba(16, 185, 129, 0.05);">
+    <div class="panel-title" style="color:var(--success)">Junior-Most Award Cutoffs</div>
+    <div id="cutoffList" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; font-family:'JetBrains Mono';">
       </div>
-    </div>
-
-    <button class="btn-run" onclick="runEngine()">RUN REBUILT ENGINE</button>
-    <div id="engineStatus" style="text-align:center; font-size:11px; color:var(--text-muted); margin-top:5px;">System Ready</div>
   </div>
 
-  <div class="main">
-    <div id="summaryBox" class="status-banner">
-      <div style="font-weight:800; color:var(--accent); margin-bottom:10px;">BID ANALYSIS RESULTS</div>
-      <div id="summaryText" style="line-height: 1.6;"></div>
-    </div>
+  <div id="summaryBox" class="status-banner" style="display:none;">
+    <div style="font-weight:800; color:var(--accent); margin-bottom:10px;">YOUR HOLD STATUS (SEN: <span id="displaySen"></span>)</div>
+    <div id="summaryText" style="line-height: 1.6; font-size:14px;"></div>
+  </div>
 
-    <div class="panel-title">Live Award Ledger</div>
-    <div id="output" class="tab-content">
-      <div style="color:var(--text-muted); text-align:center; padding-top:50px;">Enter your info and click RUN to start simulation.</div>
-    </div>
+  <div class="panel-title">System Awards</div>
+  <div id="output" class="tab-content" style="background:var(--bg-input); height: 400px; overflow-y: auto;">
+    <div id="ledgerBody"></div>
   </div>
 </div>
 
 <script>
-// Load Data from your JSON files
-let roster = [], preferences = {}, capacities = [];
-
-async function loadData() {
-    try {
-        const r = await fetch('roster.json'); roster = await r.json();
-        const p = await fetch('preferences.json'); preferences = await p.json();
-        const c = await fetch('capacities.json'); capacities = await c.json();
-        console.log("Data loaded successfully");
-    } catch (e) { 
-        console.error("Failed to load local JSON files. Using defaults.");
-        // Fallback for demo
-        roster = [{sen: 593, name: "Junior Pilot", current: {base:"SFO", seat:"FO"}}];
-        capacities = [{base:"SAN", seat:"CA", delta: 1}, {base:"SFO", seat:"CA", delta: 5}];
-    }
-}
-
 function runEngine() {
     const userSen = Number(document.getElementById('userSen').value);
-    const myPrefs = [
-        { base: document.getElementById('p1-base').value, seat: document.getElementById('p1-seat').value },
-        { base: document.getElementById('p2-base').value, seat: document.getElementById('p2-seat').value },
-        { base: document.getElementById('p3-base').value, seat: document.getElementById('p3-seat').value }
-    ];
-
-    document.getElementById('engineStatus').textContent = "Processing Award...";
-    document.getElementById('output').innerHTML = "Calculating line positions...";
-
-    // 1. Initialize Vacancies from Deltas
+    document.getElementById('displaySen').textContent = userSen;
+    
+    // Reset vacancies from capacities.json
     let vacancies = {};
     capacities.forEach(c => vacancies[`${c.base}__${c.seat}`] = Number(c.delta || 0));
 
-    // 2. Track Awards
-    let awards = [];
-    let cutoffs = {};
-    let userAward = null;
+    let cutoffs = {}; // { "SAN__CA": 0, "SAN__FO": 0, ... }
+    let moves = [];
 
-    // 3. Simple Engine Loop: Seniority Order
-    const sortedRoster = roster.sort((a,b) => Number(a.sen) - Number(b.sen));
+    // Sort Roster: Lowest Seniority (1) to Highest (9999)
+    const sortedRoster = roster.sort((a, b) => Number(a.sen) - Number(b.sen));
 
-    for (let p of sortedRoster) {
-        let currentChoice = null;
-        let pSen = Number(p.sen);
+    for (let pilot of sortedRoster) {
+        const pSen = Number(pilot.sen);
+        // Look up this pilot's bids from preferences.json
+        const pPrefs = preferences[pSen]?.preferences || [];
 
-        // Inject UI preferences for the searched user
-        let pPrefs = (pSen === userSen) ? myPrefs : (preferences[pSen]?.preferences || []);
-
-        for (let pref of pPrefs) {
-            let key = `${pref.base}__${pref.seat}`;
+        for (let bid of pPrefs) {
+            const key = `${bid.base}__${bid.seat}`;
+            
             if (vacancies[key] > 0) {
                 vacancies[key]--;
-                userAward = (pSen === userSen) ? pref : userAward;
-                awards.push({ sen: pSen, to: key });
-                cutoffs[key] = pSen; // The most junior person so far
-                break;
+                moves.push({ sen: pSen, name: pilot.name, to: key });
+                
+                // Update Cutoff: The last person into the seat is the "Junior-Most"
+                cutoffs[key] = pSen; 
+                break; 
             }
         }
     }
-
-    renderResults(userSen, myPrefs, cutoffs);
+    renderCutoffs(userSen, cutoffs, moves);
 }
 
-function renderResults(userSen, myPrefs, cutoffs) {
-    const summaryBox = document.getElementById('summaryBox');
+function renderCutoffs(userSen, cutoffs, moves) {
+    const cutoffList = document.getElementById('cutoffList');
     const summaryText = document.getElementById('summaryText');
-    const output = document.getElementById('output');
     
-    summaryBox.style.display = 'block';
-    let html = "";
-    
-    myPrefs.forEach((p, i) => {
-        const key = `${p.base}__${p.seat}`;
-        const cutoff = cutoffs[key] || 0;
-        const gap = userSen - cutoff;
+    document.getElementById('cutoffDashboard').style.display = 'block';
+    document.getElementById('summaryBox').style.display = 'block';
 
-        if (gap <= 0 && cutoff > 0) {
-            html += `<div>Choice #${i+1} (${p.base} ${p.seat}): <b style="color:var(--success)">HOLDING</b> (Cutoff: ${cutoff})</div>`;
+    // Update the Cutoff Dashboard
+    cutoffList.innerHTML = Object.entries(cutoffs).sort().map(([key, sen]) => {
+        const [base, seat] = key.split('__');
+        return `
+            <div style="background:var(--bg-panel); padding:10px; border-radius:6px; border-bottom: 3px solid var(--success);">
+                <div style="font-size:10px; color:var(--text-muted);">${base}</div>
+                <div style="font-weight:bold;">${seat}</div>
+                <div style="font-size:18px; color:var(--success);">${sen}</div>
+            </div>`;
+    }).join('');
+
+    // Update Your Gap Summary
+    // We check Choice #1 through #3 specifically
+    let html = "";
+    [1, 2, 3].forEach(i => {
+        const b = document.getElementById(`p${i}-base`).value;
+        const s = document.getElementById(`p${i}-seat`).value;
+        const key = `${b}__${s}`;
+        const cutoff = cutoffs[key] || 0;
+
+        if (cutoff > 0 && userSen <= cutoff) {
+            html += `<div>Choice #${i} (${b} ${s}): <b style="color:var(--success)">HOLDING</b></div>`;
         } else {
-            const needed = (cutoff === 0) ? "No vacancies" : `${gap} numbers`;
-            html += `<div>Choice #${i+1} (${p.base} ${p.seat}): <b style="color:var(--danger)">NEED ${needed}</b> (Junior-most: ${cutoff || 'N/A'})</div>`;
+            const gap = cutoff === 0 ? "No Vacancies" : `${userSen - cutoff} numbers away`;
+            html += `<div>Choice #${i} (${b} ${s}): <b style="color:var(--danger)">${gap}</b></div>`;
         }
     });
-
     summaryText.innerHTML = html;
-    output.innerHTML = "Engine Finished. Summary generated above.<br><br>" + 
-                       Object.entries(cutoffs).map(([k, v]) => `Base: ${k.replace('__',' ')} | Cutoff: ${v}`).join("<br>");
-    document.getElementById('engineStatus').textContent = "Complete";
 }
-
-loadData();
 </script>
-</body>
-</html>
