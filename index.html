@@ -3,40 +3,70 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>ProTrace - Base Queue</title>
+  <title>ProTrace - Seniority Queue</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
   <style>
-    :root { 
-      --bg: #0f172a; --panel: #1e293b; --input: #020617; 
-      --border: #334155; --text: #f1f5f9; --muted: #94a3b8; 
+    :root {
+      --bg-app: #0f172a; --bg-panel: #1e293b; --bg-input: #020617;
+      --border: #334155; --text-main: #f1f5f9; --text-muted: #94a3b8;
       --accent: #3b82f6; --danger: #ef4444; --success: #22c55e;
     }
-    body { margin: 0; background: var(--bg); color: var(--text); font-family: sans-serif; display: flex; height: 100vh; }
-    .sidebar { width: 320px; background: var(--panel); border-right: 1px solid var(--border); padding: 25px; display: flex; flex-direction: column; gap: 20px; }
-    .main { flex: 1; padding: 40px; display: flex; align-items: center; justify-content: center; }
-    
-    .input-group { display: flex; flex-direction: column; gap: 8px; }
-    label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; }
-    input, select { background: var(--input); border: 1px solid var(--border); color: white; padding: 12px; border-radius: 6px; font-size: 14px; outline: none; }
-    button { background: var(--accent); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; cursor: pointer; }
+    body { margin: 0; background: var(--bg-app); color: var(--text-main); font-family: 'Inter', sans-serif; display: flex; height: 100vh; overflow: hidden; }
 
-    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 40px; max-width: 600px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-    .queue-msg { font-size: 24px; font-weight: 600; line-height: 1.5; }
+    .sidebar { width: 340px; background: var(--bg-panel); border-right: 1px solid var(--border); padding: 24px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
+    .logo { font-weight: 800; font-size: 22px; color: var(--accent); letter-spacing: -1px; margin-bottom: 10px; }
+
+    .input-group { display: flex; flex-direction: column; gap: 8px; }
+    label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+    input, select { background: var(--bg-input); border: 1px solid var(--border); color: white; padding: 12px; border-radius: 6px; font-size: 14px; outline: none; transition: border 0.2s; }
+    input:focus, select:focus { border-color: var(--accent); }
+
+    button { background: var(--accent); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; cursor: pointer; margin-top: 10px; }
+    button:hover { filter: brightness(1.1); }
+
+    .main { flex: 1; padding: 40px; display: flex; align-items: center; justify-content: center; }
+    .card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 16px; padding: 40px; max-width: 700px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+
+    .queue-msg { font-size: 26px; font-weight: 600; line-height: 1.5; color: var(--text-main); }
+    .queue-msg b { color: var(--accent); }
     .highlight-red { color: var(--danger); font-weight: 800; text-decoration: underline; }
     .highlight-green { color: var(--success); font-weight: 800; }
-    
-    .loading { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 100; font-weight: bold; }
-  </style>
-</head>
-<body>
 
-  <div id="loader" class="loading">SYNCING REPO DATA...</div>
+    .meta { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: center; gap: 40px; font-size: 13px; color: var(--text-muted); flex-wrap: wrap; }
+    .meta b { color: white; font-family: 'JetBrains Mono'; }
+
+    .loader { position: fixed; inset: 0; background: var(--bg-app); display: flex; align-items: center; justify-content: center; z-index: 100; font-weight: 600; padding: 24px; text-align: center; }
+    .errbox { max-width: 800px; background: #111827; border: 1px solid #374151; padding: 18px; border-radius: 12px; }
+    .errtitle { color: var(--danger); font-weight: 800; margin-bottom: 10px; }
+    .errmono { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #cbd5e1; white-space: pre-wrap; text-align: left; }
+    .hint { margin-top: 10px; color: var(--text-muted); font-size: 13px; text-align: left; }
+    .hint code { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #e2e8f0; }
+  </style>
+
+  <script>
+    // GitHub Pages project-site trap:
+    // If you load /basesbid (no trailing slash), relative fetch('roster.json') resolves WRONG.
+    // Force a trailing slash so relative paths behave.
+    (function forceTrailingSlash() {
+      const p = location.pathname;
+      if (!p.endsWith('/') && !p.split('/').pop().includes('.')) {
+        location.replace(p + '/' + location.search + location.hash);
+      }
+    })();
+  </script>
+</head>
+
+<body>
+  <div id="loadingScreen" class="loader">
+    <div>Fetching Roster & Preferences...</div>
+  </div>
 
   <div class="sidebar">
-    <h2 style="color: var(--accent); margin: 0 0 10px 0;">PROTRACE</h2>
-    
+    <div class="logo">PROTRACE</div>
+
     <div class="input-group">
-      <label>Seniority #</label>
-      <input type="text" id="pilotSearch" placeholder="Ex: 3388" value="3388">
+      <label>Pilot Seniority #</label>
+      <input type="text" id="pilotSearch" placeholder="Ex: 3388" value="">
     </div>
 
     <div class="input-group">
@@ -46,7 +76,7 @@
         <option value="LAX">LAX</option>
         <option value="PDX">PDX</option>
         <option value="SAN">SAN</option>
-        <option value="SEA">SEA</option>
+        <option value="SEA" selected>SEA</option>
         <option value="SFO">SFO</option>
       </select>
     </div>
@@ -59,12 +89,26 @@
       </select>
     </div>
 
-    <button onclick="runAnalysis()">Update Status</button>
+    <button id="runBtn">Run Base Analysis</button>
   </div>
 
   <div class="main">
     <div id="results" class="card" style="display:none;">
-      <div id="output" class="queue-msg"></div>
+      <div id="statusOutput" class="queue-msg"></div>
+
+      <div class="meta">
+        <div>Pilot: <b id="resName">-</b></div>
+        <div>Sen: <b id="resSen">-</b></div>
+        <div>Base/Seat Delta: <b id="resDelta">-</b></div>
+        <div>People in line: <b id="resLine">-</b></div>
+      </div>
+    </div>
+
+    <div id="intro" style="color:var(--text-muted); max-width: 720px; text-align:center;">
+      Enter a seniority number and select a target base/seat.
+      <div style="margin-top:10px; font-size:13px;">
+        Tip: If the page can’t load JSON, it will tell you exactly which file failed.
+      </div>
     </div>
   </div>
 
@@ -73,24 +117,104 @@
     let PREFS = {};
     let CAPACITIES = [];
 
+    function dirBaseUrl() {
+      // Always resolve JSON relative to the directory containing this page
+      // Works on GitHub Pages project sites and normal hosting.
+      const u = new URL(location.href);
+      if (!u.pathname.endsWith('/')) {
+        u.pathname = u.pathname.replace(/\/[^/]*$/, '/');
+      }
+      return u.toString();
+    }
+
+    async function fetchJsonStrict(filename) {
+      const base = dirBaseUrl();
+      const url = new URL(filename, base).toString();
+
+      const res = await fetch(url, { cache: "no-store" });
+
+      if (!res.ok) {
+        const text = await res.text().catch(() => "");
+        throw new Error(
+          `HTTP ${res.status} loading ${filename}\nURL: ${url}\n` +
+          (text ? `Body (first 300 chars):\n${text.slice(0, 300)}` : "")
+        );
+      }
+
+      // JSON parse can throw; we want a clear message
+      const raw = await res.text();
+      try {
+        return JSON.parse(raw);
+      } catch (e) {
+        throw new Error(
+          `Invalid JSON in ${filename}\nURL: ${url}\n` +
+          `Parse error: ${e.message}\n` +
+          `First 300 chars:\n${raw.slice(0, 300)}`
+        );
+      }
+    }
+
+    function showError(err) {
+      const loading = document.getElementById('loadingScreen');
+      loading.innerHTML = `
+        <div class="errbox">
+          <div class="errtitle">Error loading data files</div>
+          <div class="errmono">${String(err).replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+          <div class="hint">
+            <div><b>Common fixes:</b></div>
+            <ul>
+              <li>Make sure these files exist in the same folder as <code>index.html</code>: <code>roster.json</code>, <code>preferences.json</code>, <code>capacities.json</code></li>
+              <li>Open the site with a trailing slash: <code>.../basesbid/</code></li>
+              <li>Click each JSON file directly in your browser to confirm it loads (no 404)</li>
+            </ul>
+          </div>
+        </div>
+      `;
+    }
+
+    function normalizePrefsEntry(prefEntry) {
+      // Accept:
+      // 1) { preferences: ["73G SEA CA", ...] }
+      // 2) { preferences: { preferences: [...] } }   (nested)
+      if (!prefEntry) return null;
+      if (Array.isArray(prefEntry.preferences)) return prefEntry.preferences;
+      if (prefEntry.preferences && Array.isArray(prefEntry.preferences.preferences)) return prefEntry.preferences.preferences;
+      return null;
+    }
+
+    function parseBidString(bid) {
+      // Expected: "73G SEA CA" or "737 SEA CA"
+      const parts = String(bid || "").trim().split(/\s+/);
+      // Handle if someone put just "SEA CA" (bad data)
+      if (parts.length === 3) return { equip: parts[0], base: parts[1], seat: parts[2] };
+      if (parts.length === 2) return { equip: null, base: parts[0], seat: parts[1] };
+      return { equip: null, base: null, seat: null };
+    }
+
+    function safeDelta(val) {
+      const n = Number(val);
+      return Number.isFinite(n) ? n : 0;
+    }
+
     async function init() {
       try {
-        // Fetching files from the root directory
         const [r, p, c] = await Promise.all([
-          fetch('roster.json').then(res => res.json()),
-          fetch('preferences.json').then(res => res.json()),
-          fetch('capacities.json').then(res => res.json())
+          fetchJsonStrict('roster.json'),
+          fetchJsonStrict('preferences.json'),
+          fetchJsonStrict('capacities.json'),
         ]);
-        
-        ROSTER = r;
-        PREFS = p;
-        CAPACITIES = c;
-        
-        document.getElementById('loader').style.display = 'none';
-        console.log("Data loaded successfully");
+
+        ROSTER = Array.isArray(r) ? r : [];
+        PREFS = (p && typeof p === 'object') ? p : {};
+        CAPACITIES = Array.isArray(c) ? c : [];
+
+        // Nice UX: set a default seniority if you want
+        // If roster has someone around mid-list, leave blank
+        document.getElementById('pilotSearch').value = "";
+
+        document.getElementById('loadingScreen').style.display = 'none';
       } catch (err) {
-        document.getElementById('loader').innerHTML = `<div style="color:var(--danger)">ERROR: Make sure all JSON files are in the same folder as this HTML.</div>`;
-        console.error("Fetch Error:", err);
+        showError(err);
       }
     }
 
@@ -99,54 +223,73 @@
       const tBase = document.getElementById('targetBase').value;
       const tSeat = document.getElementById('targetSeat').value;
 
-      // 1. Find User
+      if (!query) { alert("Enter a seniority number."); return; }
+
+      // Find pilot by seniority number
       const user = ROSTER.find(p => String(p.sen) === query);
-      if (!user) { alert("Pilot not found."); return; }
+      if (!user) { alert("Pilot not found in roster.json."); return; }
 
-      // 2. Count Senior Competitors
-      let competitors = 0;
-      ROSTER.forEach(p => {
-        // Only look at pilots with lower seniority numbers
-        if (Number(p.sen) < Number(user.sen)) {
-          const prefData = PREFS[p.id];
-          if (!prefData || !prefData.preferences) return;
+      const userSen = Number(user.sen);
 
-          const curBase = p.current.base;
-          const curSeat = p.current.seat;
+      // Count senior pilots who would take target BEFORE their current assignment appears in their bid list
+      let seniorCompetitors = 0;
 
-          for (let bid of prefData.preferences) {
-            // Bid string example: "73G SEA FO"
-            const parts = bid.split(' ');
-            const bBase = parts[1];
-            const bSeat = parts[2];
+      for (const p of ROSTER) {
+        if (Number(p.sen) >= userSen) continue;
 
-            if (bBase === tBase && bSeat === tSeat) {
-              competitors++;
-              break;
-            }
-            // If they reach their current seat first, they aren't trying to move
-            if (bBase === curBase && bSeat === curSeat) break;
+        const prefEntry = PREFS[p.id];
+        const prefList = normalizePrefsEntry(prefEntry);
+        if (!prefList) continue;
+
+        const curBase = p.current?.base;
+        const curSeat = p.current?.seat;
+
+        for (const bid of prefList) {
+          const b = parseBidString(bid);
+          const bBase = b.base;
+          const bSeat = b.seat;
+
+          if (bBase === tBase && bSeat === tSeat) {
+            seniorCompetitors++;
+            break;
           }
+          // Stop when they hit their current assignment (they'd hold it)
+          if (bBase === curBase && bSeat === curSeat) break;
         }
-      });
+      }
 
-      // 3. Get Capacity Delta
-      const cap = CAPACITIES.find(c => c.base === tBase && c.seat === tSeat) || { delta: 0 };
-      
-      const totalInLine = competitors + 1; // Senior pilots + you
-      const needed = totalInLine - cap.delta;
+      // Capacity delta
+      const cap = CAPACITIES.find(x => x.base === tBase && x.seat === tSeat) || { delta: 0 };
+      const delta = safeDelta(cap.delta);
 
-      // 4. Update UI
-      const resDiv = document.getElementById('results');
-      const outDiv = document.getElementById('output');
-      resDiv.style.display = 'block';
+      const totalInLine = seniorCompetitors + 1; // seniors + you
+      const diff = totalInLine - delta;
 
-      if (needed <= 0) {
-        outDiv.innerHTML = `There are <b>${totalInLine}</b> people in line for that base.<br><span class="highlight-green">You are projected to get in!</span>`;
+      // Update UI
+      document.getElementById('intro').style.display = 'none';
+      document.getElementById('results').style.display = 'block';
+
+      document.getElementById('resName').textContent = String(user.name || "").split(',')[0] || "-";
+      document.getElementById('resSen').textContent = "#" + user.sen;
+      document.getElementById('resDelta').textContent = String(delta);
+      document.getElementById('resLine').textContent = String(totalInLine);
+
+      const output = document.getElementById('statusOutput');
+      if (diff <= 0) {
+        output.innerHTML =
+          `There are <b>${totalInLine}</b> people in line for <b>${tBase} ${tSeat}</b>.<br>` +
+          `<span class="highlight-green">Projected to get in (based on bids + delta).</span>`;
       } else {
-        outDiv.innerHTML = `There are <b>${totalInLine}</b> people in line for that base. You'll need <span class="highlight-red">${needed} more openings</span> or <span class="highlight-red">${needed} people to leave</span>.`;
+        output.innerHTML =
+          `There are <b>${totalInLine}</b> people in line for <b>${tBase} ${tSeat}</b>.<br>` +
+          `You’ll need <span class="highlight-red">${diff} more openings</span> to clear.`;
       }
     }
+
+    document.getElementById('runBtn').addEventListener('click', runAnalysis);
+    document.getElementById('pilotSearch').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') runAnalysis();
+    });
 
     init();
   </script>
