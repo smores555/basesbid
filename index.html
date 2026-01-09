@@ -2,87 +2,74 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>ProTrace - Base Queue Tracker</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProTrace - Seniority Queue</title>
   <style>
     :root {
-      --bg-app: #0f172a; --bg-panel: #1e293b; --bg-input: #020617;
-      --border: #334155; --text-main: #f1f5f9; --text-muted: #94a3b8;
-      --accent: #3b82f6; --success: #22c55e; --warning: #f59e0b; --danger: #ef4444;
+      --bg: #0f172a; --card: #1e293b; --input: #020617;
+      --text: #f1f5f9; --muted: #94a3b8; --accent: #3b82f6; --danger: #ef4444;
     }
-    body { margin: 0; background: var(--bg-app); color: var(--text-main); font-family: 'Inter', sans-serif; display: flex; height: 100vh; overflow: hidden; }
+    body { 
+      background: var(--bg); color: var(--text); font-family: sans-serif; 
+      margin: 0; display: flex; height: 100vh; 
+    }
+    .sidebar { 
+      width: 320px; background: var(--card); border-right: 1px solid #334155; 
+      padding: 20px; display: flex; flex-direction: column; gap: 15px; 
+    }
+    .main { flex: 1; padding: 40px; display: flex; justify-content: center; align-items: flex-start; }
     
-    .sidebar { width: 350px; background: var(--bg-panel); border-right: 1px solid var(--border); padding: 24px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
-    .logo { font-weight: 800; font-size: 20px; color: var(--accent); margin-bottom: 10px; }
+    input, select, button { 
+      background: var(--input); color: white; border: 1px solid #334155; 
+      padding: 12px; border-radius: 6px; font-size: 14px; 
+    }
+    button { background: var(--accent); font-weight: bold; cursor: pointer; border: none; margin-top: 10px; }
     
-    .input-group { display: flex; flex-direction: column; gap: 8px; }
-    label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    input, select { background: var(--bg-input); border: 1px solid var(--border); color: white; padding: 12px; border-radius: 6px; font-size: 14px; outline: none; }
+    .result-card { 
+      background: var(--card); border: 1px solid #334155; padding: 30px; 
+      border-radius: 12px; width: 100%; max-width: 600px; text-align: center;
+    }
+    .queue-msg { font-size: 24px; line-height: 1.5; font-weight: 600; }
+    .highlight { color: var(--accent); }
+    .needed { color: var(--danger); text-decoration: underline; }
     
-    button { background: var(--accent); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 700; cursor: pointer; margin-top: 10px; }
-    button:hover { filter: brightness(1.1); }
-
-    .main { flex: 1; padding: 40px; overflow-y: auto; }
-    .card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 12px; padding: 30px; max-width: 700px; }
-    
-    .queue-msg { font-size: 22px; font-weight: 600; line-height: 1.4; color: var(--text-main); }
-    .queue-msg b { color: var(--accent); }
-    .queue-msg .highlight-red { color: var(--danger); }
-    .queue-msg .highlight-green { color: var(--success); }
-
-    .sub-info { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; display: flex; gap: 30px; }
-    .loading-overlay { position: fixed; inset: 0; background: var(--bg-app); display: flex; align-items: center; justify-content: center; z-index: 100; font-weight: 600; }
+    .loading-overlay {
+      position: fixed; inset: 0; background: var(--bg);
+      display: flex; align-items: center; justify-content: center; z-index: 100;
+    }
   </style>
 </head>
 <body>
 
-  <div id="loading" class="loading-overlay">Syncing Roster Data...</div>
+  <div id="loading" class="loading-overlay">Loading Roster & Preferences...</div>
 
   <div class="sidebar">
-    <div class="logo">PROTRACE</div>
+    <h2 style="color: var(--accent); margin-top:0;">ProTrace</h2>
+    <label>Search Seniority #</label>
+    <input type="text" id="pilotSearch" placeholder="Ex: 3388">
     
-    <div class="input-group">
-      <label>Search Pilot (Sen # or Name)</label>
-      <input type="text" id="pilotSearch" placeholder="Ex: 3388" autocomplete="off">
-    </div>
+    <label>Target Base</label>
+    <select id="targetBase">
+      <option value="ANC">ANC</option>
+      <option value="LAX">LAX</option>
+      <option value="PDX">PDX</option>
+      <option value="SAN">SAN</option>
+      <option value="SEA">SEA</option>
+      <option value="SFO">SFO</option>
+    </select>
 
-    <div class="input-group">
-      <label>Target Base</label>
-      <select id="targetBase">
-        <option value="ANC">ANC</option>
-        <option value="LAX">LAX</option>
-        <option value="PDX">PDX</option>
-        <option value="SAN">SAN</option>
-        <option value="SEA">SEA</option>
-        <option value="SFO">SFO</option>
-      </select>
-    </div>
+    <label>Target Seat</label>
+    <select id="targetSeat">
+      <option value="CA">Captain (CA)</option>
+      <option value="FO">First Officer (FO)</option>
+    </select>
 
-    <div class="input-group">
-      <label>Target Seat</label>
-      <select id="targetSeat">
-        <option value="CA">Captain (CA)</option>
-        <option value="FO">First Officer (FO)</option>
-      </select>
-    </div>
-
-    <button onclick="runAnalysis()">Update Status</button>
+    <button onclick="runAnalysis()">Update Analysis</button>
   </div>
 
   <div class="main">
-    <div id="results" style="display:none;">
-      <div class="card">
-        <div id="pilotHeader" style="font-size: 14px; color: var(--text-muted); margin-bottom: 10px;">PILOT ANALYSIS</div>
-        <div id="queueMessage" class="queue-msg">
-          </div>
-        
-        <div class="sub-info">
-          <div>Seniority: <b id="resSen" style="color:white;">-</b></div>
-          <div>Current Base: <b id="resCur" style="color:white;">-</b></div>
-          <div>New Openings (Delta): <b id="resDelta" style="color:white;">-</b></div>
-        </div>
-      </div>
+    <div id="results" class="result-card" style="display:none;">
+      <div id="msgOutput" class="queue-msg"></div>
     </div>
   </div>
 
@@ -94,67 +81,70 @@
     async function init() {
       try {
         const [r, p, c] = await Promise.all([
-          fetch('roster.json'), fetch('preferences.json'), fetch('capacities.json')
+          fetch('roster.json').then(res => res.json()),
+          fetch('preferences.json').then(res => res.json()),
+          fetch('capacities.json').then(res => res.json())
         ]);
-        ROSTER = await r.json();
-        PREFS = await p.json();
-        CAPACITIES = await c.json();
+        ROSTER = r;
+        PREFS = p;
+        CAPACITIES = c;
         document.getElementById('loading').style.display = 'none';
-      } catch (err) {
-        document.getElementById('loading').textContent = "Error: Check that JSON files are in the same folder.";
+      } catch (e) {
+        document.getElementById('loading').innerText = "Error loading JSON files. Make sure they are in the same folder.";
       }
     }
 
     function runAnalysis() {
-      const query = document.getElementById('pilotSearch').value.toUpperCase();
+      const searchVal = document.getElementById('pilotSearch').value.trim();
       const tBase = document.getElementById('targetBase').value;
       const tSeat = document.getElementById('targetSeat').value;
 
       // 1. Find User
-      const user = ROSTER.find(p => p.sen.toString() === query || p.name.includes(query));
-      if (!user) { alert("Pilot not found."); return; }
+      const user = ROSTER.find(p => p.sen.toString() === searchVal);
+      if (!user) { alert("Pilot seniority number not found."); return; }
 
-      // 2. Count Senior Competitors
-      let seniorCompetitors = 0;
-      ROSTER.filter(p => p.sen < user.sen).forEach(p => {
-        const prefList = PREFS[p.id]?.preferences || [];
-        const curBase = p.current.base;
-        const curSeat = p.current.seat;
+      // 2. Count everyone senior to you who wants this base
+      let competitors = 0;
+      ROSTER.forEach(p => {
+        if (p.sen < user.sen) {
+          const prefData = PREFS[p.id];
+          if (!prefData || !prefData.preferences) return;
 
-        for (let pref of prefList) {
-          const parts = pref.split(' '); // e.g. "73G SEA CA"
-          const pBase = parts[1];
-          const pSeat = parts[2];
+          const curBase = p.current.base;
+          const curSeat = p.current.seat;
 
-          if (pBase === tBase && pSeat === tSeat) {
-            seniorCompetitors++;
-            break;
+          for (let bid of prefData.preferences) {
+            // Bid format: "73G SEA FO"
+            const parts = bid.split(' ');
+            const bBase = parts[1];
+            const bSeat = parts[2];
+
+            if (bBase === tBase && bSeat === tSeat) {
+              competitors++;
+              break;
+            }
+            // If they hit their current seat first, they aren't moving
+            if (bBase === curBase && bSeat === curSeat) break;
           }
-          if (pBase === curBase && pSeat === curSeat) break;
         }
       });
 
       // 3. Get Capacity Delta
-      const capData = CAPACITIES.find(c => c.base === tBase && c.seat === tSeat) || { delta: 0 };
-      const delta = capData.delta;
+      const cap = CAPACITIES.find(c => c.base === tBase && c.seat === tSeat) || { delta: 0 };
+      const delta = cap.delta;
 
-      // 4. Calculate Queue Position
-      const totalInLine = seniorCompetitors + 1; // Senior pilots + the pilot being searched
-      const openingsNeeded = totalInLine - delta;
+      // 4. Final Count
+      const totalInLine = competitors + 1; // Senior people + You
+      const diff = totalInLine - delta;
 
-      // 5. Display Results
+      // 5. Output
+      const output = document.getElementById('msgOutput');
       document.getElementById('results').style.display = 'block';
-      document.getElementById('pilotHeader').textContent = `ANALYSIS FOR ${user.name}`;
-      document.getElementById('resSen').textContent = `#${user.sen}`;
-      document.getElementById('resCur').textContent = `${user.current.base} ${user.current.seat}`;
-      document.getElementById('resDelta').textContent = delta;
 
-      const msgEl = document.getElementById('queueMessage');
-      
-      if (openingsNeeded <= 0) {
-        msgEl.innerHTML = `There are <b>${totalInLine}</b> people in line for that base. <span class="highlight-green">You are projected to get in</span> with the current ${delta} openings!`;
+      if (diff <= 0) {
+        output.innerHTML = `There are <span class="highlight">${totalInLine}</span> people in line for that base.<br><span style="color:#22c55e">You are projected to get in!</span>`;
       } else {
-        msgEl.innerHTML = `There are <b>${totalInLine}</b> people in line for that base. You'll need <b class="highlight-red">${openingsNeeded} more openings</b> or <b class="highlight-red">${openingsNeeded} people to leave</b>.`;
+        output.innerHTML = `There are <span class="highlight">${totalInLine}</span> people in line for that base. You'll need <span class="needed">${diff} more openings</span> or <span class="needed">${diff} people to leave</span>.`;
       }
     }
 
