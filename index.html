@@ -13,7 +13,7 @@
     body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
     .container { max-width: 1200px; margin: 0 auto; }
     .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
     
     label { display: block; font-size: 11px; font-weight: 700; opacity: .6; text-transform: uppercase; margin-bottom: 8px; }
     input, select, button { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,.1); background: #0d1420; color: white; box-sizing: border-box; }
@@ -26,6 +26,7 @@
     
     .bpl-pill { display: inline-block; padding: 2px 6px; background: rgba(255, 125, 125, 0.15); border: 1px solid var(--danger); border-radius: 4px; color: var(--danger); font-weight: 800; font-size: 10px; margin-left: 8px; }
     .ok { color: var(--success); } .no { color: var(--danger); }
+    .summary-text { font-size: 14px; font-weight: 600; color: var(--accent); margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -36,6 +37,7 @@
         <div>
           <label>Your Seniority #</label>
           <input id="senInput" type="number" placeholder="e.g. 2670">
+          <div id="userStatusSummary" class="summary-text"></div>
         </div>
         <div>
           <label>Target Base</label>
@@ -58,7 +60,11 @@
 
     <div class="grid">
       <div class="card" style="text-align:center;">
-        <label>Total In Line</label>
+        <label>People Ahead</label>
+        <div id="aheadResult" class="big-num">-</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <label>Your Position</label>
         <div id="lineResult" class="big-num">-</div>
       </div>
       <div class="card" style="text-align:center; border: 1px solid var(--danger);">
@@ -66,11 +72,7 @@
         <div id="bplResult" class="big-num" style="color:var(--danger);">-</div>
       </div>
       <div class="card" style="text-align:center;">
-        <label>Base Openings</label>
-        <div id="capResult" class="big-num">-</div>
-      </div>
-      <div class="card" style="text-align:center;">
-        <label>Delta (Needed)</label>
+        <label>Required Openings</label>
         <div id="deltaResult" class="big-num">-</div>
       </div>
     </div>
@@ -96,11 +98,10 @@
 <script>
 let ROSTER = [], PREFS = {}, CAPACITIES = [];
 
-// Deep cleaner to find base/seat in complex roster objects
 function findCurrent(p) {
-  if (!p) return "";
-  const b = p.base || (p.current ? p.current.base : "");
-  const s = p.seat || (p.current ? p.current.seat : "");
+  if (!p || !p.current) return "";
+  const b = p.current.base || "";
+  const s = p.current.seat || "";
   return `${String(b).trim()} ${String(s).trim()}`;
 }
 
@@ -126,12 +127,16 @@ function runAnalysis() {
   const user = ROSTER.find(p => parseInt(p.sen) === mySen);
   if (!user) return alert("Pilot not found.");
 
+  // Update Status Summary for User
+  const uStatus = findCurrent(user);
+  document.getElementById("userStatusSummary").textContent = `Logged in: ${user.name.split(',')[0]} (${uStatus})`;
+
   const competitors = [];
   let bplCount = 0;
 
   ROSTER.forEach(p => {
     const pSen = parseInt(p.sen);
-    if (pSen >= mySen) return; // Ignore juniors
+    if (pSen >= mySen) return; // Only senior pilots
 
     const pPrefObj = PREFS[`pil${pSen}`] || PREFS[pSen];
     if (!pPrefObj || !pPrefObj.preferences) return;
@@ -143,13 +148,11 @@ function runAnalysis() {
       const bidOrder = parseInt(entry.order);
       const bplVal = parseInt(entry.bpl_min || 0);
 
-      // STAY RULE: If Order 1 is current status or blank, skip them
+      // Rule: Skip if they are already in target or staying put
       if (bidOrder === 1 && (bidStr === "" || bidStr.includes(curStatus))) break;
       
-      // TARGET MATCH: Does the bid contain your target base + seat?
       if (bidStr.includes(tBase) && bidStr.includes(tSeat)) {
-        // ALREADY HOLDING RULE: If their bid is exactly where they already are, skip
-        if (bidStr.includes(curStatus)) break;
+        if (curStatus !== "" && bidStr.includes(curStatus)) break;
 
         if (bplVal > 0) bplCount++;
         competitors.push({
@@ -162,21 +165,18 @@ function runAnalysis() {
         });
         break; 
       }
-      
-      // LIST STOP: If they hit their current status later in the list, stop checking
-      if (bidStr.includes(curStatus)) break;
+      if (curStatus !== "" && bidStr.includes(curStatus)) break;
     }
   });
 
-  const cap = CAPACITIES.find(c => c.base === tBase && c.seat === tSeat)?.delta || 0;
-  const pos = competitors.length + 1;
-  const delta = Math.max(0, pos - cap);
+  const ahead = competitors.length;
+  const pos = ahead + 1; // Position is always People Ahead + 1
+  const openingsNeeded = pos; // To hold, you need slots equal to your position
 
+  document.getElementById("aheadResult").textContent = ahead;
   document.getElementById("lineResult").textContent = pos;
   document.getElementById("bplResult").textContent = bplCount;
-  document.getElementById("capResult").textContent = cap;
-  document.getElementById("deltaResult").textContent = delta;
-  document.getElementById("deltaResult").className = delta === 0 ? "big-num ok" : "big-num no";
+  document.getElementById("deltaResult").textContent = openingsNeeded;
 
   document.getElementById("competitorTable").innerHTML = competitors.sort((a,b) => a.sen - b.sen).map(c => `
     <tr>
